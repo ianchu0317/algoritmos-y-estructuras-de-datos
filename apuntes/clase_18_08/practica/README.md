@@ -168,3 +168,9 @@ func main() {
 ```
 
 Sirve por ejemplo para no olvidarme de algo: entrada/salida de datos (archivos, network, etc)
+
+## Crear primer programa
+- Crear archivo directorio para proyeecto
+- Iniciar ese proyecto como modulo `go mod init proyecto`
+- Crear paquete main `main.go` con adentro `package main` con funcion main
+- Correr programa con `go run main.go`
