@@ -38,6 +38,12 @@ func Comparar(vector1 []int, vector2 []int) int {
 	} else if len(vector1) > len(vector2) {
 		return 1
 	}
+	/*
+		NOTA: Me parece que no hay que descartar por largo primero.
+			  Hay que descartar por largo como último recurso.
+			  Chequear en tp0_test.go linea 115
+			  o correr `go test ejercicios/tp0_test.go` para debug
+	*/
 	// Trabajar con vectores de mismo largo
 	for i := range len(vector1) {
 		if vector1[i] < vector2[i] {
