@@ -2,7 +2,7 @@ package ejercicios
 
 // Swap intercambia dos valores enteros.
 func Swap(x *int, y *int) {
-
+	*x, *y = *y, *x
 }
 
 // Maximo devuelve la posición del mayor elemento del arreglo, o -1 si el el arreglo es de largo 0. Si el máximo
