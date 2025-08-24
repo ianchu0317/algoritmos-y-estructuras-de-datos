@@ -17,8 +17,14 @@ func main() {
 	vector := [4]int{1, 2, 3, 4}
 	fmt.Println("Vector es:", vector)
 	fmt.Println("Elementos x elemento: ")
-	for i := 0; i <= 4; i++ {
+	for i := 0; i <= 3; i++ {
 		fmt.Println(vector[i])
 	}
 
+	/*
+		// Probar ordenamiento de seleccion
+		vec1 := []int{43, 25, 13, 94, 5, 10, 29, 48}
+		fmt.Println("Vector es:", vec1)
+		fmt.Println("Ordenado es:", ejercicios.Seleccion(vec1))
+	*/
 }

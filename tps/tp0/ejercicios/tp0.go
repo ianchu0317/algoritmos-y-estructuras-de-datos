@@ -66,7 +66,18 @@ func Comparar(vector1 []int, vector2 []int) int {
 
 // Seleccion ordena el arreglo recibido mediante el algoritmo de selección.
 func Seleccion(vector []int) {
-
+	var pivot int
+	for i := 0; i < len(vector)-1; i++ {
+		pivot = i
+		for j := i + 1; j < len(vector); j++ {
+			if vector[j] < vector[pivot] {
+				pivot = j
+			}
+		}
+		if pivot != i {
+			Swap(&vector[i], &vector[pivot])
+		}
+	}
 }
 
 /*
