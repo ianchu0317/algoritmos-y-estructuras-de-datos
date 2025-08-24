@@ -66,9 +66,8 @@ func Comparar(vector1 []int, vector2 []int) int {
 
 // Seleccion ordena el arreglo recibido mediante el algoritmo de selección.
 func Seleccion(vector []int) {
-	var pivot int
 	for i := 0; i < len(vector)-1; i++ {
-		pivot = i
+		pivot := i
 		for j := i + 1; j < len(vector); j++ {
 			if vector[j] < vector[pivot] {
 				pivot = j
@@ -87,7 +86,10 @@ Esta función debe implementarse de forma RECURSIVA.
 Se puede usar una función auxiliar (que sea la recursiva).
 */
 func Suma(vector []int) int {
-	return 0
+	if len(vector) == 0 {
+		return 0
+	}
+	return vector[0] + Suma(vector[1:])
 }
 
 // EsCadenaCapicua devuelve si la cadena es un palíndromo.
