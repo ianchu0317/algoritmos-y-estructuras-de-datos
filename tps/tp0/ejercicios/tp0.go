@@ -97,5 +97,13 @@ func Suma(vector []int) int {
 // Esta función debe implementarse de forma RECURSIVA.
 // Se puede usar una función auxiliar (que sea la recursiva).
 func EsCadenaCapicua(cadena string) bool {
-	return false
+	if len(cadena) <= 1 {
+		return true
+	}
+
+	if cadena[0] != cadena[len(cadena)-1] {
+		return false
+	}
+
+	return EsCadenaCapicua(cadena[1 : len(cadena)-1])
 }

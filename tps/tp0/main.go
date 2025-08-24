@@ -30,4 +30,15 @@ func main() {
 	// Probar Suma de array
 	fmt.Println("Vector es:", vector)
 	fmt.Println("Suma de elementos es:", ejercicios.Suma(vector))
+
+	// Probar funcionamiento de cadenas
+	var palabra string
+	fmt.Print("Ingrese una palabra: ")
+	fmt.Scanln(&palabra)
+	fmt.Println("Palabra es:", palabra)
+	for _, letra := range palabra {
+		fmt.Printf("%c\n", letra)
+	}
+	fmt.Println("Palabra con slice es: ")
+	fmt.Printf("%s\n", palabra[1:3])
 }
