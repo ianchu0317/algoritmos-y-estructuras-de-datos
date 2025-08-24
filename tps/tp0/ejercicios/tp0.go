@@ -39,26 +39,28 @@ Un arreglo es menor a otro cuando al compararlos elemento a elemento,
 el primer elemento en el que difieren no existe o es menor.
 */
 func Comparar(vector1 []int, vector2 []int) int {
-	// Verificar primero el largo de los vectores
+	// Hallar largo del vector mas corto
+	var len_vector_corto int
 	if len(vector1) < len(vector2) {
-		return -1
-	} else if len(vector1) > len(vector2) {
-		return 1
+		len_vector_corto = len(vector1)
+	} else {
+		len_vector_corto = len(vector2)
 	}
-	/*
-		NOTA: Me parece que no hay que descartar por largo primero.
-			  Hay que descartar por largo como último recurso.
-			  Chequear en tp0_test.go linea 115
-			  o correr `go test ejercicios/tp0_test.go` para debug
-	*/
-	// Trabajar con vectores de mismo largo
-	for i := range len(vector1) {
+	// Comparar elementos de los vectores
+	for i := range len_vector_corto {
 		if vector1[i] < vector2[i] {
 			return -1
 		} else if vector1[i] > vector2[i] {
 			return 1
 		}
 	}
+	// Si sale ciclo for (elemntos iguales), comparar por largo
+	if len(vector1) < len(vector2) {
+		return -1
+	} else if len(vector1) > len(vector2) {
+		return 1
+	}
+	// Si llega hasta acá los vectores son iguales
 	return 0
 }
 
