@@ -1,16 +1,12 @@
 package ejercicios
 
-/*
-Swap intercambia dos valores enteros.
-*/
+// Swap intercambia dos valores enteros.
 func Swap(x *int, y *int) {
 	*x, *y = *y, *x
 }
 
-/*
-Maximo devuelve la posición del mayor elemento del arreglo, o -1 si el el arreglo es de largo 0.
-Si el máximo elemento aparece más de una vez, se debe devolver la primera posición en que ocurre.
-*/
+// Maximo devuelve la posición del mayor elemento del arreglo, o -1 si el el arreglo es de largo 0.
+// Si el máximo elemento aparece más de una vez, se debe devolver la primera posición en que ocurre.
 func Maximo(vector []int) int {
 	// Caso base sin arreglo es largo 0
 	if len(vector) == 0 {
@@ -79,12 +75,10 @@ func Seleccion(vector []int) {
 	}
 }
 
-/*
-Suma devuelve la suma de los elementos de un arreglo.
-En caso de no tener elementos, debe devolver 0.
-Esta función debe implementarse de forma RECURSIVA.
-Se puede usar una función auxiliar (que sea la recursiva).
-*/
+// Suma devuelve la suma de los elementos de un arreglo.
+// En caso de no tener elementos, debe devolver 0.
+// Esta función debe implementarse de forma RECURSIVA.
+// Se puede usar una función auxiliar (que sea la recursiva).
 func Suma(vector []int) int {
 	if len(vector) == 0 {
 		return 0
