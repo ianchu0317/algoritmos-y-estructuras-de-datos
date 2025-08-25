@@ -78,3 +78,54 @@ Uso para organizar la llegada de datos (el orden en el que llega el orden en el 
 ---
 
 ## Practica
+### Estructuras (struct)
+- Guardar tipos de datos distintos en un tipo nuevo
+```go
+type Punto struct {
+    x,y int
+}
+
+p1 := Punto{}
+p2 := &Punto{}
+
+p2.func() // no hace falta operacion especial para acceder a mismos metodos o campos
+p1.func()
+```
+
+A los struct se pueden asociar métodos.
+
+```go
+// Método modifica struct
+func (p Punto) Distancia() int {
+    // code
+}
+
+// Método no modifica struct
+func (p *Punto) Modificar() int {
+    // code
+}
+``` 
+
+**Anidación de struct**
+Se puede acceder a campos de hijos directamente desde instancia de padre
+
+### Manejo de errores
+```go
+entero, err := strconv.Atoi(str)
+if err != nil {
+    // ejecutar codigo de error
+} else {
+    // ejecutar codigo si no hay error
+}
+```
+
+Declaracion de errores en una funcion
+```go
+func funcion(slice []int, e int) (int, error) {
+    // code
+    // devolver normal
+    return e, nil
+    // devolver con error
+    return e, errors.New("Texto blabla")
+}
+```
