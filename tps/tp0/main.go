@@ -1,44 +1,50 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-
-	"tp0/ejercicios"
+	"os"
+	"strconv"
 )
 
+// Cargar vector desde archivo.in que contiene enteros por línea
+func CargarVectorDeArchivo(archivo *os.File) []int {
+	vector := []int{}
+	contenido := bufio.NewScanner(archivo)
+	var numero int
+	for contenido.Scan() {
+		numero, _ = strconv.Atoi(contenido.Text())
+		vector = append(vector, numero)
+	}
+	return vector
+}
+
 func main() {
-	// Verificación de Swap
-	a, b := 5, 6
-	fmt.Println("Las variables son a, b=", a, b)
-	ejercicios.Swap(&a, &b)
-	fmt.Println("Las variables son a, b=", a, b)
+	// Leer archivos
+	const ruta1 = "archivo1.in"
+	const ruta2 = "archivo2.in"
 
-	// Verificar exceso de item en array
-	vector := []int{1, 2, 3, 4}
-	fmt.Println("Vector es:", vector)
-	fmt.Println("Elementos x elemento: ")
-	for i := 0; i <= 3; i++ {
-		fmt.Println(vector[i])
+	archivo1, err1 := os.Open(ruta1)
+	if err1 != nil {
+		fmt.Printf("Error %s abriendo archivo '%s'", err1, ruta1)
+		return
 	}
-	/*
-		// Probar ordenamiento de seleccion
-		vec1 := []int{43, 25, 13, 94, 5, 10, 29, 48}
-		fmt.Println("Vector es:", vec1)
-		fmt.Println("Ordenado es:", ejercicios.Seleccion(vec1))
-	*/
+	defer archivo1.Close()
 
-	// Probar Suma de array
-	fmt.Println("Vector es:", vector)
-	fmt.Println("Suma de elementos es:", ejercicios.Suma(vector))
-
-	// Probar funcionamiento de cadenas
-	var palabra string
-	fmt.Print("Ingrese una palabra: ")
-	fmt.Scanln(&palabra)
-	fmt.Println("Palabra es:", palabra)
-	for _, letra := range palabra {
-		fmt.Printf("%c\n", letra)
+	archivo2, err2 := os.Open(ruta2)
+	if err2 != nil {
+		fmt.Printf("Error '%s' abriendo archivo '%s'", err2, ruta2)
+		return
 	}
-	fmt.Println("Palabra con slice es: ")
-	fmt.Printf("%s\n", palabra[1:3])
+	defer archivo2.Close()
+
+	// Leer archivos
+	//vector1 := []int{}
+	//vector2 := []int{}
+
+	vector1 := CargarVectorDeArchivo(archivo1)
+	vector2 := CargarVectorDeArchivo(archivo2)
+
+	fmt.Println(vector1)
+	fmt.Println(vector2)
 }
