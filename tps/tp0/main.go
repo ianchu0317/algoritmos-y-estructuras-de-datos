@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"tp0/ejercicios"
 )
 
 // Cargar vector desde archivo.in que contiene enteros por línea
@@ -19,6 +21,13 @@ func CargarVectorDeArchivo(archivo *os.File) []int {
 	return vector
 }
 
+// Imprimir los elementos de lector línea por línea
+func ImprimirVectorPorLinea(vector []int) {
+	for num := range len(vector) {
+		fmt.Println(vector[num])
+	}
+}
+
 func main() {
 	// Leer archivos
 	const ruta1 = "archivo1.in"
@@ -26,7 +35,7 @@ func main() {
 
 	archivo1, err1 := os.Open(ruta1)
 	if err1 != nil {
-		fmt.Printf("Error %s abriendo archivo '%s'", err1, ruta1)
+		fmt.Printf("Error '%s' abriendo archivo '%s'", err1, ruta1)
 		return
 	}
 	defer archivo1.Close()
@@ -38,7 +47,7 @@ func main() {
 	}
 	defer archivo2.Close()
 
-	// Leer archivos
+	// Leer archivos y cargar vectores
 	//vector1 := []int{}
 	//vector2 := []int{}
 
@@ -47,4 +56,18 @@ func main() {
 
 	fmt.Println(vector1)
 	fmt.Println(vector2)
+
+	// Comparar vectores
+	var vectorMayor *[]int
+	resultadoComparacion := ejercicios.Comparar(vector1, vector2)
+	if resultadoComparacion == 1 || resultadoComparacion == 0 {
+		vectorMayor = &vector1
+	} else if resultadoComparacion == -1 {
+		vectorMayor = &vector2
+	}
+
+	// Ordenar vector mayor e imprimir por pantalla
+	ejercicios.Seleccion(*vectorMayor)
+	fmt.Println(*vectorMayor)
+	ImprimirVectorPorLinea(*vectorMayor)
 }
