@@ -46,14 +46,14 @@ func Comparar(vector1 []int, vector2 []int) int {
 	for i := range len_vector_corto {
 		if vector1[i] < vector2[i] {
 			return -1
-		} else if vector1[i] > vector2[i] {
+		} else if vector2[i] < vector1[i] {
 			return 1
 		}
 	}
 	// Si sale ciclo for (elemntos iguales), comparar por largo
 	if len(vector1) < len(vector2) {
 		return -1
-	} else if len(vector1) > len(vector2) {
+	} else if len(vector2) < len(vector1) {
 		return 1
 	}
 	// Si llega hasta acá los vectores son iguales

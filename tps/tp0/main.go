@@ -50,12 +50,8 @@ func main() {
 	// Leer archivos y cargar vectores
 	//vector1 := []int{}
 	//vector2 := []int{}
-
 	vector1 := CargarVectorDeArchivo(archivo1)
 	vector2 := CargarVectorDeArchivo(archivo2)
-
-	fmt.Println(vector1)
-	fmt.Println(vector2)
 
 	// Comparar vectores
 	var vectorMayor *[]int
@@ -68,6 +64,5 @@ func main() {
 
 	// Ordenar vector mayor e imprimir por pantalla
 	ejercicios.Seleccion(*vectorMayor)
-	fmt.Println(*vectorMayor)
 	ImprimirVectorPorLinea(*vectorMayor)
 }
