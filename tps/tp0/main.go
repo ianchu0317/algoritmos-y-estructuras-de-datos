@@ -23,13 +23,13 @@ func CargarVectorDeArchivo(archivo *os.File) []int {
 
 // Imprimir los elementos de lector línea por línea
 func ImprimirVectorPorLinea(vector []int) {
-	for num := range len(vector) {
-		fmt.Println(vector[num])
+	for ind := range len(vector) {
+		fmt.Println(vector[ind])
 	}
 }
 
 func main() {
-	// Leer archivos
+	// Abrir archivos
 	const ruta1 = "archivo1.in"
 	const ruta2 = "archivo2.in"
 
@@ -48,8 +48,6 @@ func main() {
 	defer archivo2.Close()
 
 	// Leer archivos y cargar vectores
-	//vector1 := []int{}
-	//vector2 := []int{}
 	vector1 := CargarVectorDeArchivo(archivo1)
 	vector2 := CargarVectorDeArchivo(archivo2)
 
