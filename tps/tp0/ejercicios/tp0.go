@@ -12,15 +12,15 @@ func Maximo(vector []int) int {
 		return -1
 	}
 	// Resolver con un for lineal
-	max_num := vector[0]
-	pos_max_num := 0
-	for pos, valor := range vector {
-		if valor > max_num {
-			max_num = valor
-			pos_max_num = pos
+	numeroMaximo := vector[0]
+	posMaximo := 0
+	for pos, numero := range vector {
+		if numero > numeroMaximo {
+			numeroMaximo = numero
+			posMaximo = pos
 		}
 	}
-	return pos_max_num
+	return posMaximo
 }
 
 // Comparar compara dos arreglos de longitud especificada.
@@ -29,14 +29,14 @@ func Maximo(vector []int) int {
 // no existe o es menor.
 func Comparar(vector1 []int, vector2 []int) int {
 	// Hallar largo del vector mas corto
-	var len_vector_corto int
+	var lenCorto int
 	if len(vector1) < len(vector2) {
-		len_vector_corto = len(vector1)
+		lenCorto = len(vector1)
 	} else {
-		len_vector_corto = len(vector2)
+		lenCorto = len(vector2)
 	}
 	// Comparar elementos de los vectores
-	for i := range len_vector_corto {
+	for i := range lenCorto {
 		if vector1[i] < vector2[i] {
 			return -1
 		} else if vector2[i] < vector1[i] {
