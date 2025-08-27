@@ -23,8 +23,8 @@ func CargarVectorDeArchivo(archivo *os.File) []int {
 
 // Imprimir los elementos de lector línea por línea
 func ImprimirVectorPorLinea(vector []int) {
-	for ind := range len(vector) {
-		fmt.Println(vector[ind])
+	for _, num := range vector {
+		fmt.Println(num)
 	}
 }
 
