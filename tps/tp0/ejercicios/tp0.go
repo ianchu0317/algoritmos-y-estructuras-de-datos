@@ -27,12 +27,7 @@ func Maximo(vector []int) int {
 // no existe o es menor.
 func Comparar(vector1 []int, vector2 []int) int {
 	// Hallar largo del vector mas corto
-	var lenCorto int
-	if len(vector1) < len(vector2) {
-		lenCorto = len(vector1)
-	} else {
-		lenCorto = len(vector2)
-	}
+	lenCorto := min(len(vector1), len(vector2))
 	// Comparar elementos de los vectores
 	for i := range lenCorto {
 		if vector1[i] < vector2[i] {
