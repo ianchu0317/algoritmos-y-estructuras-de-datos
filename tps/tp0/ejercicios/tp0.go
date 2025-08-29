@@ -12,11 +12,9 @@ func Maximo(vector []int) int {
 		return -1
 	}
 	// Resolver con un for lineal
-	numeroMaximo := vector[0]
 	posMaximo := 0
 	for pos, numero := range vector {
-		if numero > numeroMaximo {
-			numeroMaximo = numero
+		if numero > vector[posMaximo] {
 			posMaximo = pos
 		}
 	}
