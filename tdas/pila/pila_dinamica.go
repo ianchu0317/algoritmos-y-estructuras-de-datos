@@ -42,10 +42,8 @@ func (p *pilaDinamica[T]) Apilar(elemento T) {
 // Desapilar saca el elemento tope de la pila. Si la pila tiene elementos, se quita el tope de la pila, y
 // se devuelve ese valor. Si está vacía, entra en pánico con un mensaje "La pila esta vacia".
 func (p *pilaDinamica[T]) Desapilar() T {
-	if p.EstaVacia() {
-		panic("La pila esta vacia")
-	}
-	ultElemento := p.datos[p.cantidad]
+	// Desapilar ultimo elemento
+	ultElemento := p.VerTope()
 	p.cantidad = p.cantidad - 1
 	// Redimensionar slice si solo uso 25%
 	if 4*p.cantidad == len(p.datos) {
