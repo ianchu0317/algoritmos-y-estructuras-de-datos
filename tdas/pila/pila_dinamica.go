@@ -15,6 +15,10 @@ func (p pilaDinamica[T]) EstaVacia() bool {
 // VerTope obtiene el valor del tope de la pila. Si la pila tiene elementos se devuelve el valor del tope.
 // Si está vacía, entra en pánico con un mensaje "La pila esta vacia".
 func (p pilaDinamica[T]) VerTope() T {
+	if p.EstaVacia() {
+		panic("La pila esta vacia")
+	}
+	// Devolver valor tope si no esta vacia
 	return p.datos[p.cantidad]
 }
 
