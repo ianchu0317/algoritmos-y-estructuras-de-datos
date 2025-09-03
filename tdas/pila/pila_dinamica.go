@@ -19,7 +19,7 @@ func (p pilaDinamica[T]) VerTope() T {
 		panic("La pila esta vacia")
 	}
 	// Devolver valor tope si no esta vacia
-	return p.datos[p.cantidad]
+	return p.datos[p.cantidad-1]
 }
 
 // Apilar agrega un nuevo elemento a la pila.
