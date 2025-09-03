@@ -56,5 +56,6 @@ func (p *pilaDinamica[T]) Desapilar() T {
 
 // Devuelve una Pila
 func CrearPilaDinamica[T any]() Pila[T] {
-	return &pilaDinamica[T]{}
+	nuevaPilaDinamica := pilaDinamica[T]{}
+	return &nuevaPilaDinamica
 }
