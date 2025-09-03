@@ -24,16 +24,19 @@ func (p pilaDinamica[T]) VerTope() T {
 
 // Apilar agrega un nuevo elemento a la pila.
 func (p *pilaDinamica[T]) Apilar(elemento T) {
-	// Crear pila tamaño 1 si esta vacia
-	p.cantidad += 1
-	// Expandir tamaño de slice si no alcanza
-	if p.cantidad > len(p.datos) {
+	// Crear slice tamaño 1 si pila está recien creada
+	if p.EstaVacia() && len(p.datos) == 0 {
+		p.datos = make([]T, 1)
+	}
+	// Redimensionar slice si no alcanza
+	if p.cantidad == len(p.datos) {
 		nuevosDatos := make([]T, p.cantidad*2)
 		copy(nuevosDatos, p.datos)
 		p.datos = nuevosDatos
 	}
-	// Apilar en última posición de pila
-	p.datos[p.cantidad-1] = elemento
+	// Apilar elemento
+	p.datos[p.cantidad] = elemento
+	p.cantidad += 1
 }
 
 // Desapilar saca el elemento tope de la pila. Si la pila tiene elementos, se quita el tope de la pila, y
@@ -44,8 +47,8 @@ func (p *pilaDinamica[T]) Desapilar() T {
 	}
 	ultElemento := p.datos[p.cantidad]
 	p.cantidad = p.cantidad - 1
-	// Disminuir tamaño de slice si solo uso 25%
-	if 4*p.cantidad <= len(p.datos) {
+	// Redimensionar slice si solo uso 25%
+	if 4*p.cantidad == len(p.datos) {
 		nuevosDatos := make([]T, len(p.datos)/2)
 		copy(nuevosDatos, p.datos)
 		p.datos = nuevosDatos

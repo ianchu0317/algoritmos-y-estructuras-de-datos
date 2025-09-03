@@ -17,4 +17,15 @@ func main() {
 		tope := miPila.Desapilar()
 		fmt.Println(miPila, tope)
 	}
+
+	// probar apilar
+	for i := 1; i <= 10; i++ {
+		miPila.Apilar(i)
+		fmt.Println(miPila)
+	}
+	// probar desapilar
+	for i := 1; i <= 10; i++ {
+		tope := miPila.Desapilar()
+		fmt.Println(miPila, tope)
+	}
 }
