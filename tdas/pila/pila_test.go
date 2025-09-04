@@ -9,7 +9,7 @@ import (
 
 func TestPilaVacia(t *testing.T) {
 	pilaEnteros := TDAPila.CrearPilaDinamica[int]()
-	pilaFlotantes := TDAPila.CrearPilaDinamica[float32]()
+	pilaFlotantes := TDAPila.CrearPilaDinamica[float64]()
 	pilaCadenas := TDAPila.CrearPilaDinamica[string]()
 
 	require.True(t, pilaEnteros.EstaVacia(), "Pila de numeros enteros recien creada tiene que estar vacia")
@@ -25,7 +25,7 @@ func TestPilaVacia(t *testing.T) {
 
 func TestApilar(t *testing.T) {
 	pilaEnteros := TDAPila.CrearPilaDinamica[int]()
-	pilaFlotantes := TDAPila.CrearPilaDinamica[float32]()
+	pilaFlotantes := TDAPila.CrearPilaDinamica[float64]()
 	pilaCadenas := TDAPila.CrearPilaDinamica[string]()
 
 	pilaEnteros.Apilar(1)
@@ -42,7 +42,7 @@ func TestApilar(t *testing.T) {
 
 func TestDesapilar(t *testing.T) {
 	pilaEnteros := TDAPila.CrearPilaDinamica[int]()
-	pilaFlotantes := TDAPila.CrearPilaDinamica[float32]()
+	pilaFlotantes := TDAPila.CrearPilaDinamica[float64]()
 	pilaCadenas := TDAPila.CrearPilaDinamica[string]()
 
 	pilaEnteros.Apilar(1)
