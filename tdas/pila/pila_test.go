@@ -56,3 +56,31 @@ func TestDesapilar(t *testing.T) {
 	require.True(t, pilaFlotantes.EstaVacia(), "Pila de numeros flotantes apilados y desapilados tiene que estar vacia")
 	require.True(t, pilaCadenas.EstaVacia(), "Pila de cadenas apilados y desapilados tiene que estar vacia")
 }
+
+func TestVolumen(t *testing.T) {
+	pilaEnteros := TDAPila.CrearPilaDinamica[int]()
+
+	// Probar con apilar desde vector y desapilar devolviendo el vector en 'reversa'
+	vec := []int{3, 5, -7, 9}
+	vecReversa := []int{9, -7, 5, 3}
+
+	for _, num := range vec {
+		pilaEnteros.Apilar(num)
+		require.Equal(t, num, pilaEnteros.VerTope(), "Tope de pila de enteros tiene que coincidir con ultimo ingresado")
+	}
+	for _, num := range vecReversa {
+		require.Equal(t, num, pilaEnteros.Desapilar(), "Desapilar pila de enteros tiene que devolver elemento desapilado")
+	}
+	require.True(t, pilaEnteros.EstaVacia(), "Pila de numeros enteros apilados y desapilados desde un vector tiene que estar vacia")
+
+	// Probar lo mismo con diez mil numeros enteros
+	for i := 1; i <= 10000; i++ {
+		pilaEnteros.Apilar(i)
+		require.Equal(t, i, pilaEnteros.VerTope(), "Tope de pila de enteros tiene que coincidir con ultimo ingresado")
+	}
+	for i := 10000; i >= 1; i-- {
+		require.Equal(t, i, pilaEnteros.Desapilar(), "Desapilar pila de enteros tiene que devolver elemento desapilado")
+	}
+	require.True(t, pilaEnteros.EstaVacia(), "Pila de numeros enteros luego de apilar y desapilar 10000 numeros tiene que estar vacia")
+
+}
