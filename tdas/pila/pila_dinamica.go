@@ -52,7 +52,6 @@ func redimensionarPila[T any](pila *pilaDinamica[T], largo int) {
 
 // Devuelve una Pila
 func CrearPilaDinamica[T any]() Pila[T] {
-	nuevaPilaDinamica := pilaDinamica[T]{}
-	redimensionarPila(&nuevaPilaDinamica, 1)
+	nuevaPilaDinamica := pilaDinamica[T]{datos: make([]T, 1), cantidad: 0}
 	return &nuevaPilaDinamica
 }
