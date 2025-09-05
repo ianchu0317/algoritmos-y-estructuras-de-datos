@@ -1,14 +1,17 @@
 package tda_01_test
 
 import (
+	TDA01 "guias/tdas_basicos/tda_01"
 	"testing"
-  	"github.com/stretchr/testify/require"
-	"guias/tda_01"
+
+	"github.com/stretchr/testify/require"
 )
 
-
-
-
-func TestRepresentacion(t *testing.T){
-	frac1 := 
+func TestRepresentacion(t *testing.T) {
+	frac1 := TDA01.CrearFraccion(1, 2)
+	frac2 := TDA01.CrearFraccion(13, 32)
+	frac3 := TDA01.CrearFraccion(11, 11)
+	require.Equal(t, "1/2", frac1.Representacion(), "Las fracciones inicializadas tienen que ser igual a la representacion")
+	require.Equal(t, "13/32", frac2.Representacion(), "Las fracciones de dos digitos tienen que ser igual a la representacion")
+	require.NotEqual(t, "12/12", frac3.Representacion(), "Las fracciones tienen que ser distintos")
 }
