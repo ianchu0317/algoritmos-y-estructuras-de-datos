@@ -20,8 +20,8 @@ type Fraccion struct {
 // Sumar recibe una fraccion y devuelve la suma de la pasada con la actual
 // Complejidad O(1)
 func (fraccion Fraccion) Sumar(otra Fraccion) Fraccion {
-	nuevoNumerador := fraccion.numerador + otra.numerador
-	nuevoDenominador := fraccion.denominador + otra.denominador
+	nuevoNumerador := fraccion.numerador*otra.denominador + otra.numerador*fraccion.denominador
+	nuevoDenominador := fraccion.denominador * otra.denominador
 	nuevaFraccion := Fraccion{numerador: nuevoNumerador, denominador: nuevoDenominador}
 	return nuevaFraccion
 }

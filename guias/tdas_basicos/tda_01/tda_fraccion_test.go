@@ -15,3 +15,19 @@ func TestRepresentacion(t *testing.T) {
 	require.Equal(t, "13/32", frac2.Representacion(), "Las fracciones de dos digitos tienen que ser igual a la representacion")
 	require.NotEqual(t, "12/12", frac3.Representacion(), "Las fracciones tienen que ser distintos")
 }
+
+func TestMultiplicar(t *testing.T) {
+	frac1 := TDA01.CrearFraccion(1, 2)
+	frac2 := TDA01.CrearFraccion(2, 3)
+
+	require.Equal(t, TDA01.CrearFraccion(2, 6), frac1.Multiplicar(frac2), "Las fracciones multiplican lo mismo")
+	require.Equal(t, TDA01.CrearFraccion(2, 6), frac2.Multiplicar(frac1), "Las fracciones multiplican lo mismo")
+}
+
+func TestSuma(t *testing.T) {
+	frac1 := TDA01.CrearFraccion(1, 2)
+	frac2 := TDA01.CrearFraccion(2, 3)
+
+	require.Equal(t, TDA01.CrearFraccion(7, 6), frac1.Sumar(frac2), "Las fracciones suman lo mismo")
+	require.Equal(t, TDA01.CrearFraccion(7, 6), frac2.Sumar(frac1), "Las fracciones suman lo mismo")
+}
