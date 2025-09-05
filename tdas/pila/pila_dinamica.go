@@ -18,7 +18,6 @@ func (p pilaDinamica[T]) VerTope() T {
 	if p.EstaVacia() {
 		panic("La pila esta vacia")
 	}
-	// Devolver valor tope si no esta vacia
 	return p.datos[p.cantidad-1]
 }
 
@@ -28,7 +27,6 @@ func (p *pilaDinamica[T]) Apilar(elemento T) {
 	if p.cantidad == len(p.datos) {
 		redimensionarPila(p, p.cantidad*2)
 	}
-	// Apilar elemento
 	p.datos[p.cantidad] = elemento
 	p.cantidad += 1
 }
@@ -36,7 +34,6 @@ func (p *pilaDinamica[T]) Apilar(elemento T) {
 // Desapilar saca el elemento tope de la pila. Si la pila tiene elementos, se quita el tope de la pila, y
 // se devuelve ese valor. Si está vacía, entra en pánico con un mensaje "La pila esta vacia".
 func (p *pilaDinamica[T]) Desapilar() T {
-	// Desapilar ultimo elemento
 	ultElemento := p.VerTope()
 	p.cantidad = p.cantidad - 1
 	// Redimensionar slice si solo uso 25%
@@ -46,7 +43,7 @@ func (p *pilaDinamica[T]) Desapilar() T {
 	return ultElemento
 }
 
-// Redimensionar los slices de una pila dado un tamanio
+// redimensionarPila cambia los tamanios de los slices pila
 func redimensionarPila[T any](pila *pilaDinamica[T], largo int) {
 	nuevosDatos := make([]T, largo)
 	copy(nuevosDatos, pila.datos)
