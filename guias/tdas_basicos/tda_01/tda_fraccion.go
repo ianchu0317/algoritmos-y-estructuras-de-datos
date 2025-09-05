@@ -44,3 +44,8 @@ func (fraccion Fraccion) Representacion() string {
 	nuevoString := fmt.Sprintf("%d/%d", fraccion.numerador, fraccion.denominador)
 	return nuevoString
 }
+
+// Crear una instancia de fraccion
+func CrearFraccion(numerador, denominador int) Fraccion {
+	return Fraccion{numerador: numerador, denominador: denominador}
+}
