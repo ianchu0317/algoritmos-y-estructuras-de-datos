@@ -31,3 +31,10 @@ func TestSuma(t *testing.T) {
 	require.Equal(t, TDA01.CrearFraccion(7, 6), frac1.Sumar(frac2), "Las fracciones suman lo mismo")
 	require.Equal(t, TDA01.CrearFraccion(7, 6), frac2.Sumar(frac1), "Las fracciones suman lo mismo")
 }
+
+func TestEntero(t *testing.T) {
+	frac1 := TDA01.CrearFraccion(3, 2)
+	frac2 := TDA01.CrearFraccion(2, 3)
+	require.Equal(t, 1, frac1.ParteEntera(), "Las fracciones tienen que devolver parte entera")
+	require.Equal(t, 0, frac2.ParteEntera(), "Las fracciones tienen que devolver 0")
+}
