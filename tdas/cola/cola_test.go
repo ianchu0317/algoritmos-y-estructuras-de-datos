@@ -45,3 +45,23 @@ func TestEncolar(t *testing.T) {
 	require.Equal(t, 1.1, colaFlotantes.VerPrimero(), "Primero de cola de flotantes tiene que coincidir con primero ingresado")
 	require.Equal(t, "palabra1", colaCadenas.VerPrimero(), "Primero de cola de cadenas tiene que coincidir con primero ingresado")
 }
+
+func TestDesencolar(t *testing.T) {
+	colaEnteros := TDACola.CrearColaEnlazada[int]()
+	colaFlotantes := TDACola.CrearColaEnlazada[float64]()
+	colaCadenas := TDACola.CrearColaEnlazada[string]()
+
+	// Encolar un elemento
+	colaEnteros.Encolar(1)
+	colaFlotantes.Encolar(1.1)
+	colaCadenas.Encolar("palabra1")
+
+	require.Equal(t, 1, colaEnteros.Desencolar(), "Desencolar cola de enteros tiene que coincidir con primero ingresado")
+	require.Equal(t, 1.1, colaFlotantes.Desencolar(), "Desencolar cola de flotantes tiene que coincidir con primero ingresado")
+	require.Equal(t, "palabra1", colaCadenas.Desencolar(), "Desencolar cola de cadenas tiene que coincidir con primero ingresado")
+
+	require.True(t, colaEnteros.EstaVacia(), "Cola de enteros encolados tiene que estar vacia luego de encolar y desencolar un elemento")
+	require.True(t, colaFlotantes.EstaVacia(), "Cola de flotantes encolados tiene que estar vacia luego de encolar y desencolar un elemento")
+	require.True(t, colaCadenas.EstaVacia(), "Cola de cadenas encolados tiene que estar vacia luego de encolar y desencolar un elemento")
+
+}

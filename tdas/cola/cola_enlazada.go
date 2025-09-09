@@ -32,9 +32,13 @@ func (cola *ColaEnlazada[T]) Encolar(elemento T) {
 }
 
 func (cola *ColaEnlazada[T]) Desencolar() T {
-	primero := cola.VerPrimero()
+	datoPrimerNodo := cola.VerPrimero()
 	cola.primero = cola.primero.siguiente
-	return primero
+	// actualizar ultimo puntero si esta vacio
+	if cola.primero == nil {
+		cola.ultimo = nil
+	}
+	return datoPrimerNodo
 }
 
 func CrearColaEnlazada[T any]() Cola[T] {
