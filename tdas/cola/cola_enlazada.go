@@ -21,8 +21,10 @@ func (cola ColaEnlazada[T]) VerPrimero() T {
 	return cola.primero.dato
 }
 
-func (c *ColaEnlazada[T]) Encolar(T) {
-
+func (cola *ColaEnlazada[T]) Encolar(elemento T) {
+	nuevoNodo := Nodo[T]{dato: elemento, siguiente: nil}
+	cola.ultimo.siguiente = &nuevoNodo
+	cola.ultimo = &nuevoNodo
 }
 
 func (cola *ColaEnlazada[T]) Desencolar() T {
