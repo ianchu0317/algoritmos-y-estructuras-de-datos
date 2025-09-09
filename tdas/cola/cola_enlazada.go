@@ -10,12 +10,15 @@ type ColaEnlazada[T any] struct {
 	ultimo  *Nodo[T]
 }
 
-func (c ColaEnlazada[T]) EstaVacia() bool {
-	return c.primero == nil && c.ultimo == nil
+func (cola ColaEnlazada[T]) EstaVacia() bool {
+	return cola.primero == nil && cola.ultimo == nil
 }
 
-func (c ColaEnlazada[T]) VerPrimero() T {
-	return c.primero.dato
+func (cola ColaEnlazada[T]) VerPrimero() T {
+	if cola.EstaVacia() {
+		panic("La cola esta vacia")
+	}
+	return cola.primero.dato
 }
 
 func (c *ColaEnlazada[T]) Encolar(T) {
