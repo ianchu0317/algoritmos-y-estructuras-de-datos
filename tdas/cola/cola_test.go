@@ -65,6 +65,9 @@ func TestDesencolar(t *testing.T) {
 	require.True(t, colaCadenas.EstaVacia(), "Cola de cadenas encolados tiene que estar vacia luego de encolar y desencolar un elemento")
 }
 
+// TEST CON VECTORES
+// Funciones auxiliares para testear encolar y desencolar desde vector
+
 func encolarDesdeVector[T any](cola TDACola.Cola[T], vec []T) {
 	for _, elemento := range vec {
 		cola.Encolar(elemento)
@@ -77,6 +80,7 @@ func desencolarComparandoVector[T any](t *testing.T, cola TDACola.Cola[T], vec [
 	}
 }
 
+// TestColaConVectores chequea orden de encolamiento y desencolamiento sea correcto
 func TestColaConVectores(t *testing.T) {
 	vec1 := []int{5, -6, 7, 2, 0}
 	vec2 := []string{"perro", "gato", "pollito", "elefante", "jirafa"}
@@ -99,4 +103,26 @@ func TestColaConVectores(t *testing.T) {
 	desencolarComparandoVector(t, cola2, vec2)
 	desencolarComparandoVector(t, cola3, vec3)
 	desencolarComparandoVector(t, cola4, vec4)
+}
+
+// TEST DE VOLUMEN
+// Testear que se pueda encolar y desencolar gran cantidad de elemento respetando orden
+
+func testearConRango(t *testing.T, cola TDACola.Cola[int], volumen int) {
+	for i := 1; i <= volumen; i++ {
+		cola.Encolar(i)
+	}
+	for i := 1; i <= volumen; i++ {
+		require.Equal(t, i, cola.Desencolar(), "El valor desencolado tiene que coincidir con orden ingresado")
+	}
+	require.True(t, cola.EstaVacia(), "Luego de encolar y desencolar misma cantidad la cola tiene que estar vacia")
+}
+
+func TestVolumen(t *testing.T) {
+	cola := TDACola.CrearColaEnlazada[int]()
+	volumen1 := 1000
+	volumen2 := 10000
+
+	testearConRango(t, cola, volumen1)
+	testearConRango(t, cola, volumen2)
 }
