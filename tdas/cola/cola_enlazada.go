@@ -23,7 +23,11 @@ func (cola ColaEnlazada[T]) VerPrimero() T {
 
 func (cola *ColaEnlazada[T]) Encolar(elemento T) {
 	nuevoNodo := Nodo[T]{dato: elemento, siguiente: nil}
-	cola.ultimo.siguiente = &nuevoNodo
+	if cola.EstaVacia() {
+		cola.primero = &nuevoNodo
+	} else {
+		cola.ultimo.siguiente = &nuevoNodo
+	}
 	cola.ultimo = &nuevoNodo
 }
 
