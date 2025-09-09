@@ -63,5 +63,40 @@ func TestDesencolar(t *testing.T) {
 	require.True(t, colaEnteros.EstaVacia(), "Cola de enteros encolados tiene que estar vacia luego de encolar y desencolar un elemento")
 	require.True(t, colaFlotantes.EstaVacia(), "Cola de flotantes encolados tiene que estar vacia luego de encolar y desencolar un elemento")
 	require.True(t, colaCadenas.EstaVacia(), "Cola de cadenas encolados tiene que estar vacia luego de encolar y desencolar un elemento")
+}
 
+func encolarDesdeVector[T any](cola TDACola.Cola[T], vec []T) {
+	for _, elemento := range vec {
+		cola.Encolar(elemento)
+	}
+}
+
+func desencolarComparandoVector[T any](t *testing.T, cola TDACola.Cola[T], vec []T) {
+	for _, elemento := range vec {
+		require.Equal(t, elemento, cola.Desencolar(), "El orden de desencolado tiene que coincidir con orden de vector")
+	}
+}
+
+func TestColaConVectores(t *testing.T) {
+	vec1 := []int{5, -6, 7, 2, 0}
+	vec2 := []string{"perro", "gato", "pollito", "elefante", "jirafa"}
+	vec3 := []bool{true, false, false, false, true, true}
+	vec4 := []float64{1.1, 2.2, 3.3, 4.4, -1.1, -3.4}
+
+	cola1 := TDACola.CrearColaEnlazada[int]()
+	cola2 := TDACola.CrearColaEnlazada[string]()
+	cola3 := TDACola.CrearColaEnlazada[bool]()
+	cola4 := TDACola.CrearColaEnlazada[float64]()
+
+	// encolar valores de vector
+	encolarDesdeVector(cola1, vec1)
+	encolarDesdeVector(cola2, vec2)
+	encolarDesdeVector(cola3, vec3)
+	encolarDesdeVector(cola4, vec4)
+
+	// desencolar valores y comparar con orden de vector
+	desencolarComparandoVector(t, cola1, vec1)
+	desencolarComparandoVector(t, cola2, vec2)
+	desencolarComparandoVector(t, cola3, vec3)
+	desencolarComparandoVector(t, cola4, vec4)
 }
