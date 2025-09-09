@@ -25,8 +25,10 @@ func (c *ColaEnlazada[T]) Encolar(T) {
 
 }
 
-func (c *ColaEnlazada[T]) Desencolar() T {
-	return c.primero.dato
+func (cola *ColaEnlazada[T]) Desencolar() T {
+	primero := cola.VerPrimero()
+	cola.primero = cola.primero.siguiente
+	return primero
 }
 
 func CrearColaEnlazada[T any]() Cola[T] {
