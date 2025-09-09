@@ -12,6 +12,19 @@ type colaEnlazada[T any] struct {
 	ultimoNodo *nodo[T]
 }
 
+// *** Funciones de creacion para estructuras ***
+// crearNodo devuelve un nodo dado un valor a guardar
+func crearNodo[T any](elemento T) nodo[T] {
+	nuevoNodo := nodo[T]{dato: elemento, siguiente: nil}
+	return nuevoNodo
+}
+
+// CrearColaEnlazada devuelve una instancia de Cola
+func CrearColaEnlazada[T any]() Cola[T] {
+	nuevaCola := colaEnlazada[T]{primerNodo: nil, ultimoNodo: nil}
+	return &nuevaCola
+}
+
 // **** Funciones primitivas ****
 
 func (cola colaEnlazada[T]) EstaVacia() bool {
@@ -26,13 +39,13 @@ func (cola colaEnlazada[T]) VerPrimero() T {
 }
 
 func (cola *colaEnlazada[T]) Encolar(elemento T) {
-	nuevonodo := nodo[T]{dato: elemento, siguiente: nil}
+	nuevoNodo := crearNodo(elemento)
 	if cola.EstaVacia() {
-		cola.primerNodo = &nuevonodo
+		cola.primerNodo = &nuevoNodo
 	} else {
-		cola.ultimoNodo.siguiente = &nuevonodo
+		cola.ultimoNodo.siguiente = &nuevoNodo
 	}
-	cola.ultimoNodo = &nuevonodo
+	cola.ultimoNodo = &nuevoNodo
 }
 
 func (cola *colaEnlazada[T]) Desencolar() T {
@@ -43,10 +56,4 @@ func (cola *colaEnlazada[T]) Desencolar() T {
 		cola.ultimoNodo = nil
 	}
 	return datoPrimernodo
-}
-
-// CrearColaEnlazada devuelve una instancia de Cola
-func CrearColaEnlazada[T any]() Cola[T] {
-	nuevaCola := colaEnlazada[T]{primerNodo: nil, ultimoNodo: nil}
-	return &nuevaCola
 }
