@@ -2,51 +2,51 @@ package cola
 
 // **** Declaracion de estructuras a utilizar ****
 
-type Nodo[T any] struct {
+type nodo[T any] struct {
 	dato      T
-	siguiente *Nodo[T]
+	siguiente *nodo[T]
 }
 
-type ColaEnlazada[T any] struct {
-	primero *Nodo[T]
-	ultimo  *Nodo[T]
+type colaEnlazada[T any] struct {
+	primerNodo *nodo[T]
+	ultimoNodo *nodo[T]
 }
 
 // **** Funciones primitivas ****
 
-func (cola ColaEnlazada[T]) EstaVacia() bool {
-	return cola.primero == nil && cola.ultimo == nil
+func (cola colaEnlazada[T]) EstaVacia() bool {
+	return cola.primerNodo == nil && cola.ultimoNodo == nil
 }
 
-func (cola ColaEnlazada[T]) VerPrimero() T {
+func (cola colaEnlazada[T]) VerPrimero() T {
 	if cola.EstaVacia() {
 		panic("La cola esta vacia")
 	}
-	return cola.primero.dato
+	return cola.primerNodo.dato
 }
 
-func (cola *ColaEnlazada[T]) Encolar(elemento T) {
-	nuevoNodo := Nodo[T]{dato: elemento, siguiente: nil}
+func (cola *colaEnlazada[T]) Encolar(elemento T) {
+	nuevonodo := nodo[T]{dato: elemento, siguiente: nil}
 	if cola.EstaVacia() {
-		cola.primero = &nuevoNodo
+		cola.primerNodo = &nuevonodo
 	} else {
-		cola.ultimo.siguiente = &nuevoNodo
+		cola.ultimoNodo.siguiente = &nuevonodo
 	}
-	cola.ultimo = &nuevoNodo
+	cola.ultimoNodo = &nuevonodo
 }
 
-func (cola *ColaEnlazada[T]) Desencolar() T {
-	datoPrimerNodo := cola.VerPrimero()
-	cola.primero = cola.primero.siguiente
+func (cola *colaEnlazada[T]) Desencolar() T {
+	datoPrimernodo := cola.VerPrimero()
+	cola.primerNodo = cola.primerNodo.siguiente
 	// Actualizar ultimo puntero si no hay mas elementos
-	if cola.primero == nil {
-		cola.ultimo = nil
+	if cola.primerNodo == nil {
+		cola.ultimoNodo = nil
 	}
-	return datoPrimerNodo
+	return datoPrimernodo
 }
 
 // CrearColaEnlazada devuelve una instancia de Cola
 func CrearColaEnlazada[T any]() Cola[T] {
-	nuevaCola := ColaEnlazada[T]{primero: nil, ultimo: nil}
+	nuevaCola := colaEnlazada[T]{primerNodo: nil, ultimoNodo: nil}
 	return &nuevaCola
 }
