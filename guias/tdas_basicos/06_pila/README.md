@@ -27,4 +27,62 @@ func esAscendente(pila Pila[int]) bool {
 }
 ```
 
-Esto presenta problemas 
+Esto presenta problemas:
+- Si hay un solo elemento
+- Si orden ascendente
+
+Rehago el ejercicio
+
+```go
+func esAscendente(pila Pila[int]) bool {
+    var resultado bool
+
+    // verificar si no hay elementos en pila
+    if pila.EstaVacia() {
+        return true
+    }
+    elementoActual := pila.Desapilar()
+
+    // verificar si pila hay un solo elemento
+    if pila.EstaVacia() {
+        return true
+    }
+    elementoAnterior := pila.VerTope()
+    
+    // comparar los dos elementos
+    if elementoActual > elementoAnterior {
+        resultado = false
+    } else {
+        resultado = esAscendente(pila)
+    }
+
+    pila.Apilar(elementoActual)
+    return resultado
+}
+```
+
+Y en este caso lo que hago es como siempre ir adelante con todos los elementos así que es O(n). Otra opción podría utilizar una pila auxiliar
+
+```go
+func esAscendente(pila Pila[int]) bool {
+    pilaAux := Pila[int]{}
+    var resultado bool
+    var elementoActual, elementoAnterior int
+
+    // hacer comparacion
+    for !pila.EstaVacia() && resultado {
+        elementoActual = pila.Desapilar()
+        elementoAnterior = pila.VerTope()
+        resultado = elementoActual > elementoAnterior
+        pilaAux.Apilar(elementoActual)
+    }
+
+    // volver a apilar
+    for !pilaAux.EstaVacia(){
+        pila.Apilar(pilaAux.Desapilar())
+    }
+
+    return resultado
+}
+
+```
