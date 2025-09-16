@@ -1,3 +1,5 @@
+// Algoritmo en https://es.wikipedia.org/wiki/Notaci%C3%B3n_polaca_inversa
+
 package main
 
 import (
