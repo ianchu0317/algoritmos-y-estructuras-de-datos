@@ -7,13 +7,10 @@ import (
 )
 
 func main() {
-	// leer args
-	args := os.Args
-	fmt.Println(args)
-
 	// crear un scanner y leer stdin
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		fmt.Println("Linea es:", scanner.Text())
+	s := bufio.NewScanner(os.Stdin)
+	for s.Scan() {
+		lineaActual := s.Text()
+		fmt.Println("Linea es:", lineaActual)
 	}
 }
