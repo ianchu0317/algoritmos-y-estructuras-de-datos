@@ -29,4 +29,13 @@ func main() {
 	fmt.Println("\n***Counting Sort****")
 	fmt.Println("Nuevo array es:", arr3)
 	fmt.Println("Array ordenado con Counting Sort es:", sort.CountingSort(arr3))
+
+	// Radix Sort
+	// Como sabemos que arreglo va de 0 a 100 -> cada num tiene 2 digitos
+	// Podemos ordenar con Radix Sort auxiliar counting Sort
+	arr4 := aux.CrearArrayRandom(10)
+	fmt.Println("\n***Radix Sort****")
+	fmt.Println("Nuevo array es:", arr4)
+	fmt.Println("Array ordenado con Radix Sort es:", sort.RadixSort(arr4))
+
 }
