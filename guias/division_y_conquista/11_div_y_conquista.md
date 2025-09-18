@@ -43,4 +43,6 @@ func hallarInicioCero(arr []int, inicio, final int) int {
     }
 }
 ```
-La complejidad es O(log(n)) ya que si aplicamos teorema maestro a la ecuacion de recurrencia T(N)=T(N/2) +(O(1)) obtenemos que 
+La complejidad es O(log(n)) ya que si aplicamos teorema maestro a la ecuacion de recurrencia T(N)=T(N/2) +(O(1)) obtenemos que
+
+![alt text](image.png) 
