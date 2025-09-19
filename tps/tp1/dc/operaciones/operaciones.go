@@ -62,10 +62,16 @@ func tern(a, b, c int64) int64 {
 	return resultado
 }
 
-// Calcula la Operacion de dos variables
-/*func calcDosVariables(f func(int64, int64) int64) {
-	enteros := AUX.DesapilarCantidadN()
-}*/
+// calcDosVariables calcula la operacion de dos variables
+func calcDosVariables(operandos TDAPila.Pila[int64], operar func(int64, int64) int64) error {
+	enteros, err := AUX.DesapilarCantidadN(operandos, 2)
+	if err != nil {
+		return err
+	}
+	resultado := operar(enteros[0], enteros[1])
+	operandos.Apilar(resultado)
+	return nil
+}
 
 // FUNCIONES A EXPORTAR
 
@@ -73,21 +79,30 @@ func tern(a, b, c int64) int64 {
 func CalcularOperacion(operandos TDAPila.Pila[int64], operacion string) error {
 	switch operacion {
 	case "+":
-		enteros, err := AUX.DesapilarCantidadN(operandos, CANT_OPERANDO_SUMA)
-		if err != nil {
-			return err
-		}
-		resultado := sumar(enteros[0], enteros[1])
-		operandos.Apilar(resultado)
-		return nil
-
+		return calcDosVariables(operandos, sumar)
 	case "-":
-		enteros, err := AUX.DesapilarCantidadN(operandos, CANT_OPERANDO_SUMA)
+		return calcDosVariables(operandos, restar)
+	case "*":
+		return calcDosVariables(operandos, multiplicar)
+	case "/":
+		return calcDosVariables(operandos, dividir)
+	case "^":
+		return calcDosVariables(operandos, exp)
+	case "log":
+		return calcDosVariables(operandos, logBaseB)
+	case "sqrt":
+		enteros, err := AUX.DesapilarCantidadN(operandos, CANT_OPERANDO_SQRT)
 		if err != nil {
 			return err
 		}
-		resultado := restar(enteros[0], enteros[1])
-		operandos.Apilar(resultado)
+		operandos.Apilar(sqrt(enteros[0]))
+		return nil
+	case "?":
+		enteros, err := AUX.DesapilarCantidadN(operandos, CANT_OPERANDO_TERN)
+		if err != nil {
+			return err
+		}
+		operandos.Apilar(tern(enteros[0], enteros[1], enteros[2]))
 		return nil
 	}
 	return nil
