@@ -13,20 +13,16 @@ import (
 	TDAPila "tdas/pila"
 )
 
-// calcularOperacion calcula el resultado aplicando la operación adecuada
-func calcularOperacion(operandos TDAPila.Pila[int], operacion string) {
-	//desapilarCantidadEnSlice(operandos, 2)
-	fmt.Println(AUX.DesapilarCantidadN(operandos, 2))
-}
-
 // calcularOperacion calcula la operación pasada en formato polaco inverso
 func procesarLinea(linea string) {
 	operandos := TDAPila.CrearPilaDinamica[int]()
 	// Dividir espacios del string e ir por cada elemento
 	for caracter := range strings.FieldsSeq(linea) {
 		if AUX.EsOperacion(caracter) {
+			// Si es operador, calcular operación con los ultimos elementos de la pila
 			calcularOperacion(operandos, caracter)
 		} else {
+			// Si es numero, apilar
 			num, _ := strconv.Atoi(caracter)
 			operandos.Apilar(num)
 		}
