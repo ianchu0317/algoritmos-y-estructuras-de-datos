@@ -16,7 +16,7 @@ import (
 
 // calcularOperacion calcula la operación pasada en formato polaco inverso
 func procesarLinea(linea string) {
-	operandos := TDAPila.CrearPilaDinamica[int]()
+	operandos := TDAPila.CrearPilaDinamica[int64]()
 	// Dividir espacios del string e ir por cada elemento
 	for caracter := range strings.FieldsSeq(linea) {
 		if AUX.EsOperacion(caracter) {
@@ -24,7 +24,7 @@ func procesarLinea(linea string) {
 			OP.CalcularOperacion(operandos, caracter)
 		} else {
 			// Si es numero, apilar
-			num, _ := strconv.Atoi(caracter)
+			num, _ := strconv.ParseInt(caracter, 10, 64) // Base 10, bitsize 64
 			operandos.Apilar(num)
 		}
 	}

@@ -66,7 +66,14 @@ func tern(a, b, c int64) int64 {
 // FUNCIONES A EXPORTAR
 
 // calcularOperacion calcula el resultado aplicando la operación adecuada
-func CalcularOperacion(operandos TDAPila.Pila[int], operacion string) {
+func CalcularOperacion(operandos TDAPila.Pila[int64], operacion string) {
+	switch operacion {
+	case "+":
+		enteros := AUX.DesapilarCantidadN(operandos, CANT_OPERANDO_SUMA)
+		if len(enteros) == CANT_OPERANDO_SUMA {
+			resultado := sumar(enteros[0], enteros[1])
+		}
+	}
 	//desapilarCantidadEnSlice(operandos, 2)
 	fmt.Println(AUX.DesapilarCantidadN(operandos, 2))
 }

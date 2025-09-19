@@ -18,7 +18,7 @@ func EsOperacion(caracter string) bool {
 }
 
 // invertirSlice invierte un slice [a, b] -> [b, a]
-func invertirSlice(arr []int) {
+func invertirSlice(arr []int64) {
 	for i := 0; i < len(arr)/2; i++ {
 		arr[i], arr[len(arr)-1-i] = arr[len(arr)-1-i], arr[i]
 	}
@@ -27,8 +27,8 @@ func invertirSlice(arr []int) {
 // desapilarCantidadN desapila 'n' elementos y los devuelve en Slice.
 // Si la pila es [a, b, c, tope] y n=2 -> [b, c]
 // Si hay error imprime por STDERR error y devuelve lo que desapiló
-func DesapilarCantidadN(pila TDAPila.Pila[int], n int) []int {
-	resultado := make([]int, 0)
+func DesapilarCantidadN(pila TDAPila.Pila[int64], n int) []int64 {
+	resultado := make([]int64, 0)
 	for range n {
 		if !pila.EstaVacia() {
 			num := (pila).Desapilar()
