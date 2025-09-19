@@ -2,7 +2,6 @@ package operaciones
 
 import (
 	AUX "dc/auxiliares"
-	"fmt"
 	"math"
 	TDAPila "tdas/pila"
 )
@@ -63,17 +62,33 @@ func tern(a, b, c int64) int64 {
 	return resultado
 }
 
+// Calcula la Operacion de dos variables
+/*func calcDosVariables(f func(int64, int64) int64) {
+	enteros := AUX.DesapilarCantidadN()
+}*/
+
 // FUNCIONES A EXPORTAR
 
 // calcularOperacion calcula el resultado aplicando la operación adecuada
-func CalcularOperacion(operandos TDAPila.Pila[int64], operacion string) {
+func CalcularOperacion(operandos TDAPila.Pila[int64], operacion string) error {
 	switch operacion {
 	case "+":
-		enteros := AUX.DesapilarCantidadN(operandos, CANT_OPERANDO_SUMA)
-		if len(enteros) == CANT_OPERANDO_SUMA {
-			resultado := sumar(enteros[0], enteros[1])
+		enteros, err := AUX.DesapilarCantidadN(operandos, CANT_OPERANDO_SUMA)
+		if err != nil {
+			return err
 		}
+		resultado := sumar(enteros[0], enteros[1])
+		operandos.Apilar(resultado)
+		return nil
+
+	case "-":
+		enteros, err := AUX.DesapilarCantidadN(operandos, CANT_OPERANDO_SUMA)
+		if err != nil {
+			return err
+		}
+		resultado := restar(enteros[0], enteros[1])
+		operandos.Apilar(resultado)
+		return nil
 	}
-	//desapilarCantidadEnSlice(operandos, 2)
-	fmt.Println(AUX.DesapilarCantidadN(operandos, 2))
+	return nil
 }
