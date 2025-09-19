@@ -20,10 +20,9 @@ func procesarLinea(linea string) {
 	var opErr error
 
 	// Dividir espacios del string e ir por cada elemento
+	// Si es operador, calcular operación con los ultimos elementos de la pila
+	// Si es numero, apilar a operandos
 	for caracter := range strings.FieldsSeq(linea) {
-
-		// Si es operador, calcular operación con los ultimos elementos de la pila
-		// Si es numero, apilar a operandos
 		if AUX.EsOperacion(caracter) {
 			opErr = OP.CalcularOperacion(operandos, caracter)
 			if opErr != nil {
