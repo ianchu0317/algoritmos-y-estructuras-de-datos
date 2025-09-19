@@ -6,6 +6,7 @@ package main
 import (
 	"bufio"
 	AUX "dc/auxiliares"
+	OP "dc/operaciones"
 	"fmt"
 	"os"
 	"strconv"
@@ -20,7 +21,7 @@ func procesarLinea(linea string) {
 	for caracter := range strings.FieldsSeq(linea) {
 		if AUX.EsOperacion(caracter) {
 			// Si es operador, calcular operación con los ultimos elementos de la pila
-			calcularOperacion(operandos, caracter)
+			OP.CalcularOperacion(operandos, caracter)
 		} else {
 			// Si es numero, apilar
 			num, _ := strconv.Atoi(caracter)

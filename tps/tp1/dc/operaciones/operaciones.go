@@ -3,6 +3,7 @@ package operaciones
 import (
 	AUX "dc/auxiliares"
 	"fmt"
+	"math"
 	TDAPila "tdas/pila"
 )
 
@@ -21,20 +22,45 @@ const (
 )
 
 // Funciones Matemáticas (internas)
-func Sumar(a, b int64) int64 {
+
+func sumar(a, b int64) int64 {
 	return a + b
 }
 
-func Restar(a, b int64) int64 {
+func restar(a, b int64) int64 {
 	return a - b
 }
 
-func Multiplicar(a, b int64) int64 {
+func multiplicar(a, b int64) int64 {
 	return a * b
 }
 
-func Dividir(a, b int64) int64 {
+func dividir(a, b int64) int64 {
 	return a / b
+}
+
+func sqrt(n int64) int64 {
+	return int64(math.Sqrt(float64(n)))
+}
+
+func exp(a, b int64) int64 {
+	// a^b
+	return int64(math.Pow(float64(a), float64(b)))
+}
+
+func logBaseB(a, b int64) int64 {
+	// LogB(A) = log(a)/log(b)
+	return int64(math.Log(float64(a)) / math.Log(float64(b)))
+}
+
+func tern(a, b, c int64) int64 {
+	var resultado int64
+	if a != 0 {
+		resultado = b
+	} else {
+		resultado = c
+	}
+	return resultado
 }
 
 // FUNCIONES A EXPORTAR
