@@ -23,6 +23,13 @@ func esOperacion(caracter string) bool {
 	return slices.Contains(OPERACIONES, caracter)
 }
 
+// invertirSlice invierte un slice [a, b] -> [b, a]
+func invertirSlice(arr []int) {
+	for i := 0; i < len(arr)/2; i++ {
+		arr[i], arr[len(arr)-1-i] = arr[len(arr)-1-i], arr[i]
+	}
+}
+
 // desapilarCantidadEnArray desapila 'n' elementos y los devuelve en Slice.
 // Si la pila es [a, b, c, tope] y n=2 -> [b, c]
 func desapilarCantidadEnSlice(pila TDAPila.Pila[int], n int) []int {
@@ -33,15 +40,18 @@ func desapilarCantidadEnSlice(pila TDAPila.Pila[int], n int) []int {
 			resultado = append(resultado, num)
 		} else {
 			fmt.Fprintln(os.Stderr, ERROR)
+			invertirSlice(resultado)
 			return resultado
 		}
 	}
+	invertirSlice(resultado)
 	return resultado
 }
 
 // calcularOperacion calcula el resultado aplicando la operación adecuada
 func calcularOperacion(operandos TDAPila.Pila[int], operacion string) {
-	fmt.Println(desapilarCantidadEnSlice(operandos, 2))
+	desapilarCantidadEnSlice(operandos, 2)
+	//fmt.Println(desapilarCantidadEnSlice(operandos, 2))
 }
 
 // calcularOperacion calcula la operación pasada en formato polaco inverso
