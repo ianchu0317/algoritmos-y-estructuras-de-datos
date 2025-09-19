@@ -10,20 +10,22 @@ import (
 	"strings"
 )
 
-// extraerSiguienteDigito
-// func extraerSiguienteDigito
+// VARIABLES GLOBALES
 var OPERACIONES = []string{"+", "-", "*", "/", "sqrt", "log"}
+var ERROR = "ERROR"
 
+// esOperacion devuelve si el caracter es una operación o no
 func esOperacion(caracter string) bool {
 	return slices.Contains(OPERACIONES, caracter)
 }
 
-// calcularOperacion calcula la operación en formato polaco inverso
+// calcularOperacion calcula la operación pasada en formato polaco inverso
 func calcularOperacion(linea string) {
 	// Dividir espacios del string y convertir en array
-	miArrayDeLetras := strings.Fields(linea)
-	fmt.Println(miArrayDeLetras)
-	for _, caracter := range miArrayDeLetras {
+	//miArrayDeLetras := strings.Fields(linea)
+
+	// fmt.Println(miArrayDeLetras)
+	for caracter := range strings.FieldsSeq(linea) {
 		if esOperacion(caracter) {
 			fmt.Println(caracter)
 		}
@@ -35,7 +37,6 @@ func main() {
 	s := bufio.NewScanner(os.Stdin)
 	for s.Scan() {
 		lineaActual := s.Text()
-		fmt.Println("")
 		fmt.Println("\nLinea es:", lineaActual)
 		calcularOperacion(lineaActual)
 	}
