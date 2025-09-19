@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"os"
 	"slices"
+	"strconv"
 	"strings"
+	TDAPila "tdas/pila"
 )
 
 // VARIABLES GLOBALES
@@ -19,25 +21,33 @@ func esOperacion(caracter string) bool {
 	return slices.Contains(OPERACIONES, caracter)
 }
 
-// calcularOperacion calcula la operación pasada en formato polaco inverso
-func calcularOperacion(linea string) {
-	// Dividir espacios del string y convertir en array
-	//miArrayDeLetras := strings.Fields(linea)
+// calcularOperacion calcula el resultado aplicando la operación adecuada
+func calcularOperacion(operandos TDAPila.Pila[int], operacion string) {
 
-	// fmt.Println(miArrayDeLetras)
+}
+
+// calcularOperacion calcula la operación pasada en formato polaco inverso
+func procesarLinea(linea string) {
+	operandos := TDAPila.CrearPilaDinamica[int]()
+	// Dividir espacios del string y convertir en array
+	// https://pkg.go.dev/strings#FieldsSeq
 	for caracter := range strings.FieldsSeq(linea) {
 		if esOperacion(caracter) {
-			fmt.Println(caracter)
+			calcularOperacion(operandos, caracter)
+		} else {
+			num, _ := strconv.Atoi(caracter)
+			operandos.Apilar(num)
+			fmt.Println(operandos)
 		}
 	}
 }
 
 func main() {
-	// crear un scanner y leer stdin
+	// crear un scanner y leer STDIN
 	s := bufio.NewScanner(os.Stdin)
 	for s.Scan() {
 		lineaActual := s.Text()
 		fmt.Println("\nLinea es:", lineaActual)
-		calcularOperacion(lineaActual)
+		procesarLinea(lineaActual)
 	}
 }
