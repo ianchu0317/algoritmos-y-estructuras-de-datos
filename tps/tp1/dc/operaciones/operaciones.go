@@ -63,8 +63,14 @@ func logBaseB(a, b int64) (int64, error) {
 	return int64(math.Log(arg) / math.Log(base)), nil
 }
 
-func sqrt(n int64) int64 {
-	return int64(math.Sqrt(float64(n)))
+// sqrt toma numero n y devuelve raiz cuadrada de n.
+// devuelve -1 con error 'dividendo invalido' si n es inválido.
+// devuelve error nil si dividendo es válido
+func sqrt(n int64) (int64, error) {
+	if n < 0 {
+		return -1, errors.New("dividendo 'n' invalido")
+	}
+	return int64(math.Sqrt(float64(n))), nil
 }
 
 func tern(a, b, c int64) int64 {
@@ -114,11 +120,18 @@ func CalcularOperacion(operandos TDAPila.Pila[int64], operacion string) error {
 	case "log":
 		return calcDosVariables(operandos, logBaseB)
 	case "sqrt":
+		// Desapilar elementos para sqrt
 		enteros, err := AUX.DesapilarCantidadN(operandos, CANT_OPERANDO_SQRT)
 		if err != nil {
 			return err
 		}
-		operandos.Apilar(sqrt(enteros[0]))
+		// Calcular resultado para sqrt
+		resultado, err := sqrt(enteros[0])
+		if err != nil {
+			return err
+		}
+		// Apilar resultado
+		operandos.Apilar(resultado)
 		return nil
 	case "?":
 		enteros, err := AUX.DesapilarCantidadN(operandos, CANT_OPERANDO_TERN)
