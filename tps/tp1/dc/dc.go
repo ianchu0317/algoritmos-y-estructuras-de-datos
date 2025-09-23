@@ -17,7 +17,8 @@ import (
 // calcularOperacion calcula la operación pasada en formato polaco inverso
 func procesarLinea(linea string) {
 	operandos := TDAPila.CrearPilaDinamica[int64]()
-	var opErr error
+	var opErr error = nil
+	var huboOp bool = false
 
 	// Dividir espacios del string e ir por cada elemento
 	// Si es operador, calcular operación con los ultimos elementos de la pila
@@ -25,6 +26,7 @@ func procesarLinea(linea string) {
 	for caracter := range strings.FieldsSeq(linea) {
 		if AUX.EsOperacion(caracter) {
 			opErr = OP.CalcularOperacion(operandos, caracter)
+			huboOp = true
 			if opErr != nil {
 				break // Salir de operacion si hay error
 			}
@@ -34,8 +36,8 @@ func procesarLinea(linea string) {
 		}
 	}
 
-	// Imprimir Resultado de la linea
-	if opErr == nil {
+	// Imprimir resultado cuando hubo operación y sin errores
+	if opErr == nil && huboOp {
 		fmt.Println(operandos.Desapilar())
 	} else {
 		fmt.Println("ERROR")
