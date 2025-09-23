@@ -14,6 +14,12 @@ import (
 	TDAPila "tdas/pila"
 )
 
+// Constante información de número a trabajar
+const (
+	BASE    = 10
+	BITSIZE = 24
+)
+
 // calcularOperacion calcula la operación pasada en formato polaco inverso
 func procesarLinea(linea string) {
 	operandos := TDAPila.CrearPilaDinamica[int64]()
@@ -31,7 +37,7 @@ func procesarLinea(linea string) {
 				break // Salir de operacion si hay error
 			}
 		} else {
-			num, opErr := strconv.ParseInt(caracter, 10, 64) // Base 10, bitsize 64
+			num, opErr := strconv.ParseInt(caracter, BASE, BITSIZE) // Base 10, bitsize 64
 			if opErr != nil {
 				break
 			}
@@ -54,11 +60,10 @@ func procesarLinea(linea string) {
 }
 
 func main() {
-	// crear un scanner y leer STDIN
+	// Crear un scanner y leer STDIN
 	s := bufio.NewScanner(os.Stdin)
 	for s.Scan() {
 		lineaActual := s.Text()
-		//fmt.Println("\nLinea es:", lineaActual)
 		procesarLinea(lineaActual)
 	}
 }
