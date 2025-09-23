@@ -18,6 +18,7 @@ import (
 const (
 	BASE    = 10
 	BITSIZE = 24
+	ERROR   = "ERROR"
 )
 
 // calcularOperacion calcula la operación pasada en formato polaco inverso
@@ -52,10 +53,10 @@ func procesarLinea(linea string) {
 		if operandos.EstaVacia() {
 			fmt.Println(resultadoFinal)
 		} else {
-			fmt.Println("ERROR")
+			fmt.Println(ERROR)
 		}
 	} else {
-		fmt.Println("ERROR")
+		fmt.Println(ERROR)
 	}
 }
 
