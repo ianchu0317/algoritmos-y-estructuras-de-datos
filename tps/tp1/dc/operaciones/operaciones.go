@@ -34,8 +34,8 @@ func multiplicar(a, b int64) (int64, error) {
 }
 
 // dividir toma dos enteros (a,b) y devuelve a/b.
+// devuelve -1 y 'division por cero' si hay división por cero.
 // devuelve nil cuando operación es válida
-// devuelve -1 y ERROR si hay error
 func dividir(a, b int64) (int64, error) {
 	if b == 0 {
 		return -1, errors.New("error division por cero")
@@ -51,10 +51,16 @@ func exp(a, b int64) (int64, error) {
 }
 
 // logBaseB toma dos enteros (a,b) y calcula logaritmo de A en base B.
+// devuelve -1 con error 'base inválida' si la base b es inválida
 // error es nil si operación es válida
 func logBaseB(a, b int64) (int64, error) {
 	// LogB(A) = log(a)/log(b)
-	return int64(math.Log(float64(a)) / math.Log(float64(b))), nil
+	arg := float64(a)
+	base := float64(b)
+	if base <= 1 {
+		return -1, errors.New("base logaritmo inválido")
+	}
+	return int64(math.Log(arg) / math.Log(base)), nil
 }
 
 func sqrt(n int64) int64 {
