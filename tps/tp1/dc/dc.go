@@ -38,7 +38,7 @@ func procesarLinea(linea string) {
 	if opErr == nil {
 		fmt.Println(operandos.Desapilar())
 	} else {
-		fmt.Fprintf(os.Stderr, "ERROR")
+		fmt.Println("ERROR")
 	}
 }
 
