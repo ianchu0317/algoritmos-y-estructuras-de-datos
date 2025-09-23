@@ -8,7 +8,6 @@ import (
 
 // VARIABLES GLOBALES
 var OPERACIONES = []string{"+", "-", "*", "/", "sqrt", "^", "log", "?"}
-var ERROR = "ERROR"
 
 // FUNCIONES AUXILIARES
 // esOperacion devuelve si el caracter es una operación o no
@@ -25,7 +24,7 @@ func invertirSlice(arr []int64) {
 
 // desapilarCantidadN desapila 'n' elementos y los devuelve en Slice.
 // Si la pila es [a, b, c, tope] y n=2 -> [b, c]
-// Si hay error imprime por STDERR error y devuelve lo que desapiló
+// Devuelve error si no hay cantidad solicitada en la pila
 func DesapilarCantidadN(pila TDAPila.Pila[int64], n int) ([]int64, error) {
 	resultado := make([]int64, 0)
 	for range n {
@@ -33,9 +32,8 @@ func DesapilarCantidadN(pila TDAPila.Pila[int64], n int) ([]int64, error) {
 			num := (pila).Desapilar()
 			resultado = append(resultado, num)
 		} else {
-			//fmt.Fprintln(os.Stderr, ERROR)
 			invertirSlice(resultado)
-			return resultado, errors.New(ERROR)
+			return resultado, errors.New("elementos insuficientes en la pila")
 		}
 	}
 	invertirSlice(resultado)
