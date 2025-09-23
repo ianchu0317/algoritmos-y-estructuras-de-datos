@@ -31,7 +31,10 @@ func procesarLinea(linea string) {
 				break // Salir de operacion si hay error
 			}
 		} else {
-			num, _ := strconv.ParseInt(caracter, 10, 64) // Base 10, bitsize 64
+			num, opErr := strconv.ParseInt(caracter, 10, 64) // Base 10, bitsize 64
+			if opErr != nil {
+				break
+			}
 			operandos.Apilar(num)
 		}
 	}

@@ -44,8 +44,12 @@ func dividir(a, b int64) (int64, error) {
 }
 
 // exp toma dos enteros y devuelve la exponencial a^b.
+// devuelve -1 con error 'exp invalida' cuando exponente es invalido.
 // devuelve nil cuando operación es válida
 func exp(a, b int64) (int64, error) {
+	if b < 0 {
+		return -1, errors.New("exponente invalido")
+	}
 	// a^b
 	return int64(math.Pow(float64(a), float64(b))), nil
 }
