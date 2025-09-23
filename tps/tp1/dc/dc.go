@@ -47,7 +47,7 @@ func main() {
 	s := bufio.NewScanner(os.Stdin)
 	for s.Scan() {
 		lineaActual := s.Text()
-		fmt.Println("\nLinea es:", lineaActual)
+		//fmt.Println("\nLinea es:", lineaActual)
 		procesarLinea(lineaActual)
 	}
 }

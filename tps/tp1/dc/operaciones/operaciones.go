@@ -2,6 +2,7 @@ package operaciones
 
 import (
 	AUX "dc/auxiliares"
+	"errors"
 	"math"
 	TDAPila "tdas/pila"
 )
@@ -14,34 +15,50 @@ const (
 
 // Funciones Matemáticas (internas)
 
-func sumar(a, b int64) int64 {
-	return a + b
+// sumar toma dos eneteros (a,b) y devuelve a+b.
+// error siempre es nil
+func sumar(a, b int64) (int64, error) {
+	return a + b, nil
 }
 
-func restar(a, b int64) int64 {
-	return a - b
+// restar toma dos enteros (a,b) y devuelve a-b.
+// error siempre es nil
+func restar(a, b int64) (int64, error) {
+	return a - b, nil
 }
 
-func multiplicar(a, b int64) int64 {
-	return a * b
+// multiplicar toma dos enteros (a,b) y devuelve a*b.
+// error siempre es nil
+func multiplicar(a, b int64) (int64, error) {
+	return a * b, nil
 }
 
-func dividir(a, b int64) int64 {
-	return a / b
+// dividir toma dos enteros (a,b) y devuelve a/b.
+// devuelve nil cuando operación es válida
+// devuelve -1 y ERROR si hay error
+func dividir(a, b int64) (int64, error) {
+	if b == 0 {
+		return -1, errors.New("error division por cero")
+	}
+	return (a / b), nil
+}
+
+// exp toma dos enteros y devuelve la exponencial a^b.
+// devuelve nil cuando operación es válida
+func exp(a, b int64) (int64, error) {
+	// a^b
+	return int64(math.Pow(float64(a), float64(b))), nil
+}
+
+// logBaseB toma dos enteros (a,b) y calcula logaritmo de A en base B.
+// error es nil si operación es válida
+func logBaseB(a, b int64) (int64, error) {
+	// LogB(A) = log(a)/log(b)
+	return int64(math.Log(float64(a)) / math.Log(float64(b))), nil
 }
 
 func sqrt(n int64) int64 {
 	return int64(math.Sqrt(float64(n)))
-}
-
-func exp(a, b int64) int64 {
-	// a^b
-	return int64(math.Pow(float64(a), float64(b)))
-}
-
-func logBaseB(a, b int64) int64 {
-	// LogB(A) = log(a)/log(b)
-	return int64(math.Log(float64(a)) / math.Log(float64(b)))
 }
 
 func tern(a, b, c int64) int64 {
@@ -55,12 +72,20 @@ func tern(a, b, c int64) int64 {
 }
 
 // calcDosVariables calcula la operacion de dos variables
-func calcDosVariables(operandos TDAPila.Pila[int64], operar func(int64, int64) int64) error {
+func calcDosVariables(operandos TDAPila.Pila[int64], operar func(int64, int64) (int64, error)) error {
+	// Intentar desapilar la cantidad de variables a utilizar
+	// devolver error si no se ingresaron necesario
 	enteros, err := AUX.DesapilarCantidadN(operandos, 2)
 	if err != nil {
 		return err
 	}
-	resultado := operar(enteros[0], enteros[1])
+	// Intentar realizar cálculo
+	// devolver error si la operación es inválida
+	resultado, err := operar(enteros[0], enteros[1])
+	if err != nil {
+		return err
+	}
+	// Volver a apilar el resultado y devolver nil
 	operandos.Apilar(resultado)
 	return nil
 }
