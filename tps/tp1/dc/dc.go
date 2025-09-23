@@ -36,9 +36,15 @@ func procesarLinea(linea string) {
 		}
 	}
 
-	// Imprimir resultado cuando hubo operación y sin errores
+	// Imprimir resultado cuando:
+	// - Hubo operación + no hubo errores + pila solo hay un elemento
 	if opErr == nil && huboOp {
-		fmt.Println(operandos.Desapilar())
+		resultadoFinal := operandos.Desapilar()
+		if operandos.EstaVacia() {
+			fmt.Println(resultadoFinal)
+		} else {
+			fmt.Println("ERROR")
+		}
 	} else {
 		fmt.Println("ERROR")
 	}
