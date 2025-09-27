@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// Test de TDA Lista sin iterador
+// *** Test de TDA Lista sin iterador ***
 
 // Test de la lista vacia
 func TestListaVacia(t *testing.T) {
@@ -30,15 +30,39 @@ func TestListaVacia(t *testing.T) {
 	require.Panics(t, func() { listaCadenas.BorrarPrimero() }, "Lista de cadenas recien creada no puede Borrar primero")
 }
 
-// - Caso lista vacia
-// - Caso lista con un solo elemento
-// - Casos especificos, entrada y salida
+// Test caso borde de un solo elemento
+func TestUnSoloElemento(t *testing.T) {
+	// lista.EstaVacia() debe ser false
+	// lista.Largo debe ser 1
+	// lista.VerPrimero == listaVerUltimo
+	// lista.BorrarPrimero() debe coincidir con elemento ingresado
+}
 
+// Test de caso especifico
+func TestEspecificos(t *testing.T) {
+	// Llenar y vaciar la lista en orden
+
+	// Lista luego de llenar y vaciar se comporta como lista vacia
+}
+
+func TestVolumen(t *testing.T) {
+	// Llenar con 10000 elementos y vaciar 10000 elementos
+}
+
+// *** Test de iteradores ***
 // Test iterador interno
-// - Test por false (idea numeros pares)
-// - Test por true
+func TestIteradorInterno(t *testing.T) {
+	// Test con true en todos los casos (sumatoria en una lista de enteros)
+	// Test con false y corte en el medio al encontrar numero par
+	// Caso borde solo un elemento en lista
+}
 
 // Test iterador externo
+func TestIteradorExterno(t *testing.T) {
+	// Insertar un elemento en lista con iterador recien creado
+	// debe comportarse a lista primer elemento
+}
+
 // - Insertar primer elemento de iterador
 // - Insertar elemento e interador al final
 // - Insertar elemento en medio de iterador, en su posicion correcta
