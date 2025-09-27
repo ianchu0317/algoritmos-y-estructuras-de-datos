@@ -24,15 +24,17 @@ func (lista listaEnlazada[T]) EstaVacia() bool {
 	return lista.largo == 0
 }
 
-func (lista listaEnlazada[T]) InsertarPrimero(elemento T) {
-
+func (lista *listaEnlazada[T]) InsertarPrimero(elemento T) {
+	nuevoNodo := nodo[T]{dato: elemento, siguiente: lista.primero}
+	lista.primero = &nuevoNodo
 }
 
-func (lista listaEnlazada[T]) InsertarUltimo(elemento T) {
-
+func (lista *listaEnlazada[T]) InsertarUltimo(elemento T) {
+	nuevoNodo := nodo[T]{dato: elemento, siguiente: nil}
+	lista.ultimo.siguiente = &nuevoNodo
 }
 
-func (lista listaEnlazada[T]) BorrarPrimero() T {
+func (lista *listaEnlazada[T]) BorrarPrimero() T {
 
 }
 
