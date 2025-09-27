@@ -43,6 +43,10 @@ func (lista *listaEnlazada[T]) BorrarPrimero() T {
 	primerElemento := lista.primero.dato
 	lista.primero = lista.primero.siguiente
 	lista.largo--
+	// Actualizar ultimo puntero si hay un solo elemento
+	if lista.primero == nil {
+		lista.ultimo = nil
+	}
 	return primerElemento
 }
 
