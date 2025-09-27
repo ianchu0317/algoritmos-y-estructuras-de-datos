@@ -27,23 +27,37 @@ func (lista listaEnlazada[T]) EstaVacia() bool {
 func (lista *listaEnlazada[T]) InsertarPrimero(elemento T) {
 	nuevoNodo := nodo[T]{dato: elemento, siguiente: lista.primero}
 	lista.primero = &nuevoNodo
+	lista.largo++
 }
 
 func (lista *listaEnlazada[T]) InsertarUltimo(elemento T) {
 	nuevoNodo := nodo[T]{dato: elemento, siguiente: nil}
 	lista.ultimo.siguiente = &nuevoNodo
+	lista.largo++
 }
 
 func (lista *listaEnlazada[T]) BorrarPrimero() T {
-
+	if lista.EstaVacia() {
+		panic("La lista esta vacia")
+	}
+	primerElemento := lista.primero.dato
+	lista.primero = lista.primero.siguiente
+	lista.largo--
+	return primerElemento
 }
 
 func (lista listaEnlazada[T]) VerPrimero() T {
-
+	if lista.EstaVacia() {
+		panic("La lista esta vacia")
+	}
+	return lista.primero.dato
 }
 
 func (lista listaEnlazada[T]) VerUltimo() T {
-
+	if lista.EstaVacia() {
+		panic("La lista esta vacia")
+	}
+	return lista.ultimo.dato
 }
 
 func (lista listaEnlazada[T]) Largo() int {
