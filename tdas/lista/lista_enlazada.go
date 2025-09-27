@@ -76,13 +76,19 @@ func (lista listaEnlazada[T]) Iterar(visitar func(T) bool) {
 }
 
 func (lista listaEnlazada[T]) Iterador() IteradorLista[T] {
-
+	nuevoIterador := iteradorLista[T]{lista.primero, nil}
+	return &nuevoIterador
 }
 
 // *** Declarar primitivas y estructuras de iterador externo ***
+
 type iteradorLista[T any] struct {
 	actual   *nodo[T]
 	anterior *nodo[T]
+}
+
+func (iter iteradorLista[T]) VerActual() T {
+
 }
 
 func (iter iteradorLista[T]) HaySiguiente() bool {
