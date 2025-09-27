@@ -65,7 +65,10 @@ func (lista listaEnlazada[T]) Largo() int {
 }
 
 func (lista listaEnlazada[T]) Iterar(visitar func(T) bool) {
-
+	nodoActual := lista.primero
+	for nodoActual != nil && visitar(nodoActual.dato) {
+		nodoActual = nodoActual.siguiente
+	}
 }
 
 func (lista listaEnlazada[T]) Iterador() IteradorLista[T] {
