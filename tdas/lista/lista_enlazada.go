@@ -88,21 +88,28 @@ type iteradorLista[T any] struct {
 }
 
 func (iter iteradorLista[T]) VerActual() T {
-
+	return iter.actual.dato
 }
 
 func (iter iteradorLista[T]) HaySiguiente() bool {
-
+	return iter.actual == nil
 }
 
-func (iter iteradorLista[T]) Siguiente() {
-
+func (iter *iteradorLista[T]) Siguiente() {
+	iter.anterior = iter.actual
+	iter.actual = iter.actual.siguiente
 }
 
-func (iter iteradorLista[T]) Insertar(elemento T) {
-
+func (iter *iteradorLista[T]) Insertar(elemento T) {
+	nuevoNodo := nodo[T]{elemento, iter.actual}
+	iter.anterior.siguiente = &nuevoNodo
+	iter.actual = &nuevoNodo
 }
 
-func (iter iteradorLista[T]) Borrar() T {
-
+func (iter *iteradorLista[T]) Borrar() T {
+	iter.anterior.siguiente = iter.actual.siguiente
+	nodoViejo := iter.actual
+	iter.actual = iter.actual.siguiente
+	nodoViejo.siguiente = nil // Desvincular nodo a borrar para garbage collector
+	return nodoViejo.dato
 }
