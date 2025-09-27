@@ -6,4 +6,5 @@ use (
 	./guias
 	./tdas
 	./tps/tp0
+	./tps/tp1
 )

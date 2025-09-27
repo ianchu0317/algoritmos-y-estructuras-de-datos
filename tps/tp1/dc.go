@@ -1,0 +1,70 @@
+// Algoritmo en https://es.wikipedia.org/wiki/Notaci%C3%B3n_polaca_inversa
+// Documentacion string utilizado: // https://pkg.go.dev/strings#FieldsSeq
+
+package main
+
+import (
+	"bufio"
+	AUX "dc/auxiliares"
+	OP "dc/operaciones"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+	TDAPila "tdas/pila"
+)
+
+// Constante información de número a trabajar
+const (
+	BASE    = 10
+	BITSIZE = 24
+	ERROR   = "ERROR"
+)
+
+// calcularOperacion calcula la operación pasada en formato polaco inverso
+func procesarLinea(linea string) {
+	operandos := TDAPila.CrearPilaDinamica[int64]()
+	var opErr error = nil
+	var huboOp bool = false
+
+	// Dividir espacios del string e ir por cada elemento
+	// Si es operador, calcular operación con los ultimos elementos de la pila
+	// Si es numero, apilar a operandos
+	for caracter := range strings.FieldsSeq(linea) {
+		if AUX.EsOperacion(caracter) {
+			opErr = OP.CalcularOperacion(operandos, caracter)
+			huboOp = true
+			if opErr != nil {
+				break // Salir de operacion si hay error
+			}
+		} else {
+			num, opErr := strconv.ParseInt(caracter, BASE, BITSIZE) // Base 10, bitsize 64
+			if opErr != nil {
+				break
+			}
+			operandos.Apilar(num)
+		}
+	}
+
+	// Imprimir resultado cuando:
+	// - Hubo operación + no hubo errores + pila solo hay un elemento
+	if opErr == nil && huboOp {
+		resultadoFinal := operandos.Desapilar()
+		if operandos.EstaVacia() {
+			fmt.Println(resultadoFinal)
+		} else {
+			fmt.Println(ERROR)
+		}
+	} else {
+		fmt.Println(ERROR)
+	}
+}
+
+func main() {
+	// Crear un scanner y leer STDIN
+	s := bufio.NewScanner(os.Stdin)
+	for s.Scan() {
+		lineaActual := s.Text()
+		procesarLinea(lineaActual)
+	}
+}
