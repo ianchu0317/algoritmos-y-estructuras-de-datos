@@ -84,11 +84,23 @@ func TestOrdenLista(t *testing.T) {
 		require.Equal(t, num, listaEnteros.BorrarPrimero(), "El valor borrado tiene que salir en orden del arreglo")
 	}
 	// Lista luego de llenar y vaciar se comporta como lista vacia
-	require.Equal(t, true, listaEnteros.EstaVacia(), "Lista de enteros recien creada debe estar vacia (EstaVacia()-> true)")
+	require.Equal(t, true, listaEnteros.EstaVacia(), "Lista de enteros recien vaciada debe estar vacia (EstaVacia()-> true)")
 }
 
 func TestVolumen(t *testing.T) {
+	listaEnteros := TDALista.CrearListaEnlazada[int]()
+	volumen := 10000
+
 	// Llenar con 10000 elementos y vaciar 10000 elementos
+	for i := 0; i <= volumen; i++ {
+		listaEnteros.InsertarPrimero(i)
+		require.Equal(t, i, listaEnteros.VerPrimero(), "El valor de ingresado tiene que coincidir con ultimo ingresado test volumen")
+	}
+	for i := volumen; i >= 0; i-- {
+		require.Equal(t, i, listaEnteros.BorrarPrimero(), "El valor borrado tiene que salir en orden del ingresado volumen")
+	}
+
+	require.Equal(t, true, listaEnteros.EstaVacia(), "Lista de enteros vaciada debe estar vacia (EstaVacia()-> true)")
 }
 
 // *** Test de iteradores ***
