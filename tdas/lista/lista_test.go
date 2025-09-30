@@ -106,9 +106,39 @@ func TestVolumen(t *testing.T) {
 // *** Test de iteradores ***
 // Test iterador interno
 func TestIteradorInterno(t *testing.T) {
-	// Test con true en todos los casos (sumatoria en una lista de enteros)
+	listaEnteros := TDALista.CrearListaEnlazada[int]()
+
+	// Usar iterador interno para sumar todos los elementos de la lista
+	arregloEnteros := []int{10, 20, 30, 40, 50, 60, 70, 80, 90, 100} // Expectativa 550
+	sumatoriaIterar := 0
+
+	for _, num := range arregloEnteros {
+		listaEnteros.InsertarPrimero(num)
+	}
+	listaEnteros.Iterar(func(elemento int) bool {
+		sumatoriaIterar += elemento
+		return true
+	})
+	require.Equal(t, 550, sumatoriaIterar, "La sumatoria de los elementos usando iterador interno no coincide con expectativa")
+
 	// Test con false y corte en el medio al encontrar numero par
-	// Caso borde solo un elemento en lista
+	nuevaListaEnteros := TDALista.CrearListaEnlazada[int]()
+	arregloUnSoloPar := []int{1, 3, 5, 7, 9, 2, 13, 11}
+	primerElementoPar := 2
+	var primerParEncontrado int
+
+	for _, num := range arregloUnSoloPar {
+		nuevaListaEnteros.InsertarPrimero(num)
+	}
+
+	nuevaListaEnteros.Iterar(func(numero int) bool {
+		if numero%2 == 0 {
+			primerParEncontrado = 2
+			return false
+		}
+		return true
+	})
+	require.Equal(t, primerElementoPar, primerParEncontrado, "El primer par encontrado debe ser numero 2")
 }
 
 // Test iterador externo
