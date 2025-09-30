@@ -32,10 +32,30 @@ func TestListaVacia(t *testing.T) {
 
 // Test caso borde de un solo elemento
 func TestUnSoloElemento(t *testing.T) {
+	listaEnteros := TDALista.CrearListaEnlazada[int]()
+	listaCadenas := TDALista.CrearListaEnlazada[string]()
+
+	// Insertar una lista en primero y otra en ultimo,
+	// como tienen un elemento deberia ser lo mismo
+	listaEnteros.InsertarPrimero(1)
+	listaCadenas.InsertarUltimo("a")
+
 	// lista.EstaVacia() debe ser false
+	require.Equal(t, false, listaEnteros.EstaVacia(), "Lista de enteros con un elemento no debe estar vacia (EstaVacia()-> true)")
+	require.Equal(t, false, listaCadenas.EstaVacia(), "Lista de cadenas con un elemento no debe estar vacia (EstaVacia()-> true)")
+
 	// lista.Largo debe ser 1
+	require.Equal(t, 1, listaEnteros.Largo(), "Lista de enteros con un elemento debe tener largo 1")
+	require.Equal(t, 1, listaCadenas.Largo(), "Lista de cadenas con un elemento debe tener largo 1")
+
 	// lista.VerPrimero == listaVerUltimo
+	require.Equal(t, listaEnteros.VerPrimero(), listaEnteros.VerUltimo(), "Lista de enteros de un elemento coincide primer y ultimo elemento")
+	require.Equal(t, listaCadenas.VerPrimero(), listaCadenas.VerUltimo(), "Lista de cadenas de un elemento coincide primer y ultimo elemento")
+
 	// lista.BorrarPrimero() debe coincidir con elemento ingresado
+	require.Equal(t, 1, listaEnteros.BorrarPrimero(), "Lista de enteros de un elemento debe devolver unico elemento al borrar primero")
+	require.Equal(t, "a", listaCadenas.BorrarPrimero(), "Lista de cadenas de un elemento debe devolver unico elemento al borrar primero")
+
 }
 
 // Test de caso especifico

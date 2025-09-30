@@ -35,7 +35,9 @@ func (lista *listaEnlazada[T]) InsertarPrimero(elemento T) {
 
 func (lista *listaEnlazada[T]) InsertarUltimo(elemento T) {
 	nuevoNodo := nodo[T]{dato: elemento, siguiente: nil}
-	lista.ultimo.siguiente = &nuevoNodo
+	if lista.ultimo != nil {
+		lista.ultimo.siguiente = &nuevoNodo
+	}
 	lista.ultimo = &nuevoNodo
 	lista.largo++
 	if lista.largo == 1 {
