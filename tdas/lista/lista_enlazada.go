@@ -28,12 +28,19 @@ func (lista *listaEnlazada[T]) InsertarPrimero(elemento T) {
 	nuevoNodo := nodo[T]{dato: elemento, siguiente: lista.primero}
 	lista.primero = &nuevoNodo
 	lista.largo++
+	if lista.largo == 1 {
+		lista.ultimo = &nuevoNodo
+	}
 }
 
 func (lista *listaEnlazada[T]) InsertarUltimo(elemento T) {
 	nuevoNodo := nodo[T]{dato: elemento, siguiente: nil}
 	lista.ultimo.siguiente = &nuevoNodo
+	lista.ultimo = &nuevoNodo
 	lista.largo++
+	if lista.largo == 1 {
+		lista.primero = lista.ultimo
+	}
 }
 
 func (lista *listaEnlazada[T]) BorrarPrimero() T {
