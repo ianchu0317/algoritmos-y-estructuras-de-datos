@@ -84,14 +84,15 @@ func (lista listaEnlazada[T]) Iterar(visitar func(T) bool) {
 	}
 }
 
-func (lista listaEnlazada[T]) Iterador() IteradorLista[T] {
-	nuevoIterador := iteradorLista[T]{lista.primero, nil}
+func (lista *listaEnlazada[T]) Iterador() IteradorLista[T] {
+	nuevoIterador := iteradorLista[T]{lista, lista.primero, nil}
 	return &nuevoIterador
 }
 
 // *** Declarar primitivas y estructuras de iterador externo ***
 
 type iteradorLista[T any] struct {
+	lista    *listaEnlazada[T]
 	actual   *nodo[T]
 	anterior *nodo[T]
 }
@@ -101,7 +102,7 @@ func (iter iteradorLista[T]) VerActual() T {
 }
 
 func (iter iteradorLista[T]) HaySiguiente() bool {
-	return iter.actual == nil
+	return iter.actual != nil
 }
 
 func (iter *iteradorLista[T]) Siguiente() {
@@ -111,14 +112,34 @@ func (iter *iteradorLista[T]) Siguiente() {
 
 func (iter *iteradorLista[T]) Insertar(elemento T) {
 	nuevoNodo := nodo[T]{elemento, iter.actual}
-	iter.anterior.siguiente = &nuevoNodo
+	// caso primer elemento
+	if iter.anterior != nil {
+		iter.anterior.siguiente = &nuevoNodo
+	} else {
+		iter.lista.primero = &nuevoNodo
+	}
+	// caso insertar al final, actualizar ultimo
+	if iter.actual == nil {
+		iter.lista.ultimo = &nuevoNodo
+	}
 	iter.actual = &nuevoNodo
+	iter.lista.largo++
 }
 
 func (iter *iteradorLista[T]) Borrar() T {
-	iter.anterior.siguiente = iter.actual.siguiente
-	nodoViejo := iter.actual
+	// caso primer elemento
+	if iter.anterior != nil {
+		iter.anterior.siguiente = iter.actual.siguiente
+	} else {
+		iter.lista.primero = iter.actual.siguiente
+	}
+	nodoBorrado := iter.actual
 	iter.actual = iter.actual.siguiente
-	nodoViejo.siguiente = nil // Desvincular nodo a borrar para garbage collector
-	return nodoViejo.dato
+	nodoBorrado.siguiente = nil // Desvincular nodo a borrar para garbage collector
+	iter.lista.largo--
+	// actualizar ultimo nodo de la lista (caso ultimo elemento)
+	if iter.actual == nil {
+		iter.lista.ultimo = iter.anterior
+	}
+	return nodoBorrado.dato
 }
