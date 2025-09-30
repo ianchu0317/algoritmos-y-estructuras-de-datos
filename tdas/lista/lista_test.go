@@ -59,10 +59,32 @@ func TestUnSoloElemento(t *testing.T) {
 }
 
 // Test de caso especifico
-func TestEspecificos(t *testing.T) {
-	// Llenar y vaciar la lista en orden
+func TestOrdenLista(t *testing.T) {
+	ordenEnteros := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	listaEnteros := TDALista.CrearListaEnlazada[int]()
 
+	// ORDEN INSERTAR PRIMERO
+	// Llenar y vaciar la lista en orden
+	for _, num := range ordenEnteros {
+		listaEnteros.InsertarPrimero(num)
+		require.Equal(t, num, listaEnteros.VerPrimero(), "El valor de ingresado tiene que coincidir con primer elemento")
+	}
+	for i := len(ordenEnteros) - 1; i >= 0; i-- {
+		require.Equal(t, ordenEnteros[i], listaEnteros.BorrarPrimero(), "El valor borrado tiene que salir en orden como la inversa de arreglo")
+	}
 	// Lista luego de llenar y vaciar se comporta como lista vacia
+	require.Equal(t, true, listaEnteros.EstaVacia(), "Lista de enteros recien creada debe estar vacia (EstaVacia()-> true)")
+
+	// ORDEN INSERTAR ULTIMO
+	for _, num := range ordenEnteros {
+		listaEnteros.InsertarUltimo(num)
+		require.Equal(t, num, listaEnteros.VerUltimo(), "El valor de ingresado tiene que coincidir con ultimo elemento")
+	}
+	for _, num := range ordenEnteros {
+		require.Equal(t, num, listaEnteros.BorrarPrimero(), "El valor borrado tiene que salir en orden del arreglo")
+	}
+	// Lista luego de llenar y vaciar se comporta como lista vacia
+	require.Equal(t, true, listaEnteros.EstaVacia(), "Lista de enteros recien creada debe estar vacia (EstaVacia()-> true)")
 }
 
 func TestVolumen(t *testing.T) {
