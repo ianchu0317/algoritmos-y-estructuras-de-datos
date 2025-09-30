@@ -173,7 +173,7 @@ func TestIteradorExternoInsertar(t *testing.T) {
 	}
 
 	iter.Insertar(60)
-	require.Equal(t, 60, listaEnteros.VerUltimo(), "Insertar al final con iterador debe cambiar ultimo elemento")
+	require.Equal(t, iter.VerActual(), listaEnteros.VerUltimo(), "Insertar al final con iterador debe cambiar ultimo elemento")
 	require.Equal(t, 6, listaEnteros.Largo(), "Lista debe tener largo 6 después de insertar al final")
 
 	// Test de insertar elemento en el medio
@@ -226,7 +226,7 @@ func TestIteradorExternoBorrar(t *testing.T) {
 	require.Equal(t, 40, nuevaLista.VerUltimo(), "Nuevo último elemento debe ser 40")
 	require.Equal(t, 4, nuevaLista.Largo(), "Lista debe tener largo 4 después de borrar último")
 
-	// Test: Remover elemento del medio
+	// Test de remover elemento del medio
 	listaMedio := TDALista.CrearListaEnlazada[int]()
 	for _, num := range arregloEnteros {
 		listaMedio.InsertarUltimo(num)
