@@ -143,13 +143,150 @@ func TestIteradorInterno(t *testing.T) {
 
 // Test iterador externo
 func TestIteradorExterno(t *testing.T) {
-	// Insertar un elemento en lista con iterador recien creado
-	// debe comportarse a lista primer elemento
+	// Test: Insertar primer elemento con iterador recién creado
+	listaEnteros := TDALista.CrearListaEnlazada[int]()
+	iter := listaEnteros.Iterador()
+
+	// Al insertar en iterador recién creado debe comportarse como InsertarPrimero
+	// Correr los mismos tests creados anteriormente
+	iter.Insertar(10)
+	require.Equal(t, 10, listaEnteros.VerPrimero(), "Insertar con iterador recién creado debe ser primer elemento")
+	require.Equal(t, 10, listaEnteros.VerUltimo(), "En lista de un elemento, primero y ultimo deben coincidir")
+	require.Equal(t, 1, listaEnteros.Largo(), "Lista debe tener largo 1 después de insertar")
+	require.Equal(t, false, listaEnteros.EstaVacia(), "Lista no debe estar vacía después de insertar")
 }
 
-// - Insertar primer elemento de iterador
-// - Insertar elemento e interador al final
-// - Insertar elemento en medio de iterador, en su posicion correcta
-// - Remover primer elemento, cambia lista original
-// - Verificar que remover elemento del medio no esta
-// - Casos borde espeficiso
+func TestIteradorExternoInsertar(t *testing.T) {
+	listaEnteros := TDALista.CrearListaEnlazada[int]()
+	arregloEnteros := []int{10, 20, 30, 40, 50}
+
+	// Llenar lista
+	for _, num := range arregloEnteros {
+		listaEnteros.InsertarUltimo(num)
+	}
+
+	// Test: Insertar elemento al final con iterador
+	iter := listaEnteros.Iterador()
+	// Ir al final del iterador
+	for iter.HaySiguiente() {
+		iter.Siguiente()
+	}
+
+	iter.Insertar(60)
+	require.Equal(t, 60, listaEnteros.VerUltimo(), "Insertar al final con iterador debe cambiar ultimo elemento")
+	require.Equal(t, 6, listaEnteros.Largo(), "Lista debe tener largo 6 después de insertar al final")
+
+	// Test: Insertar elemento en el medio
+	nuevaLista := TDALista.CrearListaEnlazada[int]()
+	for _, num := range []int{10, 30, 40} {
+		nuevaLista.InsertarUltimo(num)
+	}
+
+	iterMedio := nuevaLista.Iterador()
+	iterMedio.Siguiente()  // Posicionarse en 30
+	iterMedio.Insertar(20) // Insertar 20 antes de 30
+
+	// Verificar orden: [10, 20, 30, 40]
+	require.Equal(t, 10, nuevaLista.BorrarPrimero(), "Primer elemento debe ser 10")
+	require.Equal(t, 20, nuevaLista.BorrarPrimero(), "Segundo elemento debe ser 20 (insertado)")
+	require.Equal(t, 30, nuevaLista.BorrarPrimero(), "Tercer elemento debe ser 30")
+	require.Equal(t, 40, nuevaLista.BorrarPrimero(), "Cuarto elemento debe ser 40")
+}
+
+func TestIteradorExternoBorrar(t *testing.T) {
+	// Test: Remover primer elemento con iterador
+	listaEnteros := TDALista.CrearListaEnlazada[int]()
+	arregloEnteros := []int{10, 20, 30, 40, 50}
+
+	for _, num := range arregloEnteros {
+		listaEnteros.InsertarUltimo(num)
+	}
+
+	iter := listaEnteros.Iterador()
+	elementoBorrado := iter.Borrar()
+
+	require.Equal(t, 10, elementoBorrado, "Elemento borrado debe ser 10")
+	require.Equal(t, 20, listaEnteros.VerPrimero(), "Nuevo primer elemento debe ser 20")
+	require.Equal(t, 4, listaEnteros.Largo(), "Lista debe tener largo 4 después de borrar")
+
+	// Test: Remover último elemento con iterador
+	nuevaLista := TDALista.CrearListaEnlazada[int]()
+	for _, num := range arregloEnteros {
+		nuevaLista.InsertarUltimo(num)
+	}
+
+	iterUltimo := nuevaLista.Iterador()
+	// Ir al último elemento
+	for i := 0; i < 4; i++ {
+		iterUltimo.Siguiente()
+	}
+
+	elementoUltimoBorrado := iterUltimo.Borrar()
+	require.Equal(t, 50, elementoUltimoBorrado, "Elemento borrado debe ser 50")
+	require.Equal(t, 40, nuevaLista.VerUltimo(), "Nuevo último elemento debe ser 40")
+	require.Equal(t, 4, nuevaLista.Largo(), "Lista debe tener largo 4 después de borrar último")
+
+	// Test: Remover elemento del medio
+	listaMedio := TDALista.CrearListaEnlazada[int]()
+	for _, num := range arregloEnteros {
+		listaMedio.InsertarUltimo(num)
+	}
+
+	iterMedio := listaMedio.Iterador()
+	iterMedio.Siguiente() // ir a 20
+	iterMedio.Siguiente() // ir a 30
+	elementoMedioBorrado := iterMedio.Borrar()
+
+	require.Equal(t, 30, elementoMedioBorrado, "Elemento borrado del medio debe ser 30")
+	require.Equal(t, 4, listaMedio.Largo(), "Lista debe tener largo 4 después de borrar del medio")
+
+	// Verificar que 30 no está en la lista
+	encontrado30 := false
+	listaMedio.Iterar(func(elemento int) bool {
+		if elemento == 30 {
+			encontrado30 = true
+			return false
+		}
+		return true
+	})
+	require.Equal(t, false, encontrado30, "Elemento 30 no debe estar en la lista después de borrarlo")
+}
+
+func TestIteradorExternoCasosBorde(t *testing.T) {
+	// Test: Iterador en lista vacía no debe tener siguiente
+	listaVacia := TDALista.CrearListaEnlazada[int]()
+	iterVacio := listaVacia.Iterador()
+
+	require.Equal(t, false, iterVacio.HaySiguiente(), "Iterador en lista vacía no debe tener siguiente")
+
+	// Test: VerActual en lista vacía debe hacer panic
+	require.Panics(t, func() { iterVacio.VerActual() }, "VerActual en lista vacía debe hacer panic")
+
+	// Test: Borrar en lista vacía debe hacer panic
+	require.Panics(t, func() { iterVacio.Borrar() }, "Borrar en lista vacía debe hacer panic")
+
+	// Test: Siguiente en iterador sin siguiente debe hacer panic
+	require.Panics(t, func() { iterVacio.Siguiente() }, "Siguiente sin más elementos debe hacer panic")
+
+	// Test: Iterador múltiples inserciones consecutivas
+	listaConsecutiva := TDALista.CrearListaEnlazada[int]()
+	iterConsecutivo := listaConsecutiva.Iterador()
+
+	iterConsecutivo.Insertar(10)
+	iterConsecutivo.Insertar(20)
+	iterConsecutivo.Insertar(30)
+
+	// Verificar orden de inserciones consecutivas: [30, 20, 10]
+	require.Equal(t, 30, listaConsecutiva.VerPrimero(), "Después de inserciones consecutivas, primero debe ser último insertado")
+	require.Equal(t, 3, listaConsecutiva.Largo(), "Lista debe tener largo 3 después de 3 inserciones")
+
+	// Test: Iterador después de borrar último elemento de lista un elemento
+	listaUnElemento := TDALista.CrearListaEnlazada[int]()
+	listaUnElemento.InsertarPrimero(100)
+
+	iterUnElemento := listaUnElemento.Iterador()
+	iterUnElemento.Borrar()
+
+	require.Equal(t, true, listaUnElemento.EstaVacia(), "Lista debe estar vacía después de borrar único elemento")
+	require.Equal(t, false, iterUnElemento.HaySiguiente(), "Iterador no debe tener siguiente después de borrar único elemento")
+}
