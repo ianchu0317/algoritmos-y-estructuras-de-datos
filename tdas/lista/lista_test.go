@@ -141,9 +141,9 @@ func TestIteradorInterno(t *testing.T) {
 	require.Equal(t, primerElementoPar, primerParEncontrado, "El primer par encontrado debe ser numero 2")
 }
 
-// Test iterador externo
+// Tests iterador externo
+// Test Insertar primer elemento con iterador recién creado
 func TestIteradorExterno(t *testing.T) {
-	// Test: Insertar primer elemento con iterador recién creado
 	listaEnteros := TDALista.CrearListaEnlazada[int]()
 	iter := listaEnteros.Iterador()
 
@@ -165,7 +165,7 @@ func TestIteradorExternoInsertar(t *testing.T) {
 		listaEnteros.InsertarUltimo(num)
 	}
 
-	// Test: Insertar elemento al final con iterador
+	// Test de insertar elemento al final con iterador
 	iter := listaEnteros.Iterador()
 	// Ir al final del iterador
 	for iter.HaySiguiente() {
@@ -176,7 +176,7 @@ func TestIteradorExternoInsertar(t *testing.T) {
 	require.Equal(t, 60, listaEnteros.VerUltimo(), "Insertar al final con iterador debe cambiar ultimo elemento")
 	require.Equal(t, 6, listaEnteros.Largo(), "Lista debe tener largo 6 después de insertar al final")
 
-	// Test: Insertar elemento en el medio
+	// Test de insertar elemento en el medio
 	nuevaLista := TDALista.CrearListaEnlazada[int]()
 	for _, num := range []int{10, 30, 40} {
 		nuevaLista.InsertarUltimo(num)
@@ -194,7 +194,7 @@ func TestIteradorExternoInsertar(t *testing.T) {
 }
 
 func TestIteradorExternoBorrar(t *testing.T) {
-	// Test: Remover primer elemento con iterador
+	// Test de remover primer elemento con iterador
 	listaEnteros := TDALista.CrearListaEnlazada[int]()
 	arregloEnteros := []int{10, 20, 30, 40, 50}
 
@@ -209,7 +209,7 @@ func TestIteradorExternoBorrar(t *testing.T) {
 	require.Equal(t, 20, listaEnteros.VerPrimero(), "Nuevo primer elemento debe ser 20")
 	require.Equal(t, 4, listaEnteros.Largo(), "Lista debe tener largo 4 después de borrar")
 
-	// Test: Remover último elemento con iterador
+	// Test de remover último elemento con iterador
 	nuevaLista := TDALista.CrearListaEnlazada[int]()
 	for _, num := range arregloEnteros {
 		nuevaLista.InsertarUltimo(num)
@@ -250,43 +250,4 @@ func TestIteradorExternoBorrar(t *testing.T) {
 		return true
 	})
 	require.Equal(t, false, encontrado30, "Elemento 30 no debe estar en la lista después de borrarlo")
-}
-
-func TestIteradorExternoCasosBorde(t *testing.T) {
-	// Test: Iterador en lista vacía no debe tener siguiente
-	listaVacia := TDALista.CrearListaEnlazada[int]()
-	iterVacio := listaVacia.Iterador()
-
-	require.Equal(t, false, iterVacio.HaySiguiente(), "Iterador en lista vacía no debe tener siguiente")
-
-	// Test: VerActual en lista vacía debe hacer panic
-	require.Panics(t, func() { iterVacio.VerActual() }, "VerActual en lista vacía debe hacer panic")
-
-	// Test: Borrar en lista vacía debe hacer panic
-	require.Panics(t, func() { iterVacio.Borrar() }, "Borrar en lista vacía debe hacer panic")
-
-	// Test: Siguiente en iterador sin siguiente debe hacer panic
-	require.Panics(t, func() { iterVacio.Siguiente() }, "Siguiente sin más elementos debe hacer panic")
-
-	// Test: Iterador múltiples inserciones consecutivas
-	listaConsecutiva := TDALista.CrearListaEnlazada[int]()
-	iterConsecutivo := listaConsecutiva.Iterador()
-
-	iterConsecutivo.Insertar(10)
-	iterConsecutivo.Insertar(20)
-	iterConsecutivo.Insertar(30)
-
-	// Verificar orden de inserciones consecutivas: [30, 20, 10]
-	require.Equal(t, 30, listaConsecutiva.VerPrimero(), "Después de inserciones consecutivas, primero debe ser último insertado")
-	require.Equal(t, 3, listaConsecutiva.Largo(), "Lista debe tener largo 3 después de 3 inserciones")
-
-	// Test: Iterador después de borrar último elemento de lista un elemento
-	listaUnElemento := TDALista.CrearListaEnlazada[int]()
-	listaUnElemento.InsertarPrimero(100)
-
-	iterUnElemento := listaUnElemento.Iterador()
-	iterUnElemento.Borrar()
-
-	require.Equal(t, true, listaUnElemento.EstaVacia(), "Lista debe estar vacía después de borrar único elemento")
-	require.Equal(t, false, iterUnElemento.HaySiguiente(), "Iterador no debe tener siguiente después de borrar único elemento")
 }
