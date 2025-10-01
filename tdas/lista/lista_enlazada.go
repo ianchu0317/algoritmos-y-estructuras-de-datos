@@ -28,6 +28,7 @@ func (lista *listaEnlazada[T]) InsertarPrimero(elemento T) {
 	nuevoNodo := nodo[T]{dato: elemento, siguiente: lista.primero}
 	lista.primero = &nuevoNodo
 	lista.largo++
+	// Actualizar ultimo nodo al insertar primer elemento
 	if lista.largo == 1 {
 		lista.ultimo = &nuevoNodo
 	}
@@ -52,8 +53,8 @@ func (lista *listaEnlazada[T]) BorrarPrimero() T {
 	primerElemento := lista.primero.dato
 	lista.primero = lista.primero.siguiente
 	lista.largo--
-	// Actualizar ultimo puntero si hay un solo elemento
-	if lista.primero == nil {
+	// Actualizar ultimo puntero si lista está vacia
+	if lista.EstaVacia() {
 		lista.ultimo = nil
 	}
 	return primerElemento
