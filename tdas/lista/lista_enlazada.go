@@ -98,6 +98,9 @@ type iteradorLista[T any] struct {
 }
 
 func (iter iteradorLista[T]) VerActual() T {
+	if iter.actual == nil {
+		panic("El iterador termino de iterar")
+	}
 	return iter.actual.dato
 }
 
@@ -106,6 +109,9 @@ func (iter iteradorLista[T]) HaySiguiente() bool {
 }
 
 func (iter *iteradorLista[T]) Siguiente() {
+	if iter.actual == nil {
+		panic("El iterador termino de iterar")
+	}
 	iter.anterior = iter.actual
 	iter.actual = iter.actual.siguiente
 }
@@ -127,6 +133,9 @@ func (iter *iteradorLista[T]) Insertar(elemento T) {
 }
 
 func (iter *iteradorLista[T]) Borrar() T {
+	if iter.actual == nil {
+		panic("El iterador termino de iterar")
+	}
 	// caso primer elemento
 	if iter.anterior != nil {
 		iter.anterior.siguiente = iter.actual.siguiente
