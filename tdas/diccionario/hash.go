@@ -54,12 +54,34 @@ func (hash hashAbierto[K, V]) buscarCelda(clave K) *celda[K, V] {
 	return nil
 }
 
+// crearCelda devuelve puntero a una celda creada
+func crearCelda[K any, V any](clave K, dato V) *celda[K, V] {
+	nuevaCelda := celda[K, V]{clave, dato}
+	return &nuevaCelda
+}
+
 // Primitivas de hash abierto
 
 func (hash hashAbierto[K, V]) Cantidad() int {
 	return hash.cantidad
 }
 
-func (hash hashAbierto[K, V]) Guardar(clave K, dato V) {
+func (hash hashAbierto[K, V]) Pertenece(clave K) bool {
+	if hash.buscarCelda(clave) != nil {
+		return true
+	}
+	return false
+}
 
+func (hash hashAbierto[K, V]) Guardar(clave K, dato V) {
+	celda := hash.buscarCelda(clave)
+	// Creaer nueva celda si no existe, sino actualizar
+	if celda == nil {
+		celda = crearCelda(clave, dato)
+		claveHash := djb2Hash(clave, len(hash.arreglo))
+		hash.arreglo[claveHash].InsertarUltimo(*celda)
+	} else {
+		celda.dato = dato
+	}
+	hash.cantidad++
 }
