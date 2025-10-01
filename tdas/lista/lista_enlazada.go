@@ -97,19 +97,19 @@ type iteradorLista[T any] struct {
 	anterior *nodo[T]
 }
 
+func (iter iteradorLista[T]) HaySiguiente() bool {
+	return iter.actual != nil
+}
+
 func (iter iteradorLista[T]) VerActual() T {
-	if iter.actual == nil {
+	if !iter.HaySiguiente() {
 		panic("El iterador termino de iterar")
 	}
 	return iter.actual.dato
 }
 
-func (iter iteradorLista[T]) HaySiguiente() bool {
-	return iter.actual != nil
-}
-
 func (iter *iteradorLista[T]) Siguiente() {
-	if iter.actual == nil {
+	if !iter.HaySiguiente() {
 		panic("El iterador termino de iterar")
 	}
 	iter.anterior = iter.actual
@@ -133,7 +133,7 @@ func (iter *iteradorLista[T]) Insertar(elemento T) {
 }
 
 func (iter *iteradorLista[T]) Borrar() T {
-	if iter.actual == nil {
+	if !iter.HaySiguiente() {
 		panic("El iterador termino de iterar")
 	}
 	// caso primer elemento
@@ -147,7 +147,7 @@ func (iter *iteradorLista[T]) Borrar() T {
 	nodoBorrado.siguiente = nil // Desvincular nodo a borrar para garbage collector
 	iter.lista.largo--
 	// actualizar ultimo nodo de la lista (caso ultimo elemento)
-	if iter.actual == nil {
+	if !iter.HaySiguiente() {
 		iter.lista.ultimo = iter.anterior
 	}
 	return nodoBorrado.dato
