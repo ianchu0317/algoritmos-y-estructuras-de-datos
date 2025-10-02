@@ -21,9 +21,15 @@ type hashCerrado[K any, V any] struct {
 	tabla     []hashCerrado[K, V]
 	capacidad int
 	cantidad  int
+	comparar  func(K, K) bool
 }
 
 // Funciones auxiliares
+
+func CrearHash[K any, V any]() Diccionario[K, V] {
+	nuevoDic := hashCerrado[K, V]{}
+	return &nuevoDic
+}
 
 // convertirABytes toma la clave y la convierte a bytes
 func convertirABytes[K any](clave K) []byte {
@@ -72,7 +78,7 @@ func (hashCerrado[K, V]) Obtener(clave K) V {
 
 }
 
-func (hash *hashCerrado[K, V]) Borrar(clave K) {
+func (hash *hashCerrado[K, V]) Borrar(clave K) V {
 
 }
 
