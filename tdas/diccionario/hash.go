@@ -18,7 +18,7 @@ type celdaHash[K any, V any] struct {
 }
 
 type hashCerrado[K any, V any] struct {
-	tabla     []hashCerrado[K, V]
+	tabla     []celdaHash[K, V]
 	capacidad int
 	cantidad  int
 	comparar  func(K, K) bool
@@ -50,8 +50,24 @@ func djb2Hash[K any](clave K, largo int) int {
 
 // buscarCelda toma una clave del hash y devuelve la celda correspondiente si existe.
 // En caso de no existir devuelve nil
-func (hash hashCerrado[K, V]) buscarCelda(clave K) {
-
+func (hash hashCerrado[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
+	// Buscar en celda actual
+	claveHash := djb2Hash(clave, hash.capacidad)
+	celda := hash.tabla[claveHash]
+	// Buscar en celdas siguientes si no está en actual
+	for celda.estado != VACIO && !hash.comparar(clave, celda.clave) {
+		claveHash++
+		// Si me pase indice, iniciar de nuevo en principio de tabla
+		if claveHash == hash.capacidad {
+			claveHash = 0
+		}
+		celda = hash.tabla[claveHash]
+	}
+	// devolver celda encontrada
+	if hash.comparar(clave, celda.clave) {
+		return &celda
+	}
+	return nil
 }
 
 func (hash *hashCerrado[K, V]) redimensionarTabla() {
