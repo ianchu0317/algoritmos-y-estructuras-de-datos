@@ -19,6 +19,12 @@ type hashAbierto[K any, V any] struct {
 
 // Funciones auxiliares
 
+// CrearHash devuelve una instancia de hashAbierto
+func CrearHash[K any, V any]() Diccionario[K, V] {
+	nuevoDiccionario := hashAbierto[K, V]{}
+	return &nuevoDiccionario
+}
+
 // convertirABytes toma la clave y la convierte a bytes
 func convertirABytes[K any](clave K) []byte {
 	return []byte(fmt.Sprintf("%v", clave))
