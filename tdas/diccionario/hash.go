@@ -1,10 +1,6 @@
 package diccionario
 
-import (
-	"fmt"
-	TDALista "tdas/lista"
-)
-
+/*
 // *** Estructura de hash abierto ***
 
 type celdaHash[K any, V any] struct {
@@ -181,3 +177,4 @@ func (iter iteradorDiccionario[K, V]) Siguiente() {
 		}
 	}
 }
+*/
