@@ -48,9 +48,9 @@ func djb2Hash[K any](clave K, largo int) int {
 	return hash % largo
 }
 
-// buscarCelda toma una clave del hash y devuelve la celda correspondiente si existe.
-// En caso de no existir devuelve nil
-func (hash hashCerrado[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
+// buscarCelda toma una clave y devuelve la posicion de celda correspondiente si existe.
+// En caso de no existir devuelve la posicion donde deberia existir (la proxima posicion VACIA)
+func (hash hashCerrado[K, V]) buscarCelda(clave K) int {
 	// Buscar en celda actual
 	claveHash := djb2Hash(clave, hash.capacidad)
 	celda := hash.tabla[claveHash]
@@ -64,10 +64,7 @@ func (hash hashCerrado[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
 		celda = hash.tabla[claveHash]
 	}
 	// devolver celda encontrada
-	if hash.comparar(clave, celda.clave) {
-		return &celda
-	}
-	return nil
+	return claveHash
 }
 
 func (hash *hashCerrado[K, V]) redimensionarTabla() {
@@ -82,11 +79,15 @@ func (hash hashCerrado[K, V]) Cantidad() int {
 	return hash.cantidad
 }
 
-func (hash *hashCerrado[K, V]) Guardar(clave K, dato V) {
-
+func (hash hashCerrado[K, V]) Pertenece(clave K) bool {
+	// Hallar celda donde deberia estar la clave
+	posCelda := hash.buscarCelda(clave)
+	celda := hash.tabla[posCelda]
+	// Si celda esta ocupada y las claves coinciden entonces pertenece a diccionario
+	return celda.estado == OCUPADO && hash.comparar(clave, celda.clave)
 }
 
-func (hashCerrado[K, V]) Pertenece(clave K) bool {
+func (hash *hashCerrado[K, V]) Guardar(clave K, dato V) {
 
 }
 
