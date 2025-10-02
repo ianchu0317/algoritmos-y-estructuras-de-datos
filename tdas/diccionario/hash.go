@@ -7,14 +7,15 @@ import (
 
 // *** Estructura de hash abierto ***
 
-type celda[K any, V any] struct {
+type celdaHash[K any, V any] struct {
 	clave K
 	dato  V
 }
 
 type hashAbierto[K any, V any] struct {
-	arreglo  []TDALista.Lista[celda[K, V]]
-	cantidad int
+	tabla     []TDALista.Lista[celdaHash[K, V]]
+	cantidad  int
+	capacidad int
 }
 
 // Funciones auxiliares
@@ -44,10 +45,10 @@ func djb2Hash[K any](clave K, largo int) int {
 
 // buscarCelda toma una clave del hash y devuelve la celda correspondiente si existe.
 // En caso de no existir devuelve nil
-func (hash hashAbierto[K, V]) buscarCelda(clave K) *celda[K, V] {
+func (hash hashAbierto[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
 	// Obtener la lista de celdas
-	claveHash := djb2Hash(clave, len(hash.arreglo))
-	listaHash := hash.arreglo[claveHash]
+	claveHash := djb2Hash(clave, hash.capacidad)
+	listaHash := hash.tabla[claveHash]
 	// Crear iterador externo de lista e iterar
 	iter := listaHash.Iterador()
 	for iter.HaySiguiente() {
@@ -61,8 +62,8 @@ func (hash hashAbierto[K, V]) buscarCelda(clave K) *celda[K, V] {
 }
 
 // crearCelda devuelve puntero a una celda creada
-func crearCelda[K any, V any](clave K, dato V) *celda[K, V] {
-	nuevaCelda := celda[K, V]{clave, dato}
+func crearCelda[K any, V any](clave K, dato V) *celdaHash[K, V] {
+	nuevaCelda := celdaHash[K, V]{clave, dato}
 	return &nuevaCelda
 }
 
@@ -79,13 +80,13 @@ func (hash hashAbierto[K, V]) Pertenece(clave K) bool {
 	return false
 }
 
-func (hash hashAbierto[K, V]) Guardar(clave K, dato V) {
+func (hash *hashAbierto[K, V]) Guardar(clave K, dato V) {
 	celda := hash.buscarCelda(clave)
 	// Creaer nueva celda si no existe, sino actualizar
 	if celda == nil {
 		celda = crearCelda(clave, dato)
-		claveHash := djb2Hash(clave, len(hash.arreglo))
-		hash.arreglo[claveHash].InsertarUltimo(*celda)
+		claveHash := djb2Hash(clave, hash.capacidad)
+		hash.tabla[claveHash].InsertarUltimo(*celda)
 	} else {
 		celda.dato = dato
 	}
