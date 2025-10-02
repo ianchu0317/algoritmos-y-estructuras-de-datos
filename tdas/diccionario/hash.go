@@ -16,6 +16,7 @@ type hashAbierto[K any, V any] struct {
 	tabla     []TDALista.Lista[celdaHash[K, V]]
 	cantidad  int
 	capacidad int
+	comparar  func(K, K) bool
 }
 
 // Funciones auxiliares
@@ -53,7 +54,7 @@ func (hash hashAbierto[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
 	iter := listaHash.Iterador()
 	for iter.HaySiguiente() {
 		celdaActual := iter.VerActual()
-		if celdaActual.clave == clave {
+		if hash.comparar(celdaActual.clave, clave) {
 			return &celdaActual
 		}
 		iter.Siguiente()
@@ -91,4 +92,29 @@ func (hash *hashAbierto[K, V]) Guardar(clave K, dato V) {
 		celda.dato = dato
 	}
 	hash.cantidad++
+}
+
+func (hash hashAbierto[K, V]) Obtener(clave K) V {
+	if !hash.Pertenece(clave) {
+		panic("La clave no pertenece al diccionario")
+	}
+	celda := hash.buscarCelda(clave)
+	return celda.dato
+}
+
+func (hash *hashAbierto[K, V]) Borrar(clave K) V {
+	if !hash.Pertenece(clave) {
+		panic("La clave no pertenece al diccionario")
+	}
+	claveHash := djb2Hash(clave, hash.capacidad)
+	iter := hash.tabla[claveHash].Iterador()
+	var dato V
+	for iter.HaySiguiente() {
+		celdaActual := iter.VerActual()
+		if hash.comparar(celdaActual.clave, clave) {
+			dato = iter.Borrar().dato
+		}
+		iter.Siguiente()
+	}
+	return dato
 }
