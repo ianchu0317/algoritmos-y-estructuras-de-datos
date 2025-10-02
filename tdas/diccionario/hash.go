@@ -22,8 +22,12 @@ type hashAbierto[K any, V any] struct {
 // Funciones auxiliares
 
 // CrearHash devuelve una instancia de hashAbierto
-func CrearHash[K any, V any]() Diccionario[K, V] {
-	nuevoDiccionario := hashAbierto[K, V]{}
+func CrearHash[K any, V any](comparar func(K, K) bool) Diccionario[K, V] {
+	nuevoDiccionario := hashAbierto[K, V]{
+		make([]TDALista.Lista[celdaHash[K, V]], 100),
+		0,
+		100,
+		comparar}
 	return &nuevoDiccionario
 }
 
@@ -75,10 +79,7 @@ func (hash hashAbierto[K, V]) Cantidad() int {
 }
 
 func (hash hashAbierto[K, V]) Pertenece(clave K) bool {
-	if hash.buscarCelda(clave) != nil {
-		return true
-	}
-	return false
+	return hash.buscarCelda(clave) != nil
 }
 
 func (hash *hashAbierto[K, V]) Guardar(clave K, dato V) {
@@ -153,7 +154,7 @@ type iteradorDiccionario[K any, V any] struct {
 // Primitivas iterador externo de diccionario
 
 func (iter iteradorDiccionario[K, V]) HaySiguiente() bool {
-	return iter.numeroLista < iter.largoTabla || iter.iterListaActual.HaySiguiente()
+	return iter.numeroLista == iter.largoTabla-1 && iter.iterListaActual.HaySiguiente()
 }
 
 func (iter iteradorDiccionario[K, V]) VerActual() (K, V) {
@@ -165,13 +166,16 @@ func (iter iteradorDiccionario[K, V]) VerActual() (K, V) {
 }
 
 func (iter iteradorDiccionario[K, V]) Siguiente() {
-	// Crear nuevo iterador para siguiente lista en tabla
-	for !iter.iterListaActual.HaySiguiente() && iter.numeroLista < iter.largoTabla {
-		iter.numeroLista++
-		iter.iterListaActual = iter.tabla[iter.numeroLista].Iterador()
-	}
-	iter.iterListaActual.Siguiente()
 	if !iter.HaySiguiente() {
 		panic("El iterador termino de iterar")
+	}
+	if iter.iterListaActual.HaySiguiente() {
+		iter.iterListaActual.Siguiente()
+	} else {
+		// Crear nuevo iterador para siguiente lista en tabla
+		for !iter.iterListaActual.HaySiguiente() && iter.numeroLista < iter.largoTabla {
+			iter.numeroLista++
+			iter.iterListaActual = iter.tabla[iter.numeroLista].Iterador()
+		}
 	}
 }
