@@ -154,7 +154,7 @@ type iteradorDiccionario[K any, V any] struct {
 // Primitivas iterador externo de diccionario
 
 func (iter iteradorDiccionario[K, V]) HaySiguiente() bool {
-	return iter.numeroLista == iter.largoTabla-1 && iter.iterListaActual.HaySiguiente()
+	return iter.numeroLista < iter.largoTabla && iter.iterListaActual.HaySiguiente()
 }
 
 func (iter iteradorDiccionario[K, V]) VerActual() (K, V) {
@@ -169,6 +169,8 @@ func (iter iteradorDiccionario[K, V]) Siguiente() {
 	if !iter.HaySiguiente() {
 		panic("El iterador termino de iterar")
 	}
+	// Si hay elementos en lista actual, avanzar elemento,
+	// sino avanzar a una lista que haya elemnetos
 	if iter.iterListaActual.HaySiguiente() {
 		iter.iterListaActual.Siguiente()
 	} else {
