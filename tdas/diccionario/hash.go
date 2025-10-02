@@ -124,7 +124,8 @@ func (hash hashCerrado[K, V]) Iterar(visitar func(clave K, dato V) bool) {
 }
 
 func (hash hashCerrado[K, V]) Iterador() IterDiccionario[K, V] {
-
+	nuevoIter := iteradorDiccionario[K, V]{hash.tabla, hash.capacidad, 0}
+	return &nuevoIter
 }
 
 // *** Estructura iterador externo ***
@@ -135,13 +136,20 @@ type iteradorDiccionario[K any, V any] struct {
 }
 
 func (iter iteradorDiccionario[K, V]) HaySiguiente() bool {
-
+	return iter.celdaActual < iter.largoTabla
 }
 
 func (iter iteradorDiccionario[K, V]) VerActual() (K, V) {
-
+	if !iter.HaySiguiente() {
+		panic("El iterador termino de iterar")
+	}
+	celda := iter.tabla[iter.celdaActual]
+	return celda.clave, celda.dato
 }
 
 func (iter iteradorDiccionario[K, V]) Siguiente() {
-
+	if !iter.HaySiguiente() {
+		panic("El iterador termino de iterar")
+	}
+	iter.celdaActual++
 }
