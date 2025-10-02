@@ -88,7 +88,12 @@ func (hash hashCerrado[K, V]) Pertenece(clave K) bool {
 }
 
 func (hash *hashCerrado[K, V]) Guardar(clave K, dato V) {
-
+	posCelda := hash.buscarCelda(clave)
+	celda := hash.tabla[posCelda]
+	// Guardar informacion a la celda
+	celda.clave = clave
+	celda.dato = dato
+	celda.estado = OCUPADO
 }
 
 func (hashCerrado[K, V]) Obtener(clave K) V {
