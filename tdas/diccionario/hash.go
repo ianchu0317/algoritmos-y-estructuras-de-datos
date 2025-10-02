@@ -26,8 +26,8 @@ type hashCerrado[K any, V any] struct {
 
 // Funciones auxiliares
 
-func CrearHash[K any, V any]() Diccionario[K, V] {
-	nuevoDic := hashCerrado[K, V]{}
+func CrearHash[K any, V any](comparar func(K, K) bool) Diccionario[K, V] {
+	nuevoDic := hashCerrado[K, V]{capacidad: 100, cantidad: 0, comparar: comparar}
 	return &nuevoDic
 }
 
@@ -94,6 +94,7 @@ func (hash *hashCerrado[K, V]) Guardar(clave K, dato V) {
 	celda.clave = clave
 	celda.dato = dato
 	celda.estado = OCUPADO
+	hash.cantidad++
 }
 
 func (hash hashCerrado[K, V]) Obtener(clave K) V {
@@ -152,4 +153,8 @@ func (iter iteradorDiccionario[K, V]) Siguiente() {
 		panic("El iterador termino de iterar")
 	}
 	iter.celdaActual++
+	// Se detiene en el proximo casillero ocupado y dentro del rango
+	if iter.HaySiguiente() && iter.tabla[iter.celdaActual].estado != OCUPADO {
+		iter.celdaActual++
+	}
 }
