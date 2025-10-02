@@ -96,12 +96,23 @@ func (hash *hashCerrado[K, V]) Guardar(clave K, dato V) {
 	celda.estado = OCUPADO
 }
 
-func (hashCerrado[K, V]) Obtener(clave K) V {
-
+func (hash hashCerrado[K, V]) Obtener(clave K) V {
+	if !hash.Pertenece(clave) {
+		panic("La clave no pertenece al diccionario")
+	}
+	posCelda := hash.buscarCelda(clave)
+	celda := hash.tabla[posCelda]
+	return celda.dato
 }
 
 func (hash *hashCerrado[K, V]) Borrar(clave K) V {
-
+	if !hash.Pertenece(clave) {
+		panic("La clave no pertenece al diccionario")
+	}
+	posCelda := hash.buscarCelda(clave)
+	celda := hash.tabla[posCelda]
+	celda.estado = BORRADO
+	return celda.dato
 }
 
 func (hash hashCerrado[K, V]) Iterar(visitar func(clave K, dato V) bool) {
