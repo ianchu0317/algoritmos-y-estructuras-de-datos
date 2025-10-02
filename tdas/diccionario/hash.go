@@ -116,7 +116,11 @@ func (hash *hashCerrado[K, V]) Borrar(clave K) V {
 }
 
 func (hash hashCerrado[K, V]) Iterar(visitar func(clave K, dato V) bool) {
-
+	for _, celda := range hash.tabla {
+		if celda.estado == OCUPADO && !visitar(celda.clave, celda.dato) {
+			return
+		}
+	}
 }
 
 func (hash hashCerrado[K, V]) Iterador() IterDiccionario[K, V] {
