@@ -160,15 +160,18 @@ func (iter iteradorDiccionario[K, V]) VerActual() (K, V) {
 	if !iter.HaySiguiente() {
 		panic("El iterador termino de iterar")
 	}
-	// Crear nuevo iterador para siguiente lista en tabla
-	for !iter.iterListaActual.HaySiguiente() && iter.numeroLista < iter.largoTabla{
-		iter.numeroLista++
-		iter.iterListaActual = iter.tabla[iter.numeroLista].Iterador()
-	}
-	// Devolver la proxima celda si todavia hay siguiente
-	if iter.HaySiguiente()
+	celdaActual := iter.iterListaActual.VerActual()
+	return celdaActual.clave, celdaActual.dato
 }
 
 func (iter iteradorDiccionario[K, V]) Siguiente() {
-	
+	// Crear nuevo iterador para siguiente lista en tabla
+	for !iter.iterListaActual.HaySiguiente() && iter.numeroLista < iter.largoTabla {
+		iter.numeroLista++
+		iter.iterListaActual = iter.tabla[iter.numeroLista].Iterador()
+	}
+	iter.iterListaActual.Siguiente()
+	if !iter.HaySiguiente() {
+		panic("El iterador termino de iterar")
+	}
 }
