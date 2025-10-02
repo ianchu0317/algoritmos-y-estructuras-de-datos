@@ -118,3 +118,20 @@ func (hash *hashAbierto[K, V]) Borrar(clave K) V {
 	}
 	return dato
 }
+
+func (hash hashAbierto[K, V]) Iterar(visitar func(clave K, dato V) bool) {
+	var celdaActual celdaHash[K, V]
+	for _, lista := range hash.tabla {
+		for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
+			celdaActual = iter.VerActual()
+			// Si es false salir de iteracion
+			if !visitar(celdaActual.clave, celdaActual.dato) {
+				return
+			}
+		}
+	}
+}
+
+func (hash hashAbierto[K, V]) Iterador() {
+
+}
