@@ -132,6 +132,26 @@ func (hash hashAbierto[K, V]) Iterar(visitar func(clave K, dato V) bool) {
 	}
 }
 
-func (hash hashAbierto[K, V]) Iterador() {
+func (hash hashAbierto[K, V]) Iterador() IterDiccionario[K, V] {
+	nuevoIterador := iteradorDiccionario[K, V]{
+		hash.tabla,
+		hash.capacidad,
+		hash.tabla[0].Iterador(),
+		0}
+	return &nuevoIterador
+}
 
+// *** Estructura Iterador Externo ***
+
+type iteradorDiccionario[K any, V any] struct {
+	tabla           []TDALista.Lista[celdaHash[K, V]]
+	largoTabla      int
+	iterListaActual TDALista.IteradorLista[celdaHash[K, V]]
+	numeroLista     int
+}
+
+// Primitivas iterador externo de diccionario
+
+func (iter iteradorDiccionario[K, V]) HaySiguiente() bool {
+	return iter.numeroLista < iter.largoTabla && iter.iterListaActual.HaySiguiente()
 }
