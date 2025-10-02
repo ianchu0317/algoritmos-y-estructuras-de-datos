@@ -5,9 +5,10 @@ import "fmt"
 // *** Estructura hash cerrado ***
 
 const (
-	VACIO   = 0
-	BORRADO = -1
-	OCUPADO = 1
+	VACIO            = 0
+	OCUPADO          = 1
+	BORRADO          = -1
+	FACT_REDIMENSION = 0.7
 )
 
 type celdaHash[K any, V any] struct {
@@ -48,9 +49,56 @@ func (hash hashCerrado[K, V]) buscarCelda(clave K) {
 }
 
 func (hash *hashCerrado[K, V]) redimensionarTabla() {
+	// comparar con factor redimension
+	// crear nueva tabla
+	// pasar claves actuales a claves nuevas (copiar)
+}
+
+// Primitivas hash cerrada
+
+func (hash hashCerrado[K, V]) Cantidad() int {
+	return hash.cantidad
+}
+
+func (hash *hashCerrado[K, V]) Guardar(clave K, dato V) {
 
 }
 
-// Primitiva hash cerrad
+func (hashCerrado[K, V]) Pertenece(clave K) bool {
+
+}
+
+func (hashCerrado[K, V]) Obtener(clave K) V {
+
+}
+
+func (hash *hashCerrado[K, V]) Borrar(clave K) {
+
+}
+
+func (hash hashCerrado[K, V]) Iterar(visitar func(clave K, dato V) bool) {
+
+}
+
+func (hash hashCerrado[K, V]) Iterador() IterDiccionario[K, V] {
+
+}
 
 // *** Estructura iterador externo ***
+type iteradorDiccionario[K any, V any] struct {
+	tabla       []celdaHash[K, V]
+	largoTabla  int
+	celdaActual int
+}
+
+func (iter iteradorDiccionario[K, V]) HaySiguiente() bool {
+
+}
+
+func (iter iteradorDiccionario[K, V]) VerActual() (K, V) {
+
+}
+
+func (iter iteradorDiccionario[K, V]) Siguiente() {
+
+}
