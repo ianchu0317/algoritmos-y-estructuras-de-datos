@@ -53,8 +53,8 @@ func djb2Hash[K any](clave K, largo int) int {
 	return hash % largo
 }
 
-// buscarCelda toma una clave y devuelve la posicion de celda correspondiente si existe.
-// En caso de no existir devuelve la posicion donde deberia existir (la proxima posicion VACIA)
+// buscarCelda toma una clave y devuelve el pntero a celda correspondiente si existe.
+// En caso de no existir devuelve el puntero a la celda donde deberia existir (la proxima celda VACIA)
 func (hash hashCerrado[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
 	// Buscar en celda actual
 	claveHash := djb2Hash(clave, hash.capacidad)
@@ -93,11 +93,13 @@ func (hash hashCerrado[K, V]) Pertenece(clave K) bool {
 
 func (hash *hashCerrado[K, V]) Guardar(clave K, dato V) {
 	celda := hash.buscarCelda(clave)
-	// Guardar informacion a la celda
-	celda.clave = clave
+	// Marcar ocupado y reservar celda si estaba vacia
+	if celda.estado == VACIO {
+		celda.clave = clave
+		celda.estado = OCUPADO
+		hash.cantidad++
+	}
 	celda.dato = dato
-	celda.estado = OCUPADO
-	hash.cantidad++
 }
 
 func (hash hashCerrado[K, V]) Obtener(clave K) V {
