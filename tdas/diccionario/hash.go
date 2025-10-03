@@ -127,19 +127,19 @@ func (hash *hashCerrado[K, V]) Guardar(clave K, dato V) {
 }
 
 func (hash hashCerrado[K, V]) Obtener(clave K) V {
-	if !hash.Pertenece(clave) {
+	celda := hash.buscarCelda(clave)
+	if celda.estado != OCUPADO || !hash.comparar(clave, celda.clave) {
 		panic("La clave no pertenece al diccionario")
 	}
-	celda := hash.buscarCelda(clave)
 	return celda.dato
 }
 
 func (hash *hashCerrado[K, V]) Borrar(clave K) V {
-	if !hash.Pertenece(clave) {
+	celda := hash.buscarCelda(clave)
+	if celda.estado != OCUPADO || !hash.comparar(clave, celda.clave) {
 		panic("La clave no pertenece al diccionario")
 	}
 	// Actualizar celda
-	celda := hash.buscarCelda(clave)
 	celda.estado = BORRADO
 	// Actualizar contadores
 	hash.cantidad--
