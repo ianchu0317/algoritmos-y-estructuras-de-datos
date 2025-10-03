@@ -32,6 +32,7 @@ func CrearHash[K any, V any](comparar func(K, K) bool) Diccionario[K, V] {
 	nuevoDic := hashCerrado[K, V]{
 		capacidad: 100,
 		cantidad:  0,
+		borrados:  0,
 		comparar:  comparar}
 	nuevoDic.redimensionarTabla(nuevoDic.capacidad)
 	return &nuevoDic
@@ -75,20 +76,21 @@ func (hash hashCerrado[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
 
 func (hash *hashCerrado[K, V]) redimensionarTabla(largo int) {
 	// crear nueva tabla
-	nuevaTabla := make([]celdaHash[K, V], largo)
+	// actualizar variables al redimensionar
+	viejaTabla := hash.tabla
+	hash.tabla = make([]celdaHash[K, V], largo)
+	hash.capacidad = largo
+	hash.borrados = 0
 	// Para cada celda con posicion ocupada, reubicar en nueva tabla
-	for _, celda := range hash.tabla {
+	// utilizar buscarCelda para buscar la celda correspondiente en nueva tabla
+	for _, celda := range viejaTabla {
 		if celda.estado == OCUPADO {
-			claveHash := djb2Hash(celda.clave, largo)
-			nuevaCelda := &nuevaTabla[claveHash]
+			nuevaCelda := hash.buscarCelda(celda.clave)
 			nuevaCelda.clave = celda.clave
 			nuevaCelda.dato = celda.dato
 			nuevaCelda.estado = OCUPADO
 		}
 	}
-	// actualizar variables luego de redimensionar
-	hash.tabla = nuevaTabla
-	hash.capacidad = largo
 }
 
 // Primitivas hash cerrada
