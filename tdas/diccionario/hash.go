@@ -148,8 +148,23 @@ func (hash hashCerrado[K, V]) Iterar(visitar func(clave K, dato V) bool) {
 	}
 }
 
+// primerCeldaOcupada devuelve la posicion en la tabla de la primera celda ocupada.
+// En caso de no existir devuelve el largo de la lista
+func (hash hashCerrado[K, V]) primerCeldaOcupada() int {
+	posCelda := 0
+	for _, celda := range hash.tabla {
+		if celda.estado == OCUPADO {
+			break
+		}
+		posCelda++
+	}
+	return posCelda
+}
+
 func (hash hashCerrado[K, V]) Iterador() IterDiccionario[K, V] {
-	nuevoIter := iteradorDiccionario[K, V]{hash.tabla, hash.capacidad, 0}
+	nuevoIter := iteradorDiccionario[K, V]{tabla: hash.tabla, largoTabla: hash.capacidad}
+	// Hallar primer celda no vacia
+	nuevoIter.celdaActual = hash.primerCeldaOcupada()
 	return &nuevoIter
 }
 
