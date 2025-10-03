@@ -27,7 +27,12 @@ type hashCerrado[K any, V any] struct {
 // Funciones auxiliares
 
 func CrearHash[K any, V any](comparar func(K, K) bool) Diccionario[K, V] {
-	nuevoDic := hashCerrado[K, V]{capacidad: 100, cantidad: 0, comparar: comparar}
+	nuevoDic := hashCerrado[K, V]{
+		tabla:     make([]celdaHash[K, V], 100),
+		capacidad: 100,
+		cantidad:  0,
+		comparar:  comparar}
+	// Inicializar el hash
 	return &nuevoDic
 }
 
@@ -50,10 +55,10 @@ func djb2Hash[K any](clave K, largo int) int {
 
 // buscarCelda toma una clave y devuelve la posicion de celda correspondiente si existe.
 // En caso de no existir devuelve la posicion donde deberia existir (la proxima posicion VACIA)
-func (hash hashCerrado[K, V]) buscarCelda(clave K) int {
+func (hash hashCerrado[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
 	// Buscar en celda actual
 	claveHash := djb2Hash(clave, hash.capacidad)
-	celda := hash.tabla[claveHash]
+	celda := &hash.tabla[claveHash]
 	// Buscar en celdas siguientes si no está en actual
 	for celda.estado != VACIO && !hash.comparar(clave, celda.clave) {
 		claveHash++
@@ -61,10 +66,10 @@ func (hash hashCerrado[K, V]) buscarCelda(clave K) int {
 		if claveHash == hash.capacidad {
 			claveHash = 0
 		}
-		celda = hash.tabla[claveHash]
+		celda = &hash.tabla[claveHash]
 	}
 	// devolver celda encontrada
-	return claveHash
+	return celda
 }
 
 func (hash *hashCerrado[K, V]) redimensionarTabla() {
@@ -81,15 +86,13 @@ func (hash hashCerrado[K, V]) Cantidad() int {
 
 func (hash hashCerrado[K, V]) Pertenece(clave K) bool {
 	// Hallar celda donde deberia estar la clave
-	posCelda := hash.buscarCelda(clave)
-	celda := hash.tabla[posCelda]
+	celda := hash.buscarCelda(clave)
 	// Si celda esta ocupada y las claves coinciden entonces pertenece a diccionario
 	return celda.estado == OCUPADO && hash.comparar(clave, celda.clave)
 }
 
 func (hash *hashCerrado[K, V]) Guardar(clave K, dato V) {
-	posCelda := hash.buscarCelda(clave)
-	celda := hash.tabla[posCelda]
+	celda := hash.buscarCelda(clave)
 	// Guardar informacion a la celda
 	celda.clave = clave
 	celda.dato = dato
@@ -101,8 +104,7 @@ func (hash hashCerrado[K, V]) Obtener(clave K) V {
 	if !hash.Pertenece(clave) {
 		panic("La clave no pertenece al diccionario")
 	}
-	posCelda := hash.buscarCelda(clave)
-	celda := hash.tabla[posCelda]
+	celda := hash.buscarCelda(clave)
 	return celda.dato
 }
 
@@ -110,8 +112,7 @@ func (hash *hashCerrado[K, V]) Borrar(clave K) V {
 	if !hash.Pertenece(clave) {
 		panic("La clave no pertenece al diccionario")
 	}
-	posCelda := hash.buscarCelda(clave)
-	celda := hash.tabla[posCelda]
+	celda := hash.buscarCelda(clave)
 	celda.estado = BORRADO
 	return celda.dato
 }
