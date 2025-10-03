@@ -144,6 +144,11 @@ func (hash *hashCerrado[K, V]) Borrar(clave K) V {
 	// Actualizar contadores
 	hash.cantidad--
 	hash.borrados++
+	// Chequeo redimension del hash
+	// Si la cantidad ocupada es menor a factor de redimension/2, redimensionar a tabla pequeña
+	if float64(hash.cantidad)/float64(hash.capacidad) <= FACT_REDIMENSION/4 {
+		hash.redimensionarTabla(hash.capacidad / 2)
+	}
 	return celda.dato
 }
 
