@@ -34,7 +34,7 @@ func CrearHash[K any, V any](comparar func(K, K) bool) Diccionario[K, V] {
 		cantidad:  0,
 		borrados:  0,
 		comparar:  comparar}
-	nuevoDic.redimensionarTabla(nuevoDic.capacidad)
+	nuevoDic.crearTabla(nuevoDic.capacidad)
 	return &nuevoDic
 }
 
@@ -74,11 +74,16 @@ func (hash hashCerrado[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
 	return celda
 }
 
+func (hash *hashCerrado[K, V]) crearTabla(largo int) {
+	hash.tabla = make([]celdaHash[K, V], largo)
+}
+
+// redimensionarTabla copia las celdas actuales a una nueva celda de capacidad 'largo'
 func (hash *hashCerrado[K, V]) redimensionarTabla(largo int) {
 	// crear nueva tabla
-	// actualizar variables al redimensionar
 	viejaTabla := hash.tabla
-	hash.tabla = make([]celdaHash[K, V], largo)
+	hash.crearTabla(largo)
+	// actualizar variables al redimensionar
 	hash.capacidad = largo
 	hash.borrados = 0
 	// Para cada celda con posicion ocupada, reubicar en nueva tabla
