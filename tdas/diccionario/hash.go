@@ -47,11 +47,11 @@ func convertirABytes[K any](clave K) []byte {
 // documentacion http://www.cse.yorku.ca/~oz/hash.html
 func djb2Hash[K any](clave K, largo int) int {
 	bytes := convertirABytes(clave)
-	hash := 5381
+	hash := uint32(5381)
 	for _, b := range bytes {
-		hash = ((hash << 5) + hash) + int(b) // hash * 33 + b
+		hash = ((hash << 5) + hash) + uint32(b) // hash*33 + b
 	}
-	return hash % largo
+	return int(hash % uint32(largo))
 }
 
 // buscarCelda toma una clave y devuelve el pntero a celda correspondiente si existe.
