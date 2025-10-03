@@ -76,7 +76,6 @@ func (hash hashCerrado[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
 func (hash *hashCerrado[K, V]) redimensionarTabla(largo int) {
 	// crear nueva tabla
 	nuevaTabla := make([]celdaHash[K, V], largo)
-
 	// Para cada celda con posicion ocupada, reubicar en nueva tabla
 	for _, celda := range hash.tabla {
 		if celda.estado == OCUPADO {
@@ -108,7 +107,7 @@ func (hash hashCerrado[K, V]) Pertenece(clave K) bool {
 func (hash *hashCerrado[K, V]) Guardar(clave K, dato V) {
 	celda := hash.buscarCelda(clave)
 	// Marcar ocupado y reservar celda si estaba vacia
-	if celda.estado == VACIO {
+	if celda.estado != OCUPADO {
 		celda.clave = clave
 		celda.estado = OCUPADO
 		hash.cantidad++
