@@ -21,18 +21,19 @@ type hashCerrado[K any, V any] struct {
 	tabla     []celdaHash[K, V]
 	capacidad int
 	cantidad  int
+	borrados  int
 	comparar  func(K, K) bool
 }
 
 // Funciones auxiliares
 
 func CrearHash[K any, V any](comparar func(K, K) bool) Diccionario[K, V] {
+	// Inicializar el hash
 	nuevoDic := hashCerrado[K, V]{
-		tabla:     make([]celdaHash[K, V], 100),
 		capacidad: 100,
 		cantidad:  0,
 		comparar:  comparar}
-	// Inicializar el hash
+	nuevoDic.redimensionarTabla(nuevoDic.capacidad)
 	return &nuevoDic
 }
 
@@ -72,10 +73,23 @@ func (hash hashCerrado[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
 	return celda
 }
 
-func (hash *hashCerrado[K, V]) redimensionarTabla() {
-	// comparar con factor redimension
+func (hash *hashCerrado[K, V]) redimensionarTabla(largo int) {
 	// crear nueva tabla
-	// pasar claves actuales a claves nuevas (copiar)
+	nuevaTabla := make([]celdaHash[K, V], largo)
+
+	// Para cada celda con posicion ocupada, reubicar en nueva tabla
+	for _, celda := range hash.tabla {
+		if celda.estado == OCUPADO {
+			claveHash := djb2Hash(celda.clave, largo)
+			nuevaCelda := &nuevaTabla[claveHash]
+			nuevaCelda.clave = celda.clave
+			nuevaCelda.dato = celda.dato
+			nuevaCelda.estado = OCUPADO
+		}
+	}
+	// actualizar variables luego de redimensionar
+	hash.tabla = nuevaTabla
+	hash.capacidad = largo
 }
 
 // Primitivas hash cerrada
@@ -100,6 +114,10 @@ func (hash *hashCerrado[K, V]) Guardar(clave K, dato V) {
 		hash.cantidad++
 	}
 	celda.dato = dato
+	// Chequeo redimension del hash
+	if float64(hash.cantidad+hash.borrados)/float64(hash.capacidad) >= FACT_REDIMENSION {
+		hash.redimensionarTabla(hash.capacidad * 2)
+	}
 }
 
 func (hash hashCerrado[K, V]) Obtener(clave K) V {
@@ -114,8 +132,12 @@ func (hash *hashCerrado[K, V]) Borrar(clave K) V {
 	if !hash.Pertenece(clave) {
 		panic("La clave no pertenece al diccionario")
 	}
+	// Actualizar celda
 	celda := hash.buscarCelda(clave)
 	celda.estado = BORRADO
+	// Actualizar contadores
+	hash.cantidad--
+	hash.borrados++
 	return celda.dato
 }
 
