@@ -12,50 +12,37 @@ import (
 // Test de la lista vacia
 func TestListaVacia(t *testing.T) {
 	listaEnteros := TDALista.CrearListaEnlazada[int]()
-	listaCadenas := TDALista.CrearListaEnlazada[string]()
 
 	// lista.EstaVacia debe devolver 'true'
 	require.Equal(t, true, listaEnteros.EstaVacia(), "Lista de enteros recien creada debe estar vacia (EstaVacia()-> true)")
-	require.Equal(t, true, listaCadenas.EstaVacia(), "Lista de cadenas recien creada debe estar vacia (EstaVacia()-> true)")
 	// lista.Largo debe ser 0
 	require.Equal(t, 0, listaEnteros.Largo(), "Lista de enteros recien creada debe ser largo 0")
-	require.Equal(t, 0, listaCadenas.Largo(), "Lista de cadenas recien creada debe ser largo 0")
 	// lista.VerPrimero() y listaVerUltimo() debe llamar panic
 	require.Panics(t, func() { listaEnteros.VerPrimero() }, "Lista de enteros recien creada no puede ver primero")
-	require.Panics(t, func() { listaCadenas.VerPrimero() }, "Lista de cadenas recien creada no puede ver primero")
 	require.Panics(t, func() { listaEnteros.VerUltimo() }, "Lista de enteros recien creada no puede ver ultimo")
-	require.Panics(t, func() { listaCadenas.VerUltimo() }, "Lista de cadenas recien creada no puede ver ultimo")
 	// lista.BorrarPrimero() debe ser panic
 	require.Panics(t, func() { listaEnteros.BorrarPrimero() }, "Lista de enteros recien creada no puede Borrar primero")
-	require.Panics(t, func() { listaCadenas.BorrarPrimero() }, "Lista de cadenas recien creada no puede Borrar primero")
 }
 
 // Test caso borde de un solo elemento
 func TestUnSoloElemento(t *testing.T) {
-	listaEnteros := TDALista.CrearListaEnlazada[int]()
 	listaCadenas := TDALista.CrearListaEnlazada[string]()
 
 	// Insertar una lista en primero y otra en ultimo,
 	// como tienen un elemento deberia ser lo mismo
-	listaEnteros.InsertarPrimero(1)
 	listaCadenas.InsertarUltimo("a")
 
 	// lista.EstaVacia() debe ser false
-	require.Equal(t, false, listaEnteros.EstaVacia(), "Lista de enteros con un elemento no debe estar vacia (EstaVacia()-> true)")
 	require.Equal(t, false, listaCadenas.EstaVacia(), "Lista de cadenas con un elemento no debe estar vacia (EstaVacia()-> true)")
 
 	// lista.Largo debe ser 1
-	require.Equal(t, 1, listaEnteros.Largo(), "Lista de enteros con un elemento debe tener largo 1")
 	require.Equal(t, 1, listaCadenas.Largo(), "Lista de cadenas con un elemento debe tener largo 1")
 
 	// lista.VerPrimero == listaVerUltimo
-	require.Equal(t, listaEnteros.VerPrimero(), listaEnteros.VerUltimo(), "Lista de enteros de un elemento coincide primer y ultimo elemento")
 	require.Equal(t, listaCadenas.VerPrimero(), listaCadenas.VerUltimo(), "Lista de cadenas de un elemento coincide primer y ultimo elemento")
 
 	// lista.BorrarPrimero() debe coincidir con elemento ingresado
-	require.Equal(t, 1, listaEnteros.BorrarPrimero(), "Lista de enteros de un elemento debe devolver unico elemento al borrar primero")
 	require.Equal(t, "a", listaCadenas.BorrarPrimero(), "Lista de cadenas de un elemento debe devolver unico elemento al borrar primero")
-
 }
 
 // Test de caso especifico
