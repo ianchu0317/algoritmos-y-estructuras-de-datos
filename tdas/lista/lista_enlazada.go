@@ -14,13 +14,11 @@ type listaEnlazada[T any] struct {
 }
 
 func CrearListaEnlazada[T any]() Lista[T] {
-	nuevaLista := listaEnlazada[T]{nil, nil, 0}
-	return &nuevaLista
+	return &listaEnlazada[T]{nil, nil, 0}
 }
 
 func crearNodo[T any](dato T, siguiente *nodo[T]) nodo[T] {
-	nuevoNodo := nodo[T]{dato, siguiente}
-	return nuevoNodo
+	return nodo[T]{dato, siguiente}
 }
 
 // Primitivas Lista Enlazada
