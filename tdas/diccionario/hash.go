@@ -190,12 +190,9 @@ func (iter *iteradorDiccionario[K, V]) Siguiente() {
 	if !iter.HaySiguiente() {
 		panic("El iterador termino de iterar")
 	}
-	var proxCelda int
-	for proxCelda = iter.celdaActual + 1; proxCelda < iter.largoTabla; proxCelda++ {
-		celda := iter.tabla[proxCelda]
-		if celda.estado == OCUPADO {
-			break
-		}
+	iter.celdaActual++
+	// Buscar siguiente celda ocupada
+	for iter.celdaActual < iter.largoTabla && iter.tabla[iter.celdaActual].estado != OCUPADO {
+		iter.celdaActual++
 	}
-	iter.celdaActual = proxCelda
 }
