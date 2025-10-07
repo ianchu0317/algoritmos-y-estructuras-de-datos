@@ -1,7 +1,5 @@
 package diccionario
 
-import "fmt"
-
 // *** Estructura de ABB ***
 
 type nodo[K any, V any] struct {
@@ -29,22 +27,6 @@ func CrearABB[K any, V any](funcionCmp func(K, K) int) DiccionarioOrdenado[K, V]
 
 // Funciones auxiliares
 
-// convertirBytes toma la clave y la convierte a bytes
-func convertirBytes[K any](clave K) []byte {
-	return []byte(fmt.Sprintf("%v", clave))
-}
-
-// djb2HashInt toma una clave y devuelve un entero unico con respecto a la clave.
-// documentacion http://www.cse.yorku.ca/~oz/hash.html
-func djb2HashInt[K any](clave K) int {
-	bytes := convertirBytes(clave)
-	hash := uint32(5381)
-	for _, b := range bytes {
-		hash = ((hash << 5) + hash) + uint32(b) // hash*33 + b
-	}
-	return int(hash)
-}
-
 // buscarNodo toma una clave y devuelve la posicion del nodo correspondiente.
 // En caso de existir devuelve la posicion
 // En caso de no existir devuelve nil
@@ -71,6 +53,7 @@ func (abb arbolBinario[K, V]) Guardar(clave K, dato V) {
 		nuevoNodo := crearNodo(clave, dato)
 		*nodo = nuevoNodo // que el puntero apunte a ese nodo
 		nodo = &nuevoNodo // avanzar el punter a ese nodo para editar dato
+		abb.cantidad++
 	}
 	(**nodo).dato = dato
 }
