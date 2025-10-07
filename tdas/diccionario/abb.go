@@ -14,6 +14,7 @@ type nodo[K any, V any] struct {
 type arbolBinario[K any, V any] struct {
 	raiz     *nodo[K, V]
 	comparar func(K, K) int
+	cantidad int
 }
 
 // Funciones auxiliares
@@ -40,3 +41,57 @@ func djb2HashInt[K any](clave K) int {
 }
 
 // Primitivas de ABB
+func (abb arbolBinario[K, V]) Guardar(clave K, dato V) {
+
+}
+
+func (abb arbolBinario[K, V]) Pertence(clave K, dato V) bool {
+	return false
+}
+
+func (abb arbolBinario[K, V]) Obtener(clave K) V {
+	var data V
+	return data
+}
+
+func (abb arbolBinario[K, V]) Borrar(clave K) V {
+	var data V
+	return data
+}
+
+func (abb arbolBinario[K, V]) Cantidad() int {
+	return abb.cantidad
+}
+
+func (abb arbolBinario[K, V]) Iterar(visitar func(clave K, dato V) bool) {
+}
+
+func (abb arbolBinario[K, V]) IterarRango(desde *K, hasta *K, visitar func(clave K, dato V) bool) {
+
+}
+
+func (abb arbolBinario[K, V]) Iterador() IterDiccionario[K, V] {
+
+}
+
+func (abb arbolBinario[K, V]) IteradorRango(desde *K, hasta *K) IterDiccionario[K, V] {
+
+}
+
+// *** Estructura Iterador Externo ABB ***
+type iteradorABB[K any, V any] struct {
+	desde *K
+	hasta *K
+}
+
+func (iter iteradorABB[K, V]) HaySiguiente() bool {
+	return false
+}
+
+func (iter *iteradorDiccionario[K, V]) VerActual() (K, V) {
+
+}
+
+func (iter *iteradorABB[K, V]) Siguiente() {
+
+}
