@@ -17,12 +17,17 @@ type arbolBinario[K any, V any] struct {
 	cantidad int
 }
 
-// Funciones auxiliares
-
 // crearNodo crea un nodo para el abb
 func crearNodo[K any, V any](clave K, dato V) *nodo[K, V] {
 	return &nodo[K, V]{clave: clave, dato: dato, izq: nil, der: nil}
 }
+
+// CrearABB crea una instancia de diccionario ordenado
+func CrearABB[K any, V any](funcionCmp func(K, K) int) DiccionarioOrdenado[K, V] {
+	return &arbolBinario[K, V]{nil, funcionCmp, 0}
+}
+
+// Funciones auxiliares
 
 // convertirBytes toma la clave y la convierte a bytes
 func convertirBytes[K any](clave K) []byte {
@@ -45,7 +50,7 @@ func (abb arbolBinario[K, V]) Guardar(clave K, dato V) {
 
 }
 
-func (abb arbolBinario[K, V]) Pertence(clave K, dato V) bool {
+func (abb arbolBinario[K, V]) Pertenece(clave K) bool {
 	return false
 }
 
@@ -71,11 +76,11 @@ func (abb arbolBinario[K, V]) IterarRango(desde *K, hasta *K, visitar func(clave
 }
 
 func (abb arbolBinario[K, V]) Iterador() IterDiccionario[K, V] {
-
+	return &iteradorABB[K, V]{nil, nil}
 }
 
 func (abb arbolBinario[K, V]) IteradorRango(desde *K, hasta *K) IterDiccionario[K, V] {
-
+	return &iteradorABB[K, V]{desde, hasta}
 }
 
 // *** Estructura Iterador Externo ABB ***
@@ -88,7 +93,7 @@ func (iter iteradorABB[K, V]) HaySiguiente() bool {
 	return false
 }
 
-func (iter *iteradorDiccionario[K, V]) VerActual() (K, V) {
+func (iter *iteradorABB[K, V]) VerActual() (K, V) {
 
 }
 
