@@ -30,28 +30,9 @@ func CrearABB[K any, V any](funcionCmp func(K, K) int) DiccionarioOrdenado[K, V]
 // Funciones auxiliares
 
 // buscarNodo toma una clave y devuelve la posicion del nodo correspondiente.
-// En caso de existir devuelve la posicion
-// En caso de no existir devuelve nil
-func (abb *arbolBinario[K, V]) buscarNodo(clave K) **nodo[K, V] {
-	nodoActual := &abb.raiz
-	// Ir por cada nodo hasta encontrar clave igual o si nodo actual es nil
-	for *nodoActual != nil && abb.comparar(clave, (**nodoActual).clave) != 0 {
-		// Si clave a buscar es menor a clave del nodo actual ir a izquierda
-		// Sino ir a nodo derecha
-		fmt.Println((**nodoActual).clave)
-		if abb.comparar(clave, (**nodoActual).clave) < 0 {
-			nodoActual = &((**nodoActual).izq)
-		} else {
-			nodoActual = &((**nodoActual).der)
-		}
-	}
-	return nodoActual
-}
-
-// buscarNodo toma una clave y devuelve la posicion del nodo correspondiente.
 // En caso de existir devuelve el puntero al puntero del nodo
 // En caso de no existir devuelve nil
-func (abb arbolBinario[K, V]) buscarNodoRecursivo(clave K, nodoActual **nodo[K, V]) **nodo[K, V] {
+func (abb arbolBinario[K, V]) buscarNodo(clave K, nodoActual **nodo[K, V]) **nodo[K, V] {
 	// Ir por cada nodo hasta encontrar clave igual o si nodo actual es nil
 	if *nodoActual == nil || abb.comparar(clave, (**nodoActual).clave) == 0 {
 		return nodoActual
@@ -59,15 +40,15 @@ func (abb arbolBinario[K, V]) buscarNodoRecursivo(clave K, nodoActual **nodo[K, 
 	// Si clave a buscar es menor a clave del nodo actual ir a izquierda
 	// Sino ir a nodo derecha
 	if abb.comparar(clave, (**nodoActual).clave) < 0 {
-		return abb.buscarNodoRecursivo(clave, &((**nodoActual).izq))
+		return abb.buscarNodo(clave, &((**nodoActual).izq))
 	}
-	return abb.buscarNodoRecursivo(clave, &((**nodoActual).der))
+	return abb.buscarNodo(clave, &((**nodoActual).der))
 }
 
 // Primitivas de ABB
 
 func (abb *arbolBinario[K, V]) Guardar(clave K, dato V) {
-	nodo := abb.buscarNodoRecursivo(clave, &abb.raiz)
+	nodo := abb.buscarNodo(clave, &abb.raiz)
 	// Si nodo esta vacio, crear uno nuevo e insertar en su posicion
 	if *nodo == nil {
 		nuevoNodo := crearNodo(clave, dato)
@@ -75,17 +56,18 @@ func (abb *arbolBinario[K, V]) Guardar(clave K, dato V) {
 		nodo = &nuevoNodo // avanzar el punter a ese nodo para editar dato
 		fmt.Println("clave insertado es:", (**nodo).clave)
 		abb.cantidad++
+	} else {
+		(**nodo).dato = dato
 	}
-	(**nodo).dato = dato
 }
 
 func (abb arbolBinario[K, V]) Pertenece(clave K) bool {
-	nodo := abb.buscarNodo(clave)
+	nodo := abb.buscarNodo(clave, &abb.raiz)
 	return *nodo != nil
 }
 
 func (abb arbolBinario[K, V]) Obtener(clave K) V {
-	nodo := abb.buscarNodo(clave)
+	nodo := abb.buscarNodo(clave, &abb.raiz)
 	if *nodo == nil {
 		panic("La clave no pertenece al diccionario")
 	}
