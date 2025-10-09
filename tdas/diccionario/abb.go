@@ -48,10 +48,26 @@ func (abb *arbolBinario[K, V]) buscarNodo(clave K) **nodo[K, V] {
 	return nodoActual
 }
 
+// buscarNodo toma una clave y devuelve la posicion del nodo correspondiente.
+// En caso de existir devuelve el puntero al puntero del nodo
+// En caso de no existir devuelve nil
+func (abb arbolBinario[K, V]) buscarNodoRecursivo(clave K, nodoActual **nodo[K, V]) **nodo[K, V] {
+	// Ir por cada nodo hasta encontrar clave igual o si nodo actual es nil
+	if *nodoActual == nil || abb.comparar(clave, (**nodoActual).clave) == 0 {
+		return nodoActual
+	}
+	// Si clave a buscar es menor a clave del nodo actual ir a izquierda
+	// Sino ir a nodo derecha
+	if abb.comparar(clave, (**nodoActual).clave) < 0 {
+		return abb.buscarNodoRecursivo(clave, &((**nodoActual).izq))
+	}
+	return abb.buscarNodoRecursivo(clave, &((**nodoActual).der))
+}
+
 // Primitivas de ABB
 
 func (abb *arbolBinario[K, V]) Guardar(clave K, dato V) {
-	nodo := abb.buscarNodo(clave)
+	nodo := abb.buscarNodoRecursivo(clave, &abb.raiz)
 	// Si nodo esta vacio, crear uno nuevo e insertar en su posicion
 	if *nodo == nil {
 		nuevoNodo := crearNodo(clave, dato)
