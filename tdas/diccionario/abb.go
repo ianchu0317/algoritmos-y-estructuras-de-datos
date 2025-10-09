@@ -136,7 +136,22 @@ func (abb arbolBinario[K, V]) Cantidad() int {
 	return abb.cantidad
 }
 
+// nodo.iterar() itera los nodos del subarbol del nodo que se utiliza para llamar el metodo.
+// Devuelve true si se quiere seguir iterando, devuelve false si se quiere dejar de iterar
+func (nodo *nodo[K, V]) iterar(visitar func(clave K, dato V) bool) bool {
+	// Caso base si es final de arbol dejar de iterar
+	if nodo == nil {
+		return false
+	}
+	// Iterar in-order
+	return nodo.izq.iterar(visitar)
+	return visitar(nodo.clave, nodo.dato)
+	return nodo.der.iterar(visitar)
+}
+
 func (abb arbolBinario[K, V]) Iterar(visitar func(clave K, dato V) bool) {
+	// Iterar in-Order
+	abb.raiz.iterar(visitar)
 }
 
 func (abb arbolBinario[K, V]) IterarRango(desde *K, hasta *K, visitar func(clave K, dato V) bool) {
