@@ -69,8 +69,11 @@ func (abb arbolBinario[K, V]) Pertenece(clave K) bool {
 }
 
 func (abb arbolBinario[K, V]) Obtener(clave K) V {
-	var data V
-	return data
+	nodo := abb.buscarNodo(clave)
+	if *nodo == nil {
+		panic("La clave no pertenece al diccionario")
+	}
+	return (**nodo).dato
 }
 
 func (abb arbolBinario[K, V]) Borrar(clave K) V {
