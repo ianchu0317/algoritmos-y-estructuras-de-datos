@@ -22,8 +22,8 @@ func TestGuardar(t *testing.T) {
 	abb.Guardar(5, 3)
 	abb.Guardar(3, 4)
 	abb.Guardar(8, 8)
-	abb.Guardar(9, 9)
-	abb.Guardar(13, 13)
+	abb.Guardar(9, 8)
+	abb.Guardar(13, 6)
 	abb.Guardar(7, 7)
 	fmt.Println("test1:", abb.Obtener(3))
 	abb.Guardar(3, 2)
@@ -31,5 +31,5 @@ func TestGuardar(t *testing.T) {
 	//require.True(t, abb.Pertenece(9), "Elemento 2 guardado tiene que pertenecer a ABB")
 	fmt.Println("test2:", abb.Obtener(3))
 	fmt.Println("test borrar:", abb.Borrar(9))
-	fmt.Println("Test pertenece", abb.Pertenece(13))
+	fmt.Println("Test pertenece", abb.Obtener(13))
 }

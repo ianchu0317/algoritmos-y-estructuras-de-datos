@@ -55,12 +55,18 @@ func (abb arbolBinario[K, V]) buscarNodo(clave K, nodoActual **nodo[K, V]) **nod
 // Devuelve puntero al puntero del nodo encontrado.
 func (abb arbolBinario[K, V]) buscarNodoReemplazo(nodoActual **nodo[K, V], direccion int) **nodo[K, V] {
 	// Mover hacia derecha o izquierda dependiendo si existe o no
-	if *nodoActual == nil {
-		return nodoActual
-	}
 	// Mover hacia el final segun direccion
+
+	// Busqueda en lado derecho
 	if direccion == BUSQUEDA_DER {
+		if (**nodoActual).der == nil {
+			return nodoActual
+		}
 		return abb.buscarNodoReemplazo(&((**nodoActual).der), direccion)
+	}
+	// Busqueda en lado izquierdo
+	if (**nodoActual).izq == nil {
+		return nodoActual
 	}
 	return abb.buscarNodoReemplazo(&((**nodoActual).izq), direccion)
 }
