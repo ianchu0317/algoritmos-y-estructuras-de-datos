@@ -45,6 +45,23 @@ func (abb arbolBinario[K, V]) buscarNodo(clave K, nodoActual **nodo[K, V]) **nod
 	return abb.buscarNodo(clave, &((**nodoActual).der))
 }
 
+// esHoja devuelve toma un nodo y devuelve True si es hoja del arbol (si no tiene hijos),
+// de lo contrario devuelve false
+func esHoja[K any, V any](nodoActual *nodo[K, V]) bool {
+	return nodoActual.izq == nil && nodoActual.der == nil
+}
+
+// buscarNodoReemplazo toma el nodo actual y busca el candidato para su sucesion.
+// Devuelve puntero al puntero del nodo encontrado
+func (abb *arbolBinario[K, V]) buscarNodoReemplazo(nodoActual **nodo[K, V]) **nodo[K, V] {
+	// Mover hacia derecha o izquierda dependiendo si existe o no
+	if *nodoActual == nil {
+		return nodoActual
+	}
+	// Mover hasta nodo final muy derecho
+	return abb.buscarNodoReemplazo(&((**nodoActual).der))
+}
+
 // Primitivas de ABB
 
 func (abb *arbolBinario[K, V]) Guardar(clave K, dato V) {
@@ -74,9 +91,26 @@ func (abb arbolBinario[K, V]) Obtener(clave K) V {
 	return (**nodo).dato
 }
 
-func (abb arbolBinario[K, V]) Borrar(clave K) V {
-	var data V
-	return data
+func (abb *arbolBinario[K, V]) Borrar(clave K) V {
+	// Si no tiene hijos (es hoja), entonces solo borrar
+	// Si tiene hijos (ver cual hijo tiene) -> buscar reemplazo
+	nodo := abb.buscarNodo(clave, &abb.raiz)
+	if *nodo == nil {
+		panic("La clave no pertenece al diccionario")
+	}
+	dato := (**nodo).dato
+	if !esHoja(*nodo) {
+		// mover uno izquierda
+		nodoReemplazo := &((**nodo).izq)
+		nodoReemplazo = abb.buscarNodoReemplazo(nodoReemplazo)
+		// Cambiar y copiar clave
+		(**nodo).clave, (**nodo).dato = (**nodoReemplazo).clave, (**nodoReemplazo).dato
+		// borrar nodo reemplazo
+		*nodoReemplazo = nil
+	} else {
+		*nodo = nil
+	}
+	return dato
 }
 
 func (abb arbolBinario[K, V]) Cantidad() int {
