@@ -2,6 +2,12 @@ package diccionario
 
 import "fmt"
 
+// Constantes
+const (
+	BUSQUEDA_IZQ = -1
+	BUSQUEDA_DER = 1
+)
+
 // *** Estructura de ABB ***
 
 type nodo[K any, V any] struct {
@@ -45,21 +51,18 @@ func (abb arbolBinario[K, V]) buscarNodo(clave K, nodoActual **nodo[K, V]) **nod
 	return abb.buscarNodo(clave, &((**nodoActual).der))
 }
 
-// esHoja devuelve toma un nodo y devuelve True si es hoja del arbol (si no tiene hijos),
-// de lo contrario devuelve false
-func esHoja[K any, V any](nodoActual *nodo[K, V]) bool {
-	return nodoActual.izq == nil && nodoActual.der == nil
-}
-
-// buscarNodoReemplazo toma el nodo actual y busca el candidato para su sucesion.
-// Devuelve puntero al puntero del nodo encontrado
-func (abb *arbolBinario[K, V]) buscarNodoReemplazo(nodoActual **nodo[K, V]) **nodo[K, V] {
+// buscarNodoReemplazo toma el nodo actual y busca el candidato para su sucesion (dependiendo de direccion).
+// Devuelve puntero al puntero del nodo encontrado.
+func (abb arbolBinario[K, V]) buscarNodoReemplazo(nodoActual **nodo[K, V], direccion int) **nodo[K, V] {
 	// Mover hacia derecha o izquierda dependiendo si existe o no
 	if *nodoActual == nil {
 		return nodoActual
 	}
-	// Mover hasta nodo final muy derecho
-	return abb.buscarNodoReemplazo(&((**nodoActual).der))
+	// Mover hacia el final segun direccion
+	if direccion == BUSQUEDA_DER {
+		return abb.buscarNodoReemplazo(&((**nodoActual).der), direccion)
+	}
+	return abb.buscarNodoReemplazo(&((**nodoActual).izq), direccion)
 }
 
 // Primitivas de ABB
@@ -92,24 +95,34 @@ func (abb arbolBinario[K, V]) Obtener(clave K) V {
 }
 
 func (abb *arbolBinario[K, V]) Borrar(clave K) V {
-	// Si no tiene hijos (es hoja), entonces solo borrar
-	// Si tiene hijos (ver cual hijo tiene) -> buscar reemplazo
 	nodo := abb.buscarNodo(clave, &abb.raiz)
 	if *nodo == nil {
 		panic("La clave no pertenece al diccionario")
 	}
 	dato := (**nodo).dato
-	if !esHoja(*nodo) {
-		// mover uno izquierda
-		nodoReemplazo := &((**nodo).izq)
-		nodoReemplazo = abb.buscarNodoReemplazo(nodoReemplazo)
-		// Cambiar y copiar clave
-		(**nodo).clave, (**nodo).dato = (**nodoReemplazo).clave, (**nodoReemplazo).dato
-		// borrar nodo reemplazo
-		*nodoReemplazo = nil
-	} else {
+	// Si no tiene hijos entonces, solo borrar el nodo (desenlazar de estructura)
+	// Si tiene hijos (ver cual hijo tiene) -> buscar reemplazo
+	if (**nodo).izq == nil && (**nodo).der == nil {
 		*nodo = nil
+	} else {
+		nodoReemplazo := nodo
+		if (**nodo).izq != nil {
+			// Si tiene hijo izquierdo entonces aplicar "busqueda maximo de minimos"
+			// Mover uno izquierda y luego full derecha
+			nodoReemplazo = &((**nodoReemplazo).izq)
+			nodoReemplazo = abb.buscarNodoReemplazo(nodoReemplazo, BUSQUEDA_DER)
+		} else {
+			// Si no tiene hijo izquierdo pero sí derecho entonces aplicar "busqueda minimo de maximos"
+			// Mover uno derecha y luego full izquierda
+			nodoReemplazo = &((**nodoReemplazo).der)
+			nodoReemplazo = abb.buscarNodoReemplazo(nodoReemplazo, BUSQUEDA_IZQ)
+		}
+		// Copiar datos de heredero a nodo a borrar
+		(**nodo).clave, (**nodo).dato = (**nodoReemplazo).clave, (**nodoReemplazo).dato
+		// Borrar el nodo de reemplazo
+		*nodoReemplazo = nil
 	}
+	abb.cantidad--
 	return dato
 }
 
