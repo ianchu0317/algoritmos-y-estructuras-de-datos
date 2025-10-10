@@ -39,19 +39,23 @@ func TestGuardar(t *testing.T) {
 func TestIteradorInterno(t *testing.T) {
 	// Test iterador interno sin rango
 	abb := TDADiccionario.CrearABB[int, int](compararInt)
-	abb.Guardar(5, 5)
-	abb.Guardar(3, 3)
-	abb.Guardar(2, 2)
-	abb.Guardar(1, 1)
-	abb.Guardar(8, 8)
-	abb.Guardar(9, 9)
-	abb.Guardar(13, 13)
 	abb.Guardar(7, 7)
+	abb.Guardar(6, 6)
+	abb.Guardar(9, 9)
+	abb.Guardar(10, 10)
+	abb.Guardar(3, 3)
+	abb.Guardar(5, 5)
+	abb.Guardar(8, 8)
 
 	abb.Iterar(func(clave int, dato int) bool {
-		if clave == 3 {
-			fmt.Println("Clave, dato:", clave, dato)
-		}
+		fmt.Println("Clave, dato:", clave, dato)
+		return true
+	})
+
+	fmt.Println("Debug Iterador interno rangos:")
+	a, b := 6, 9
+	abb.IterarRango(&a, &b, func(clave int, dato int) bool {
+		fmt.Println("Clave, dato:", clave, dato)
 		return true
 	})
 }
