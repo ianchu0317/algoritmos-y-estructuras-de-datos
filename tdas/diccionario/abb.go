@@ -136,44 +136,25 @@ func (abb arbolBinario[K, V]) Cantidad() int {
 	return abb.cantidad
 }
 
-// nodo.iterar() itera los nodos del subarbol del nodo que se utiliza para llamar el metodo.
-// Devuelve true si se quiere seguir iterando, devuelve false si se quiere dejar de iterar.
-func (nodo *nodo[K, V]) iterar(visitar func(clave K, dato V) bool) bool {
-	// Caso base si es final de arbol, volver al anterior nodo pero seguir iterando
-	if nodo == nil {
-		return true
-	}
-	// Iterar in-order: izq, nodo, der
-	// Si en algun caso se devuelve false entonces devolver false y dejar iteracion.
-	// La unica forma de devolver false es con salida de funcion visitar.
-	if !nodo.izq.iterar(visitar) {
-		return false
-	}
-	if !visitar(nodo.clave, nodo.dato) {
-		return false
-	}
-	return nodo.der.iterar(visitar)
-}
-
 func (abb arbolBinario[K, V]) Iterar(visitar func(clave K, dato V) bool) {
 	// Iterar in-Order
-	abb.raiz.iterar(visitar)
+	abb.raiz.iterarRango(nil, nil, abb.comparar, visitar)
 }
 
 // nodo.iterar() itera los nodos del subarbol del nodo que se utiliza para llamar el metodo.
 // Devuelve true si se quiere seguir iterando, devuelve false si se quiere dejar de iterar.
-func (nodo *nodo[K, V]) iterarRango(desde, hasta K,
+func (nodo *nodo[K, V]) iterarRango(desde, hasta *K,
 	comparar func(K, K) int, visitar func(clave K, dato V) bool) bool {
 	// Caso base si es final de arbol, volver al anterior nodo pero seguir iterando
 	if nodo == nil {
 		return true
 	}
 	// Iterar in-order: izq, nodo, der si cumple condicion.
-	// Si cumple condicion:  desde < nodo.clave < hasta entonces hacer inorder
+	// Si cumple condicion:  desde <= nodo.clave <= hasta entonces hacer inorder
 	// Si nodo.clave < desde, ir hacia derecha
 	// Si nodo.clave > final, ir hacia izquierda
 	// La unica forma de devolver false es con salida de funcion visitar.
-	if comparar(nodo.clave, desde) > 0 && comparar(nodo.clave, hasta) < 0 {
+	if (desde == nil || comparar(nodo.clave, *desde) >= 0) && (hasta == nil || comparar(nodo.clave, *hasta) <= 0) {
 		if !nodo.izq.iterarRango(desde, hasta, comparar, visitar) {
 			return false
 		}
@@ -182,20 +163,19 @@ func (nodo *nodo[K, V]) iterarRango(desde, hasta K,
 		}
 		return nodo.der.iterarRango(desde, hasta, comparar, visitar)
 	} else {
-		if comparar(nodo.clave, desde) < 0 {
-			fmt.Println("Hello", nodo.clave)
+		if comparar(nodo.clave, *desde) < 0 {
 			return nodo.der.iterarRango(desde, hasta, comparar, visitar)
 		}
-		if comparar(nodo.clave, hasta) > 0 {
-			fmt.Println("Hello", nodo.clave)
+		if comparar(nodo.clave, *hasta) > 0 {
 			return nodo.izq.iterarRango(desde, hasta, comparar, visitar)
 		}
 	}
 	return true
 }
+
 func (abb arbolBinario[K, V]) IterarRango(desde *K, hasta *K, visitar func(clave K, dato V) bool) {
 	fmt.Println("Desde, Hasta:", *desde, *hasta)
-	abb.raiz.iterarRango(*desde, *hasta, abb.comparar, visitar)
+	abb.raiz.iterarRango(desde, hasta, abb.comparar, visitar)
 }
 
 func (abb arbolBinario[K, V]) Iterador() IterDiccionario[K, V] {
