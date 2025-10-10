@@ -49,7 +49,9 @@ func TestIteradorInterno(t *testing.T) {
 	abb.Guardar(7, 7)
 
 	abb.Iterar(func(clave int, dato int) bool {
-		fmt.Println("Clave, dato:", clave, dato)
+		if clave == 3 {
+			fmt.Println("Clave, dato:", clave, dato)
+		}
 		return true
 	})
 }
