@@ -1,6 +1,6 @@
 package diccionario
 
-import "fmt"
+import TDAPila "tdas/pila"
 
 // Constantes
 const (
@@ -80,7 +80,6 @@ func (abb *arbolBinario[K, V]) Guardar(clave K, dato V) {
 		nuevoNodo := crearNodo(clave, dato)
 		*nodo = nuevoNodo // que el puntero apunte a ese nodo
 		nodo = &nuevoNodo // avanzar el punter a ese nodo para editar dato
-		fmt.Println("clave insertado es:", (**nodo).clave)
 		abb.cantidad++
 	} else {
 		(**nodo).dato = dato
@@ -174,34 +173,52 @@ func (nodo *nodo[K, V]) iterarRango(desde, hasta *K,
 }
 
 func (abb arbolBinario[K, V]) IterarRango(desde *K, hasta *K, visitar func(clave K, dato V) bool) {
-	fmt.Println("Desde, Hasta:", *desde, *hasta)
 	abb.raiz.iterarRango(desde, hasta, abb.comparar, visitar)
 }
 
 func (abb arbolBinario[K, V]) Iterador() IterDiccionario[K, V] {
-	return &iteradorABB[K, V]{nil, nil}
+	nuevoIter := iteradorABB[K, V]{TDAPila.CrearPilaDinamica[*nodo[K, V]](), nil, nil}
+	nuevoIter.apilarIzquierda(abb.raiz)
+	return &nuevoIter
 }
 
 func (abb arbolBinario[K, V]) IteradorRango(desde *K, hasta *K) IterDiccionario[K, V] {
-	return &iteradorABB[K, V]{desde, hasta}
+	return &iteradorABB[K, V]{TDAPila.CrearPilaDinamica[*nodo[K, V]](), desde, hasta}
 }
 
 // *** Estructura Iterador Externo ABB ***
 type iteradorABB[K any, V any] struct {
-	desde *K
-	hasta *K
+	pilaNodos TDAPila.Pila[*nodo[K, V]]
+	desde     *K
+	hasta     *K
 }
+
+// Funciones auxiliares Iter Externo
+
+// apilarIzquierda() toma una un nodo.
+// Apila a la pila interna del iterador todos los nodos izquierdos
+// al nodo actual inclusive (si no es nil)
+func (iter iteradorABB[K, V]) apilarIzquierda(nodo *nodo[K, V]) {
+	if nodo == nil {
+		return
+	}
+	iter.pilaNodos.Apilar(nodo)
+	iter.apilarIzquierda(nodo.izq)
+}
+
+// Primitivas Iterador Externo
 
 func (iter iteradorABB[K, V]) HaySiguiente() bool {
-	return false
+	// Chequear que la pila no esté vacia
+	return !iter.pilaNodos.EstaVacia()
 }
 
-func (iter *iteradorABB[K, V]) VerActual() (K, V) {
+func (iter iteradorABB[K, V]) VerActual() (K, V) {
 	var clave K
 	var dato V
 	return clave, dato
 }
 
-func (iter *iteradorABB[K, V]) Siguiente() {
+func (iter iteradorABB[K, V]) Siguiente() {
 
 }
