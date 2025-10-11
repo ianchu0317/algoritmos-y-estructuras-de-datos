@@ -1,6 +1,9 @@
 package diccionario
 
-import TDAPila "tdas/pila"
+import (
+	"fmt"
+	TDAPila "tdas/pila"
+)
 
 // Constantes
 const (
@@ -178,6 +181,7 @@ func (abb arbolBinario[K, V]) IterarRango(desde *K, hasta *K, visitar func(clave
 
 func (abb arbolBinario[K, V]) Iterador() IterDiccionario[K, V] {
 	nuevoIter := iteradorABB[K, V]{TDAPila.CrearPilaDinamica[*nodo[K, V]](), nil, nil}
+	fmt.Println("Se crea iter diccionario")
 	nuevoIter.apilarIzquierda(abb.raiz)
 	return &nuevoIter
 }
@@ -198,7 +202,7 @@ type iteradorABB[K any, V any] struct {
 // apilarIzquierda() toma una un nodo.
 // Apila a la pila interna del iterador todos los nodos izquierdos
 // al nodo actual inclusive (si no es nil)
-func (iter iteradorABB[K, V]) apilarIzquierda(nodo *nodo[K, V]) {
+func (iter *iteradorABB[K, V]) apilarIzquierda(nodo *nodo[K, V]) {
 	if nodo == nil {
 		return
 	}
@@ -217,11 +221,13 @@ func (iter iteradorABB[K, V]) VerActual() (K, V) {
 	if !iter.HaySiguiente() {
 		panic("El iterador termino de iterar")
 	}
-	return iter.pilaNodos.VerTope().clave, iter.pilaNodos.Desapilar().dato
+	return iter.pilaNodos.VerTope().clave, iter.pilaNodos.VerTope().dato
 }
 
 func (iter iteradorABB[K, V]) Siguiente() {
 	if !iter.HaySiguiente() {
 		panic("El iterador termino de iterar")
 	}
+	nodoTope := iter.pilaNodos.Desapilar()
+	iter.apilarIzquierda(nodoTope.der)
 }

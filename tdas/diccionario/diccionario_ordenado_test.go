@@ -59,3 +59,22 @@ func TestIteradorInterno(t *testing.T) {
 		return true
 	})
 }
+
+func TestIteradorExterno(t *testing.T) {
+	abb := TDADiccionario.CrearABB[int, int](compararInt)
+	abb.Guardar(7, 7)
+	abb.Guardar(6, 6)
+	abb.Guardar(9, 9)
+	abb.Guardar(10, 10)
+	abb.Guardar(3, 3)
+	abb.Guardar(5, 5)
+	abb.Guardar(8, 8)
+
+	iter := abb.Iterador()
+
+	for iter.HaySiguiente() {
+		clave, datos := iter.VerActual()
+		fmt.Println("Iterador (clave, datos):", clave, datos)
+		iter.Siguiente()
+	}
+}
