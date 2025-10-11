@@ -214,11 +214,14 @@ func (iter iteradorABB[K, V]) HaySiguiente() bool {
 }
 
 func (iter iteradorABB[K, V]) VerActual() (K, V) {
-	var clave K
-	var dato V
-	return clave, dato
+	if !iter.HaySiguiente() {
+		panic("El iterador termino de iterar")
+	}
+	return iter.pilaNodos.VerTope().clave, iter.pilaNodos.Desapilar().dato
 }
 
 func (iter iteradorABB[K, V]) Siguiente() {
-
+	if !iter.HaySiguiente() {
+		panic("El iterador termino de iterar")
+	}
 }
