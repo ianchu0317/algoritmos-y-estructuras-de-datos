@@ -184,7 +184,7 @@ func (abb arbolBinario[K, V]) Iterador() IterDiccionario[K, V] {
 		desde:     nil,
 		hasta:     nil,
 		comparar:  abb.comparar}
-	nuevoIter.apilarIzquierda(abb.raiz)
+	nuevoIter.apilarMinimos(abb.raiz)
 	return &nuevoIter
 }
 
@@ -194,7 +194,7 @@ func (abb arbolBinario[K, V]) IteradorRango(desde *K, hasta *K) IterDiccionario[
 		desde:     desde,
 		hasta:     hasta,
 		comparar:  abb.comparar}
-	nuevoIter.apilarIzquierda(abb.raiz)
+	nuevoIter.apilarMinimos(abb.raiz)
 	return &nuevoIter
 }
 
@@ -211,19 +211,27 @@ type iteradorABB[K any, V any] struct {
 // apilarIzquierda() toma una un nodo.
 // Apila a la pila interna del iterador todos los nodos izquierdos
 // al nodo actual inclusive (si no es nil)
-func (iter *iteradorABB[K, V]) apilarIzquierda(nodo *nodo[K, V]) {
+func (iter *iteradorABB[K, V]) apilarMinimos(nodo *nodo[K, V]) {
 	if nodo == nil {
 		return
 	}
-	// Si el nodo actual cumple: desde <= nodo.clave <= hasta
-	// entonces apilar normal todo izquierdo
-	if (iter.desde == nil || iter.comparar(nodo.clave, *iter.desde) >= 0) && (iter.hasta == nil || iter.comparar(nodo.clave, *iter.hasta) <= 0) {
+	// Si el nodo actual cumple:
+	// - desde <= nodo.clave <= hasta
+	// - O iter== nil y hasta == nil
+	// Entonces apilar normal todo izquierdo
+	if (iter.desde == nil && iter.hasta == nil) ||
+		(iter.comparar(nodo.clave, *iter.desde) >= 0 &&
+			iter.comparar(nodo.clave, *iter.hasta) <= 0) {
 		iter.pilaNodos.Apilar(nodo)
-		iter.apilarIzquierda(nodo.izq)
+		iter.apilarMinimos(nodo.izq)
 	}
 	// Si nodo actual cumple nodo.clave < desde entonces considerar hijos derechos
-	if iter.comparar(nodo.clave, *iter.desde) < 0 {
-		iter.apilarIzquierda(nodo.der)
+	if iter.desde != nil && iter.comparar(nodo.clave, *iter.desde) < 0 {
+		iter.apilarMinimos(nodo.der)
+	}
+	// Si nodo actual cumple nodo.clave > hasta entonces considerar ijos izquierdo
+	if iter.hasta != nil && iter.comparar(nodo.clave, *iter.hasta) > 0 {
+		iter.apilarMinimos(nodo.izq)
 	}
 }
 
@@ -246,5 +254,5 @@ func (iter iteradorABB[K, V]) Siguiente() {
 		panic("El iterador termino de iterar")
 	}
 	nodoTope := iter.pilaNodos.Desapilar()
-	iter.apilarIzquierda(nodoTope.der)
+	iter.apilarMinimos(nodoTope.der)
 }

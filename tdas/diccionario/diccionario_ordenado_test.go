@@ -77,4 +77,12 @@ func TestIteradorExterno(t *testing.T) {
 		fmt.Println("Iterador (clave, datos):", clave, datos)
 		iter.Siguiente()
 	}
+
+	a, b := 6, 9
+	iter = abb.IteradorRango(&a, &b)
+	for iter.HaySiguiente() {
+		clave, datos := iter.VerActual()
+		fmt.Println("Iterador (clave, datos):", clave, datos)
+		iter.Siguiente()
+	}
 }
