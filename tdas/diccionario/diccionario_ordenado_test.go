@@ -157,17 +157,6 @@ func crearArregloDesordenado(cantidad, rango int) []int {
 	return nuevoArr
 }
 
-func testIteradorRango(t *testing.T, desde, hasta *int,
-	valoresEsperados []int, abb TDADiccionario.DiccionarioOrdenado[int, int]) {
-	i := 0
-	abb.IterarRango(desde, hasta, func(clave int, dato int) bool {
-		require.Equal(t, clave, valoresEsperados[i], "Iterar con rango desde-hasta las claves deben salir en in-orden ordenado")
-		require.Equal(t, dato, valoresEsperados[i], "Iterar con rango desde-hasta los datos deben coincidir con clave")
-		i++
-		return true
-	})
-}
-
 func TestIteradorInterno(t *testing.T) {
 	abb := TDADiccionario.CrearABB[int, int](compararInt)
 	rango := 100
@@ -198,49 +187,74 @@ func TestIteradorInterno(t *testing.T) {
 			valoresEsperados = append(valoresEsperados, val)
 		}
 	}
-	testIteradorRango(t, &desde, &hasta, valoresEsperados, abb)
-	// Test iterador interno con nil-nil
-	testIteradorRango(t, nil, nil, valoresEsperados, abb)
-	// Test iterador interno con nil en uno de los extremos:
-	// nil-hasta
+	indx = 0
+	abb.IterarRango(&desde, &hasta, func(clave int, dato int) bool {
+		require.Equal(t, clave, valoresEsperados[indx], "Iterar con rango desde-hasta las claves deben salir en in-orden ordenado")
+		require.Equal(t, dato, valoresEsperados[indx], "Iterar con rango desde-hasta los datos deben coincidir con clave")
+		indx++
+		return true
+	})
+	// Test iterador interno con nil
+	indx = 0
+	abb.IterarRango(nil, nil, func(clave int, dato int) bool {
+		require.Equal(t, clave, arregloOrdenado[indx], "Iterar con nil-nil las claves deben salir en in-orden ordenado")
+		require.Equal(t, dato, arregloOrdenado[indx], "Iterar con nil-nil los datos deben coincidir con clave")
+		indx++
+		return true
+	})
+
+	// Test iterador interno con nil en uno de los extremos: nil-hasta
+	indx = 0
 	valoresEsperados = []int{}
 	for _, val := range arregloOrdenado {
 		if val <= hasta {
 			valoresEsperados = append(valoresEsperados, val)
 		}
 	}
-	testIteradorRango(t, nil, &hasta, valoresEsperados, abb)
+	abb.IterarRango(nil, &hasta, func(clave int, dato int) bool {
+		require.Equal(t, clave, valoresEsperados[indx], "Iterar nil-hasta las claves deben salir en in-orden ordenado")
+		require.Equal(t, dato, valoresEsperados[indx], "Iterar nil-hasta los datos deben coincidir con clave")
+		indx++
+		return true
+	})
 	require.Equal(t, abb.Obtener(valoresEsperados[indx-1]), abb.Obtener(hasta), "Hasta y el indx deben devolver el mismo dato si iterador funciona correctamente")
-	// Test iterador interno con nil en uno de los extremos:
-	// desde-nil
+	// Test iterador interno con nil en uno de los extremos: desde-nil
+	indx = 0
 	valoresEsperados = []int{}
 	for _, val := range arregloOrdenado {
 		if val >= desde {
 			valoresEsperados = append(valoresEsperados, val)
 		}
 	}
-	testIteradorRango(t, &desde, nil, valoresEsperados, abb)
-
+	abb.IterarRango(&desde, nil, func(clave int, dato int) bool {
+		require.Equal(t, clave, valoresEsperados[indx], "Iterar desde-nil las claves deben salir en in-orden ordenado")
+		require.Equal(t, dato, valoresEsperados[indx], "Iterar desde-nil los datos deben coincidir con clave")
+		indx++
+		return true
+	})
 }
 
+/*
 func TestIteradorExterno(t *testing.T) {
-	/*
-	   abb := TDADiccionario.CrearABB[int, int](compararInt)
-	   rango := 100
-	   arregloDesordenado := crearArregloDesordenado(10, rango)
-	   arregloOrdenado := countingSort(arregloDesordenado, rango)
 
-	   	for _, num := range arregloDesordenado {
-	   		abb.Guardar(num, num)
-	   		require.True(t, abb.Pertenece(num), "Clave recien guardada debe pertenecer ABB")
-	   		require.Equal(t, abb.Obtener(num), num, "Ver clave debe ser igual al dato guardado")
-	   	}
+	abb := TDADiccionario.CrearABB[int, int](compararInt)
+	rango := 100
+	arregloDesordenado := crearArregloDesordenado(10, rango)
+	arregloOrdenado := countingSort(arregloDesordenado, rango)
 
-	   // Iterador sin rango debe salir en mismo orden que elementos en arregloOrdenado
-	*/
+	for _, num := range arregloDesordenado {
+		abb.Guardar(num, num)
+		require.True(t, abb.Pertenece(num), "Clave recien guardada debe pertenecer ABB")
+		require.Equal(t, abb.Obtener(num), num, "Ver clave debe ser igual al dato guardado")
+	}
+
+	// Iterador sin rango debe salir en mismo orden que elementos en arregloOrdenado
+
 }
 
-func TestVolumen(t *testing.T) {
+func TestVolumen() {
 	// testear con 10000, 20000, 40000
 	// utilizar metodo de array desordenado para testear
+
 }
+*/
