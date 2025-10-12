@@ -95,7 +95,30 @@ func TestClaveCompleja(t *testing.T) {
 	require.Equal(t, abb.Cantidad(), 0, "Elementos de ABB debe ser 0 luego de borrar todos")
 }
 
-func TestCasosEspecificos(t *testing.T) {
+func TestReemplazarDato(t *testing.T) {
+	// Claves y datos a guardar
+	clave1, clave2, clave3 := 75, 339, 23
+	dato1, dato2, dato3 := "palabra1", "palabra2", "palabra3"
+	nuevoDat1, nuevoDat2, nuevoDat3 := "dato1", "dato2", "dato3"
+	claves := []int{clave1, clave2, clave3}
+	datos := []string{dato1, dato2, dato3}
+	nuevosDat := []string{nuevoDat1, nuevoDat2, nuevoDat3}
+	abb := TDADiccionario.CrearABB[int, string](compararInt)
+	// Guardar los datos
+	for i := range 3 {
+		abb.Guardar(claves[i], datos[i])
+	}
+	// Verificar que pertenecen
+	for i := range 3 {
+		require.True(t, abb.Pertenece(claves[i]), "Clave guardada tiene que pertenecer a diccionario")
+		require.Equal(t, abb.Obtener(claves[i]), datos[i], "Obtneer clave guardada tiene que coincidir con dato guardado")
+	}
+	// Reemplazar los datos y verificar cambio
+	for i := range 3 {
+		abb.Guardar(claves[i], nuevosDat[i])
+		require.True(t, abb.Pertenece(claves[i]), "Clave guardada tiene que pertenecer a diccionario")
+		require.Equal(t, abb.Obtener(claves[i]), nuevosDat[i], "Obtneer clave guardada tiene que coincidir con dato guardado")
+	}
 
 }
 
