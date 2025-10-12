@@ -4,7 +4,11 @@ import (
 	"fmt"
 	TDADiccionario "tdas/diccionario"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
+
+// Funciones auxiliares de comparacion
 
 func compararInt(a, b int) int {
 	if a < b {
@@ -13,8 +17,37 @@ func compararInt(a, b int) int {
 	if a > b {
 		return 1
 	}
-
 	return 0
+}
+
+func compararStr(a, b string) int {
+	if a < b {
+		return -1
+	}
+	if a > b {
+		return 1
+	}
+	return 0
+}
+
+func TestAbbVacio(t *testing.T) {
+	abb := TDADiccionario.CrearABB[string, bool](compararStr)
+	require.Equal(t, 0, abb.Cantidad(), "Un ABB recien creado deberia tener cantidad 0")
+	require.False(t, abb.Pertenece("a"), "ABB recien creado no deberia tener ninguna clave que pertence")
+	require.Panics(t, func() { abb.Obtener("a") }, "ABB recien creado no se puede obtener clave")
+	require.Panics(t, func() { abb.Borrar("a") }, "ABB recien creado no se puede borrar clave")
+}
+
+func TestUnSoloElemento(t *testing.T) {
+
+}
+
+func TestClaveCompleja(t *testing.T) {
+
+}
+
+func TestCasosEspecificos(t *testing.T) {
+
 }
 
 func TestGuardar(t *testing.T) {

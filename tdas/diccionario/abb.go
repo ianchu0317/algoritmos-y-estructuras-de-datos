@@ -211,7 +211,7 @@ type iteradorABB[K any, V any] struct {
 // apilarIzquierda() toma una un nodo.
 // Apila a la pila interna del iterador todos los nodos izquierdos
 // al nodo actual inclusive (si no es nil)
-func (iter *iteradorABB[K, V]) apilarMinimos(nodo *nodo[K, V]) {
+func (iter iteradorABB[K, V]) apilarMinimos(nodo *nodo[K, V]) {
 	if nodo == nil {
 		return
 	}
