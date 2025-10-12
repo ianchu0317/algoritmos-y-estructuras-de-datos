@@ -244,6 +244,18 @@ func obtenerValoresEsperados(desde, hasta *int, arregloOrdenado []int) []int {
 	return valoresEsperados
 }
 
+func testIteradorExternoRango(t *testing.T, desde, hasta *int,
+	arregloOrdenado []int, abb TDADiccionario.DiccionarioOrdenado[int, int], msg string) {
+	valoresEsperados := obtenerValoresEsperados(desde, hasta, arregloOrdenado)
+	iter := abb.IteradorRango(desde, hasta)
+	i := 0
+	for iter.HaySiguiente() {
+		clave, _ := iter.VerActual()
+		require.Equal(t, valoresEsperados[i], clave, msg)
+		iter.Siguiente()
+		i++
+	}
+}
 func TestIteradorExterno(t *testing.T) {
 
 	abb := TDADiccionario.CrearABB[int, int](compararInt)
@@ -266,22 +278,20 @@ func TestIteradorExterno(t *testing.T) {
 		iter.Siguiente()
 		i++
 	}
+
 	// ** Test iterador externo con rango **
 	//desde := arregloOrdenado[3]
-	//hasta := arregloOrdenado[7]
+	hasta := arregloOrdenado[7]
 
 	// Iterador externo con rango nil-nil
-	iter = abb.IteradorRango(nil, nil)
-	valoresEsperados := obtenerValoresEsperados(nil, nil, arregloOrdenado)
-	i = 0
-	for iter.HaySiguiente() {
-		clave, _ := iter.VerActual()
-		require.Equal(t, valoresEsperados[i], clave, "Tiene que coincidir orden de iterador externo con arreglo ordenado")
-		iter.Siguiente()
-		i++
-	}
+	testIteradorExternoRango(t, nil, nil, arregloOrdenado, abb,
+		"En rango nil-nil tiene que coincidir orden de iterador externo con arreglo ordenado")
 	// Iterador externo con rango nil-hasta
+	testIteradorExternoRango(t, nil, &hasta, arregloOrdenado, abb,
+		"En rango nil-hasta tiene que coincidir orden de iterador externo con arreglo ordenado")
 	// Iterador externo con rango desde-nil
+	//testIteradorExternoRango(t, &desde, nil, arregloOrdenado, abb,
+	//	"En rango desde-nil tiene que coincidir orden de iterador externo con arreglo ordenado")
 
 }
 
