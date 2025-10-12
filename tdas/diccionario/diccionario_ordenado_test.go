@@ -30,6 +30,14 @@ func compararStr(a, b string) int {
 	return 0
 }
 
+type cmpStruct struct {
+	num int
+}
+
+func compararStruct(a, b cmpStruct) int {
+	return compararInt(a.num, b.num)
+}
+
 func TestAbbVacio(t *testing.T) {
 	abb := TDADiccionario.CrearABB[string, bool](compararStr)
 	require.Equal(t, 0, abb.Cantidad(), "Un ABB recien creado deberia tener cantidad 0")
@@ -39,6 +47,7 @@ func TestAbbVacio(t *testing.T) {
 }
 
 func TestUnSoloElemento(t *testing.T) {
+	// Probar primitivas de ABB para un solo elemento
 	abb := TDADiccionario.CrearABB[string, string](compararStr)
 	clave, dato := "a", "palabra"
 	abb.Guardar(clave, dato)
@@ -55,8 +64,35 @@ func TestUnSoloElemento(t *testing.T) {
 	require.Panics(t, func() { abb.Borrar(clave) }, "ABB sin elementos no se puede borrar clave")
 }
 
-func TestClaveCompleja(t *testing.T) {
+func probarPrimitivas(t *testing.T, abb TDADiccionario.DiccionarioOrdenado[cmpStruct, int], clave cmpStruct, dato int) {
+	require.True(t, abb.Pertenece(clave), "Clave compleja debe pertenecer a diccionario")
+	require.Equal(t, abb.Obtener(clave), dato, "Clave compleja debe coincidir con dato ingresado")
+	require.Equal(t, abb.Borrar(clave), dato, "Dato borrado debe coincidir con dato guardado")
+}
 
+func TestClaveCompleja(t *testing.T) {
+	clave1 := cmpStruct{3}
+	clave2 := cmpStruct{6}
+	clave3 := cmpStruct{9}
+	clave4 := cmpStruct{1}
+	clave5 := cmpStruct{2}
+	clave6 := cmpStruct{0}
+	abb := TDADiccionario.CrearABB[cmpStruct, int](compararStruct)
+	abb.Guardar(clave1, 1)
+	abb.Guardar(clave2, 2)
+	abb.Guardar(clave3, 3)
+	abb.Guardar(clave4, 4)
+	abb.Guardar(clave5, 5)
+	abb.Guardar(clave6, 6)
+	require.Equal(t, abb.Cantidad(), 6, "Elementos de ABB debe coincidir con la cantidad guardada")
+	// Probar que cumplen las primitivas basicas para las 6 claves anteriores, luego borrarlas del ABB
+	probarPrimitivas(t, abb, clave1, 1)
+	probarPrimitivas(t, abb, clave2, 2)
+	probarPrimitivas(t, abb, clave3, 3)
+	probarPrimitivas(t, abb, clave4, 4)
+	probarPrimitivas(t, abb, clave5, 5)
+	probarPrimitivas(t, abb, clave6, 6)
+	require.Equal(t, abb.Cantidad(), 0, "Elementos de ABB debe ser 0 luego de borrar todos")
 }
 
 func TestCasosEspecificos(t *testing.T) {
