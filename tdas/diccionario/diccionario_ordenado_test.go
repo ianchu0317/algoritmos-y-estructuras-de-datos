@@ -39,7 +39,20 @@ func TestAbbVacio(t *testing.T) {
 }
 
 func TestUnSoloElemento(t *testing.T) {
-
+	abb := TDADiccionario.CrearABB[string, string](compararStr)
+	clave, dato := "a", "palabra"
+	abb.Guardar(clave, dato)
+	// Test de un elemento guardado
+	require.Equal(t, 1, abb.Cantidad(), "Un ABB con un elemento guardado deberia tener cantidad 1")
+	require.True(t, abb.Pertenece(clave), "Clave guardada debe pertenecer a ABB")
+	require.Equal(t, abb.Obtener(clave), dato, "ABB con clave guardada deberia devolver bien dato")
+	// Test de borrado de ese elemento
+	datoBorrado := abb.Borrar(clave)
+	require.Equal(t, datoBorrado, dato, "ABB recien creado no se puede borrar clave")
+	require.Equal(t, 0, abb.Cantidad(), "ABB sin elementos deberia ser cantidad 0")
+	require.False(t, abb.Pertenece(clave), "ABB sin elementos no deberia tener ninguna clave que pertence")
+	require.Panics(t, func() { abb.Obtener(clave) }, "ABB sin elementos no se puede obtener clave")
+	require.Panics(t, func() { abb.Borrar(clave) }, "ABB sin elementos no se puede borrar clave")
 }
 
 func TestClaveCompleja(t *testing.T) {
