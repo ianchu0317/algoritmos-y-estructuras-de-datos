@@ -172,7 +172,7 @@ func obtenerValoresEsperados(desde, hasta *int, arregloOrdenado []int) []int {
 
 func testIteradorInternoRango(t *testing.T, desde, hasta *int, arregloOrdenado []int,
 	abb TDADiccionario.DiccionarioOrdenado[int, int], msg string) {
-	valoresEsperados := obtenerValoresEsperados(nil, nil, arregloOrdenado)
+	valoresEsperados := obtenerValoresEsperados(desde, hasta, arregloOrdenado)
 	i := 0
 	abb.IterarRango(desde, hasta, func(clave int, dato int) bool {
 		require.Equal(t, clave, valoresEsperados[i], msg)
@@ -180,6 +180,7 @@ func testIteradorInternoRango(t *testing.T, desde, hasta *int, arregloOrdenado [
 		return true
 	})
 }
+
 func TestIteradorInterno(t *testing.T) {
 	abb := TDADiccionario.CrearABB[int, int](compararInt)
 	rango := 100
@@ -204,46 +205,16 @@ func TestIteradorInterno(t *testing.T) {
 	// respetando rango: desde <= num <= hasta
 	desde := arregloOrdenado[3]
 	hasta := arregloOrdenado[7]
-	testIteradorInternoRango(t, nil, nil, arregloOrdenado, abb, "Iterar con rango desde-hasta las claves deben salir en in-orden ordenado")
 
 	// Test iterador interno con nil
-	indx = 0
-	abb.IterarRango(nil, nil, func(clave int, dato int) bool {
-		require.Equal(t, clave, arregloOrdenado[indx], "Iterar con nil-nil las claves deben salir en in-orden ordenado")
-		require.Equal(t, dato, arregloOrdenado[indx], "Iterar con nil-nil los datos deben coincidir con clave")
-		indx++
-		return true
-	})
-
+	testIteradorInternoRango(t, nil, nil, arregloOrdenado, abb,
+		"Iterar con rango desde-hasta las claves deben salir en in-orden ordenado")
 	// Test iterador interno con nil en uno de los extremos: nil-hasta
-	indx = 0
-	valoresEsperados := obtenerValoresEsperados(nil, &hasta, arregloOrdenado)
-	for _, val := range arregloOrdenado {
-		if val <= hasta {
-			valoresEsperados = append(valoresEsperados, val)
-		}
-	}
-	abb.IterarRango(nil, &hasta, func(clave int, dato int) bool {
-		require.Equal(t, clave, valoresEsperados[indx], "Iterar nil-hasta las claves deben salir en in-orden ordenado")
-		require.Equal(t, dato, valoresEsperados[indx], "Iterar nil-hasta los datos deben coincidir con clave")
-		indx++
-		return true
-	})
-	require.Equal(t, abb.Obtener(valoresEsperados[indx-1]), abb.Obtener(hasta), "Hasta y el indx deben devolver el mismo dato si iterador funciona correctamente")
+	testIteradorInternoRango(t, nil, &hasta, arregloOrdenado, abb,
+		"Iterar nil-hasta las claves deben salir en in-orden ordenado")
 	// Test iterador interno con nil en uno de los extremos: desde-nil
-	indx = 0
-	valoresEsperados = []int{}
-	for _, val := range arregloOrdenado {
-		if val >= desde {
-			valoresEsperados = append(valoresEsperados, val)
-		}
-	}
-	abb.IterarRango(&desde, nil, func(clave int, dato int) bool {
-		require.Equal(t, clave, valoresEsperados[indx], "Iterar desde-nil las claves deben salir en in-orden ordenado")
-		require.Equal(t, dato, valoresEsperados[indx], "Iterar desde-nil los datos deben coincidir con clave")
-		indx++
-		return true
-	})
+	testIteradorInternoRango(t, &desde, nil, arregloOrdenado, abb,
+		"Iterar desde-nil las claves deben salir en in-orden ordenado")
 }
 
 func testIteradorExternoRango(t *testing.T, desde, hasta *int,
