@@ -280,7 +280,7 @@ func TestIteradorExterno(t *testing.T) {
 	}
 
 	// ** Test iterador externo con rango **
-	//desde := arregloOrdenado[3]
+	desde := arregloOrdenado[3]
 	hasta := arregloOrdenado[7]
 
 	// Iterador externo con rango nil-nil
@@ -290,9 +290,8 @@ func TestIteradorExterno(t *testing.T) {
 	testIteradorExternoRango(t, nil, &hasta, arregloOrdenado, abb,
 		"En rango nil-hasta tiene que coincidir orden de iterador externo con arreglo ordenado")
 	// Iterador externo con rango desde-nil
-	//testIteradorExternoRango(t, &desde, nil, arregloOrdenado, abb,
-	//	"En rango desde-nil tiene que coincidir orden de iterador externo con arreglo ordenado")
-
+	testIteradorExternoRango(t, &desde, nil, arregloOrdenado, abb,
+		"En rango desde-nil tiene que coincidir orden de iterador externo con arreglo ordenado")
 }
 
 func TestVolumen(t *testing.T) {
