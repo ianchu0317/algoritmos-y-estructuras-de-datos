@@ -155,7 +155,8 @@ func (nodo *nodo[K, V]) iterarRango(desde, hasta *K,
 	// Si nodo.clave < desde, ir hacia derecha
 	// Si nodo.clave > final, ir hacia izquierda
 	// La unica forma de devolver false es con salida de funcion visitar.
-	if (desde == nil || comparar(nodo.clave, *desde) >= 0) && (hasta == nil || comparar(nodo.clave, *hasta) <= 0) {
+	if (desde == nil && hasta == nil) ||
+		(comparar(nodo.clave, *desde) >= 0 && comparar(nodo.clave, *hasta) <= 0) {
 		if !nodo.izq.iterarRango(desde, hasta, comparar, visitar) {
 			return false
 		}

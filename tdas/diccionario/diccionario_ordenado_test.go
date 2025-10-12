@@ -180,7 +180,44 @@ func TestIteradorInterno(t *testing.T) {
 		indx++
 		return true
 	})
-
+	// Test iterador interno con rango: los elementos deben coincidir con orden de arreglo ordenado
+	// respetando rango: desde <= num <= hasta
+	desdeInt, hastaInt := 3, 7
+	desde := arregloOrdenado[desdeInt]
+	hasta := arregloOrdenado[hastaInt]
+	valoresEsperados := []int{}
+	for _, val := range arregloOrdenado {
+		if val >= desde && val <= hasta {
+			valoresEsperados = append(valoresEsperados, val)
+		}
+	}
+	indx = desdeInt
+	abb.IterarRango(&desdeInt, &hastaInt, func(clave int, dato int) bool {
+		fmt.Println("clave,dato;", clave, dato)
+		require.Equal(t, clave, valoresEsperados[indx], "Iterar sin rango las claves deben salir en in-orden ordenado")
+		require.Equal(t, dato, valoresEsperados[indx], "Iterar sin rango los datos deben coincidir con clave")
+		indx++
+		return true
+	})
+	// Test iterador interno con nil
+	indx = 0
+	abb.IterarRango(nil, nil, func(clave int, dato int) bool {
+		require.Equal(t, clave, arregloOrdenado[indx], "Iterar con nil-nil las claves deben salir en in-orden ordenado")
+		require.Equal(t, dato, arregloOrdenado[indx], "Iterar con nil-nil los datos deben coincidir con clave")
+		indx++
+		return true
+	})
+	/*
+		// Test iterador interno con nil en uno de los extremos
+		indx = 0
+		abb.IterarRango(nil, nil, func(clave int, dato int) bool {
+			require.Equal(t, clave, arregloOrdenado[indx], "Iterar nil-hasta las claves deben salir en in-orden ordenado")
+			require.Equal(t, dato, arregloOrdenado[indx], "Iterar nil-hasta los datos deben coincidir con clave")
+			indx++
+			return true
+		})
+		require.Equal(t, abb.Obtener(indx), abb.Obtener(hasta), "Hasta y el indx deben devolver el mismo dato si iterador funciona correctamente")
+	*/
 }
 
 func TestIteradorExterno(t *testing.T) {
