@@ -256,6 +256,22 @@ func TestIteradorExterno(t *testing.T) {
 		iter.Siguiente()
 		i++
 	}
+	// ** Test iterador externo con rango **
+	//desde := arregloOrdenado[3]
+	//hasta := arregloOrdenado[7]
+
+	// Iterador externo con rango nil-nil
+	iter = abb.IteradorRango(nil, nil)
+	i = 0
+	for iter.HaySiguiente() {
+		clave, _ := iter.VerActual()
+		require.Equal(t, arregloOrdenado[i], clave, "Tiene que coincidir orden de iterador externo con arreglo ordenado")
+		iter.Siguiente()
+		i++
+	}
+	// Iterador externo con rango nil-hasta
+	// Iterador externo con rango desde-nil
+
 }
 
 func TestVolumen(t *testing.T) {
