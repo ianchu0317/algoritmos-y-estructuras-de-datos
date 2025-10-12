@@ -2,6 +2,8 @@ package diccionario_test
 
 import (
 	"fmt"
+	"math/rand"
+	"slices"
 	TDADiccionario "tdas/diccionario"
 	"testing"
 
@@ -122,47 +124,63 @@ func TestReemplazarDato(t *testing.T) {
 
 }
 
-func TestGuardar(t *testing.T) {
-	abb := TDADiccionario.CrearABB[int, int](compararInt)
-	abb.Guardar(5, 3)
-	abb.Guardar(3, 4)
-	abb.Guardar(8, 8)
-	abb.Guardar(9, 8)
-	abb.Guardar(13, 6)
-	abb.Guardar(7, 7)
-	fmt.Println("test1:", abb.Obtener(3))
-	abb.Guardar(3, 2)
-	//require.True(t, abb.Pertenece(13), "Elemento guardado tiene que pertenecer a ABB")
-	//require.True(t, abb.Pertenece(9), "Elemento 2 guardado tiene que pertenecer a ABB")
-	fmt.Println("test2:", abb.Obtener(3))
-	fmt.Println("Cantidad antes de borrar:", abb.Cantidad())
-	fmt.Println("test borrar:", abb.Borrar(9))
-	fmt.Println("Test pertenece", abb.Obtener(13))
-	fmt.Println("Cantidad despues de borrar:", abb.Cantidad())
+// countinSort ordena un arreglo de numeros enteros dentro del rango
+func countingSort(arr []int, rango int) []int {
+	frecuencias := make([]int, rango)
+	for _, num := range arr {
+		frecuencias[num]++
+	}
+	inicios := make([]int, rango)
+	for i := 1; i < rango; i++ {
+		inicios[i] = inicios[i-1] + frecuencias[i-1]
+	}
+	ordenado := make([]int, len(arr))
+	for _, num := range arr {
+		indxInicio := inicios[num]
+		ordenado[indxInicio] = num
+		inicios[num]++
+	}
+	return ordenado
+}
+
+// crearArregloDesordenado toma cantidad y rango en enteros.
+// Devuelve un arreglo de largo 'cantidad' desordenado de numeros aleatorios dentro del rango.
+func crearArregloDesordenado(cantidad, rango int) []int {
+	nuevoArr := make([]int, cantidad)
+	for i := range cantidad {
+		numRandom := rand.Int() % rango
+		// Crear arreglo desordenado de numeros no repetidos
+		for slices.Contains(nuevoArr, numRandom) {
+			numRandom = rand.Int() % rango
+		}
+		nuevoArr[i] = numRandom
+	}
+	return nuevoArr
 }
 
 func TestIteradorInterno(t *testing.T) {
-	// Test iterador interno sin rango
 	abb := TDADiccionario.CrearABB[int, int](compararInt)
-	abb.Guardar(7, 7)
-	abb.Guardar(6, 6)
-	abb.Guardar(9, 9)
-	abb.Guardar(10, 10)
-	abb.Guardar(3, 3)
-	abb.Guardar(5, 5)
-	abb.Guardar(8, 8)
+	rango := 100
+	arregloDesordenado := crearArregloDesordenado(10, rango)
+	arregloOrdenado := countingSort(arregloDesordenado, rango)
+	fmt.Println(arregloDesordenado)
+	fmt.Println(arregloOrdenado)
 
+	for _, num := range arregloDesordenado {
+		abb.Guardar(num, num)
+		require.True(t, abb.Pertenece(num), "Clave recien guardada debe pertenecer ABB")
+		require.Equal(t, abb.Obtener(num), num, "Ver clave debe ser igual al dato guardado")
+	}
+
+	// Test iterador interno sin rango: los elementos deben coincidir con orden de arreglo Ordenado
+	indx := 0
 	abb.Iterar(func(clave int, dato int) bool {
-		fmt.Println("Clave, dato:", clave, dato)
+		require.Equal(t, clave, arregloOrdenado[indx], "Iterar sin rango las claves deben salir en in-orden ordenado")
+		require.Equal(t, dato, arregloOrdenado[indx], "Iterar sin rango los datos deben coincidir con clave")
+		indx++
 		return true
 	})
 
-	fmt.Println("Debug Iterador interno rangos:")
-	a, b := 6, 9
-	abb.IterarRango(&a, &b, func(clave int, dato int) bool {
-		fmt.Println("Clave, dato:", clave, dato)
-		return true
-	})
 }
 
 func TestIteradorExterno(t *testing.T) {
