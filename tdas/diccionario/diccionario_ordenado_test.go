@@ -157,6 +157,19 @@ func crearArregloDesordenado(cantidad, rango int) []int {
 	return nuevoArr
 }
 
+// obtenerValoresEsperados toma punteros *int de desde, hasta y un arreglo ordenado.
+// Devuelve un arreglo ordenado con elementos que cumplen desde <= num <= hasta, donde [num1, num2..numN].
+// En caso de si alguno es nil entonces toma como si no hubiera rango.
+func obtenerValoresEsperados(desde, hasta *int, arregloOrdenado []int) []int {
+	valoresEsperados := []int{}
+	for _, num := range arregloOrdenado {
+		if (desde == nil || num >= *desde) && (hasta == nil || num <= *hasta) {
+			valoresEsperados = append(valoresEsperados, num)
+		}
+	}
+	return valoresEsperados
+}
+
 func TestIteradorInterno(t *testing.T) {
 	abb := TDADiccionario.CrearABB[int, int](compararInt)
 	rango := 100
@@ -232,16 +245,6 @@ func TestIteradorInterno(t *testing.T) {
 		indx++
 		return true
 	})
-}
-
-func obtenerValoresEsperados(desde, hasta *int, arregloOrdenado []int) []int {
-	valoresEsperados := []int{}
-	for _, num := range arregloOrdenado {
-		if (desde == nil || num >= *desde) && (hasta == nil || num <= *hasta) {
-			valoresEsperados = append(valoresEsperados, num)
-		}
-	}
-	return valoresEsperados
 }
 
 func testIteradorExternoRango(t *testing.T, desde, hasta *int,
