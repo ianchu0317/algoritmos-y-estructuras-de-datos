@@ -234,7 +234,6 @@ func TestIteradorInterno(t *testing.T) {
 	})
 }
 
-/*
 func TestIteradorExterno(t *testing.T) {
 
 	abb := TDADiccionario.CrearABB[int, int](compararInt)
@@ -249,12 +248,18 @@ func TestIteradorExterno(t *testing.T) {
 	}
 
 	// Iterador sin rango debe salir en mismo orden que elementos en arregloOrdenado
-
+	iter := abb.Iterador()
+	i := 0
+	for iter.HaySiguiente() {
+		clave, _ := iter.VerActual()
+		require.Equal(t, arregloOrdenado[i], clave, "Tiene que coincidir orden de iterador externo con arreglo ordenado")
+		iter.Siguiente()
+		i++
+	}
 }
 
-func TestVolumen() {
+func TestVolumen(t *testing.T) {
 	// testear con 10000, 20000, 40000
 	// utilizar metodo de array desordenado para testear
 
 }
-*/
