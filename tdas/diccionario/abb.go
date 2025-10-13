@@ -188,13 +188,7 @@ func (abb arbolBinario[K, V]) IterarRango(desde *K, hasta *K, visitar func(clave
 }
 
 func (abb arbolBinario[K, V]) Iterador() IterDiccionario[K, V] {
-	nuevoIter := iteradorABB[K, V]{
-		pilaNodos: TDAPila.CrearPilaDinamica[*nodo[K, V]](),
-		desde:     nil,
-		hasta:     nil,
-		comparar:  abb.comparar}
-	nuevoIter.apilarMinimos(abb.raiz)
-	return &nuevoIter
+	return abb.IteradorRango(nil, nil)
 }
 
 func (abb arbolBinario[K, V]) IteradorRango(desde *K, hasta *K) IterDiccionario[K, V] {
