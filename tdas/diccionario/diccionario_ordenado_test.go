@@ -1,9 +1,7 @@
 package diccionario_test
 
 import (
-	"fmt"
 	"math/rand"
-	"slices"
 	TDADiccionario "tdas/diccionario"
 	"testing"
 
@@ -147,12 +145,14 @@ func countingSort(arr []int, rango int) []int {
 // Devuelve un arreglo de largo 'cantidad' desordenado de numeros aleatorios dentro del rango.
 func crearArregloDesordenado(cantidad, rango int) []int {
 	nuevoArr := make([]int, cantidad)
+	enArreglo := TDADiccionario.CrearABB[int, bool](compararInt)
 	for i := range cantidad {
 		numRandom := rand.Int() % rango
 		// Crear arreglo desordenado de numeros no repetidos
-		for slices.Contains(nuevoArr, numRandom) {
+		for enArreglo.Pertenece(numRandom) {
 			numRandom = rand.Int() % rango
 		}
+		enArreglo.Guardar(numRandom, true)
 		nuevoArr[i] = numRandom
 	}
 	return nuevoArr
@@ -287,14 +287,15 @@ func testVolumen(t *testing.T, volumen int) {
 	require.Equal(t, volumen, abb.Cantidad(), "Cantidad de elementos tiene que ser igual al voluemn cargado")
 	// Borrar elementos desde el arreglo Desordenado
 	for _, num := range arregloDesordenado {
-		fmt.Println(abb.Obtener(num))
 		require.Equal(t, num, abb.Borrar(num), "Elemento borrado tiene que coincidir con elemento cargado")
 	}
 	require.Equal(t, 0, abb.Cantidad(), "Luego de borrar los elementos no debe quedar nada en arbol")
 }
 
 func TestVolumen(t *testing.T) {
-	// testear con 10000, 20000, 40000
+	// testear con 10000, 20000, 400000, 1000000
 	testVolumen(t, 10000)
-
+	testVolumen(t, 20000)
+	testVolumen(t, 400000)
+	testVolumen(t, 1000000)
 }
