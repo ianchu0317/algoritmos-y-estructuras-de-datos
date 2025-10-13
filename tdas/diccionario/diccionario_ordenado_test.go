@@ -1,6 +1,7 @@
 package diccionario_test
 
 import (
+	"fmt"
 	"math/rand"
 	"slices"
 	TDADiccionario "tdas/diccionario"
@@ -267,8 +268,33 @@ func TestIteradorExterno(t *testing.T) {
 		"En rango desde-nil tiene que coincidir orden de iterador externo con arreglo ordenado")
 }
 
+func testVolumen(t *testing.T, volumen int) {
+	// Crear arreglo
+	rango := volumen + 1000
+	arregloDesordenado := crearArregloDesordenado(volumen, rango)
+	arregloOrdenado := countingSort(arregloDesordenado, rango)
+	abb := TDADiccionario.CrearABB[int, int](compararInt)
+
+	// Cargar ABB
+	for _, num := range arregloDesordenado {
+		abb.Guardar(num, num)
+	}
+	// Chequear con el arreglo ordenado si los elementos estan cargados
+	for _, num := range arregloOrdenado {
+		require.True(t, abb.Pertenece(num), "Numero guardado tiene que pertenecer a ABB")
+		require.Equal(t, abb.Obtener(num), num, "Numero guardado tiene que ser igual al elemento guardado")
+	}
+	require.Equal(t, volumen, abb.Cantidad(), "Cantidad de elementos tiene que ser igual al voluemn cargado")
+	// Borrar elementos desde el arreglo Desordenado
+	for _, num := range arregloDesordenado {
+		fmt.Println(abb.Obtener(num))
+		require.Equal(t, num, abb.Borrar(num), "Elemento borrado tiene que coincidir con elemento cargado")
+	}
+	require.Equal(t, 0, abb.Cantidad(), "Luego de borrar los elementos no debe quedar nada en arbol")
+}
+
 func TestVolumen(t *testing.T) {
 	// testear con 10000, 20000, 40000
-	// utilizar metodo de array desordenado para testear
+	testVolumen(t, 10000)
 
 }

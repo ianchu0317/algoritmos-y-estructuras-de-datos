@@ -126,8 +126,17 @@ func (abb *arbolBinario[K, V]) Borrar(clave K) V {
 		}
 		// Copiar datos de heredero a nodo a borrar
 		(**nodo).clave, (**nodo).dato = (**nodoReemplazo).clave, (**nodoReemplazo).dato
-		// Borrar el nodo de reemplazo
-		*nodoReemplazo = nil
+		// Borrar el nodo de reemplazo dependiendo si tiene hijos o no
+		if (**nodoReemplazo).izq != nil || (**nodoReemplazo).der != nil {
+			// Si tiene hijo izquierdo entonces apuntar a hijo izquierdo, sino al derecho
+			if (**nodoReemplazo).izq != nil {
+				*nodoReemplazo = (**nodoReemplazo).izq
+			} else {
+				*nodoReemplazo = (**nodoReemplazo).der
+			}
+		} else {
+			*nodoReemplazo = nil
+		}
 	}
 	abb.cantidad--
 	return dato
