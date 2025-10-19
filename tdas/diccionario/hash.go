@@ -25,80 +25,6 @@ type hashCerrado[K any, V any] struct {
 	comparar  func(K, K) bool
 }
 
-// Funciones auxiliares
-
-func CrearHash[K any, V any](comparar func(K, K) bool) Diccionario[K, V] {
-	// Inicializar el hash
-	nuevoDic := hashCerrado[K, V]{
-		capacidad: 100,
-		cantidad:  0,
-		borrados:  0,
-		comparar:  comparar,
-	}
-	nuevoDic.crearTabla(nuevoDic.capacidad)
-	return &nuevoDic
-}
-
-// convertirABytes toma la clave y la convierte a bytes
-func convertirABytes[K any](clave K) []byte {
-	return []byte(fmt.Sprintf("%v", clave))
-}
-
-// djb2Hash toma una clave y el numero maximo que puede valer,
-// y devuelve la clave en hash dentro del rango pasado.
-// documentacion http://www.cse.yorku.ca/~oz/hash.html
-func djb2Hash[K any](clave K, largo int) int {
-	bytes := convertirABytes(clave)
-	hash := uint32(5381)
-	for _, b := range bytes {
-		hash = ((hash << 5) + hash) + uint32(b) // hash*33 + b
-	}
-	return int(hash % uint32(largo))
-}
-
-// buscarCelda toma una clave y devuelve el pntero a celda correspondiente si existe.
-// En caso de no existir devuelve el puntero a la celda donde deberia existir (la proxima celda VACIA)
-func (hash hashCerrado[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
-	// Buscar en celda actual
-	claveHash := djb2Hash(clave, hash.capacidad)
-	celda := &hash.tabla[claveHash]
-	// Buscar en celdas siguientes si no está en actual
-	for celda.estado != VACIO && !hash.comparar(clave, celda.clave) {
-		claveHash++
-		// Si me pase indice, iniciar de nuevo en principio de tabla
-		if claveHash == hash.capacidad {
-			claveHash = 0
-		}
-		celda = &hash.tabla[claveHash]
-	}
-	// devolver celda encontrada
-	return celda
-}
-
-func (hash *hashCerrado[K, V]) crearTabla(largo int) {
-	hash.tabla = make([]celdaHash[K, V], largo)
-}
-
-// redimensionarTabla copia las celdas actuales a una nueva celda de capacidad 'largo'
-func (hash *hashCerrado[K, V]) redimensionarTabla(largo int) {
-	// crear nueva tabla
-	viejaTabla := hash.tabla
-	hash.crearTabla(largo)
-	// actualizar variables al redimensionar
-	hash.capacidad = largo
-	hash.borrados = 0
-	// Para cada celda con posicion ocupada, reubicar en nueva tabla
-	// utilizar buscarCelda para buscar la celda correspondiente en nueva tabla
-	for _, celda := range viejaTabla {
-		if celda.estado == OCUPADO {
-			nuevaCelda := hash.buscarCelda(celda.clave)
-			nuevaCelda.clave = celda.clave
-			nuevaCelda.dato = celda.dato
-			nuevaCelda.estado = OCUPADO
-		}
-	}
-}
-
 // Primitivas hash cerrada
 
 func (hash hashCerrado[K, V]) Cantidad() int {
@@ -195,5 +121,79 @@ func (iter *iteradorDiccionario[K, V]) Siguiente() {
 	// Buscar siguiente celda ocupada
 	for iter.celdaActual < iter.largoTabla && iter.tabla[iter.celdaActual].estado != OCUPADO {
 		iter.celdaActual++
+	}
+}
+
+// Funciones auxiliares
+
+func CrearHash[K any, V any](comparar func(K, K) bool) Diccionario[K, V] {
+	// Inicializar el hash
+	nuevoDic := hashCerrado[K, V]{
+		capacidad: 100,
+		cantidad:  0,
+		borrados:  0,
+		comparar:  comparar,
+	}
+	nuevoDic.crearTabla(nuevoDic.capacidad)
+	return &nuevoDic
+}
+
+// convertirABytes toma la clave y la convierte a bytes
+func convertirABytes[K any](clave K) []byte {
+	return []byte(fmt.Sprintf("%v", clave))
+}
+
+// djb2Hash toma una clave y el numero maximo que puede valer,
+// y devuelve la clave en hash dentro del rango pasado.
+// documentacion http://www.cse.yorku.ca/~oz/hash.html
+func djb2Hash[K any](clave K, largo int) int {
+	bytes := convertirABytes(clave)
+	hash := uint32(5381)
+	for _, b := range bytes {
+		hash = ((hash << 5) + hash) + uint32(b) // hash*33 + b
+	}
+	return int(hash % uint32(largo))
+}
+
+// buscarCelda toma una clave y devuelve el pntero a celda correspondiente si existe.
+// En caso de no existir devuelve el puntero a la celda donde deberia existir (la proxima celda VACIA)
+func (hash hashCerrado[K, V]) buscarCelda(clave K) *celdaHash[K, V] {
+	// Buscar en celda actual
+	claveHash := djb2Hash(clave, hash.capacidad)
+	celda := &hash.tabla[claveHash]
+	// Buscar en celdas siguientes si no está en actual
+	for celda.estado != VACIO && !hash.comparar(clave, celda.clave) {
+		claveHash++
+		// Si me pase indice, iniciar de nuevo en principio de tabla
+		if claveHash == hash.capacidad {
+			claveHash = 0
+		}
+		celda = &hash.tabla[claveHash]
+	}
+	// devolver celda encontrada
+	return celda
+}
+
+func (hash *hashCerrado[K, V]) crearTabla(largo int) {
+	hash.tabla = make([]celdaHash[K, V], largo)
+}
+
+// redimensionarTabla copia las celdas actuales a una nueva celda de capacidad 'largo'
+func (hash *hashCerrado[K, V]) redimensionarTabla(largo int) {
+	// crear nueva tabla
+	viejaTabla := hash.tabla
+	hash.crearTabla(largo)
+	// actualizar variables al redimensionar
+	hash.capacidad = largo
+	hash.borrados = 0
+	// Para cada celda con posicion ocupada, reubicar en nueva tabla
+	// utilizar buscarCelda para buscar la celda correspondiente en nueva tabla
+	for _, celda := range viejaTabla {
+		if celda.estado == OCUPADO {
+			nuevaCelda := hash.buscarCelda(celda.clave)
+			nuevaCelda.clave = celda.clave
+			nuevaCelda.dato = celda.dato
+			nuevaCelda.estado = OCUPADO
+		}
 	}
 }
