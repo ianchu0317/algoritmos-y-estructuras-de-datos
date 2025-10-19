@@ -33,7 +33,8 @@ func CrearHash[K any, V any](comparar func(K, K) bool) Diccionario[K, V] {
 		capacidad: 100,
 		cantidad:  0,
 		borrados:  0,
-		comparar:  comparar}
+		comparar:  comparar,
+	}
 	nuevoDic.crearTabla(nuevoDic.capacidad)
 	return &nuevoDic
 }
