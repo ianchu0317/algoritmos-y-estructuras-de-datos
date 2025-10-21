@@ -29,8 +29,11 @@ func cmpIntMin(a, b int) int {
 
 // Test heap vacio
 func TestHeapVacio(t *testing.T) {
-	heap := TDAColaPrioridad.CrearHeap[string]()
-	require.Equal(t, 0, heap.Cantidad(), "Heap recien creado")
+	heap := TDAColaPrioridad.CrearHeap[string](cmpString)
+	require.Equal(t, 0, heap.Cantidad(), "Heap recien creado debe tener cantidad 0")
+	require.True(t, heap.EstaVacia(), "Heap recien creado debe estar vacio")
+	require.Panics(t, func() { heap.VerMax() }, "Heap recien creado no puede ver elemento de mayor prioridad")
+	require.Panics(t, func() { heap.Desencolar() }, "Heap recien creado no puede desencolar")
 }
 
 // Test heap un elemento (probar todas las primitivas)
