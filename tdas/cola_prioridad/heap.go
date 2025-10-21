@@ -27,11 +27,26 @@ func (heap *heapArr[T]) Encolar(elemento T) {
 }
 
 func (heap heapArr[T]) VerMax() T {
+	if heap.EstaVacia() {
+		panic("La cola esta vacia")
+	}
 	return heap.arreglo[0]
 }
 
 func (heap heapArr[T]) Desencolar() T {
-	return heap.arreglo[0]
+	if heap.EstaVacia() {
+		panic("La cola esta vacia")
+	}
+	primerElem := heap.arreglo[0]
+	// Swap ultimo elemento y downheap al primer elemnto
+	heap.arreglo[0] = heap.arreglo[heap.cantidad]
+	downHeap(0, heap.arreglo[:heap.cantidad], heap.cmp)
+	heap.cantidad--
+	// Chequear redimension
+	if heap.cantidad < heap.capacidad/4 {
+		heap.redimensionar(heap.capacidad / 2)
+	}
+	return primerElem
 }
 
 func (heap heapArr[T]) Cantidad() int {
@@ -110,11 +125,8 @@ func upHeap[T any](pos int, arreglo []T, cmp func(T, T) int) {
 	// Si actual necesita ir antes, swap, sino salir de recursion
 	if cmp(actual, padre) > 0 {
 		swap(&arreglo[posPadre], &arreglo[pos])
-	} else {
-		return
+		upHeap(posPadre, arreglo, cmp)
 	}
-	// Llamada recursiva
-	upHeap(posPadre, arreglo, cmp)
 }
 
 // heapify(arreglo, funcion) toma un arreglo y una funcion de comparacion
