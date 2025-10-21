@@ -132,5 +132,7 @@ func upHeap[T any](pos int, arreglo []T, cmp func(T, T) int) {
 // heapify(arreglo, funcion) toma un arreglo y una funcion de comparacion
 // y modifica el arreglo en forma de heap segun la funcion pasada
 func heapify[T any](arreglo []T, cmp func(T, T) int) {
-
+	for i := len(arreglo) - 1; i >= 0; i-- {
+		downHeap(i, arreglo, cmp)
+	}
 }
