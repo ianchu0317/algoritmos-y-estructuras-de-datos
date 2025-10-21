@@ -54,15 +54,27 @@ func (heap heapArr[T]) Cantidad() int {
 }
 
 // *** Funciones de creacion de Heap (Constructores)***
+
+// CrearHeap(cmp) toma funcion de comparacion cmp
+// y devuelve una instancia de Heap con la prioridad pasada
 func CrearHeap[T any](funcion_cmp func(T, T) int) ColaPrioridad[T] {
 	heap := heapArr[T]{cantidad: 0, cmp: funcion_cmp}
 	heap.redimensionar(0)
 	return &heap
 }
 
+// CrearHeapArr toma un arreglo y una funcion de comparacion
+// y crea un Heap a partir de la prioridad y los elementos del arreglo
 func CrearHeapArr[T any](arreglo []T, funcion_cmp func(T, T) int) ColaPrioridad[T] {
-	heapify(arreglo, funcion_cmp)
-	heap := heapArr[T]{cantidad: 0, cmp: funcion_cmp}
+	aux := make([]T, len(arreglo))
+	copy(aux, arreglo)
+	heapify(aux, funcion_cmp)
+	heap := heapArr[T]{
+		arreglo:   aux,
+		cantidad:  len(arreglo),
+		capacidad: len(arreglo),
+		cmp:       funcion_cmp,
+	}
 	return &heap
 }
 
