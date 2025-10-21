@@ -33,7 +33,7 @@ func (heap heapArr[T]) VerMax() T {
 	return heap.arreglo[0]
 }
 
-func (heap heapArr[T]) Desencolar() T {
+func (heap *heapArr[T]) Desencolar() T {
 	if heap.EstaVacia() {
 		panic("La cola esta vacia")
 	}
