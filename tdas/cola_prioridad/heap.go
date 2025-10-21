@@ -68,8 +68,26 @@ func swap[T any](a, b *T) {
 
 // downHeap(pos, arreglo) toma una posicion en arreglo de un elemento y el arreglo
 // y aplica algoritmo down-heap al elemento de esa posicion
-func downHeap[T any](pos int, arreglo []T) {
-
+func downHeap[T any](pos int, arreglo []T, cmp func(T, T) int) {
+	// Si se pasa de este indice entonces el resto son hijos
+	if pos > len(arreglo)/2 {
+		return
+	}
+	indxIzq := pos*2 + 1
+	indxDer := pos*2 + 2
+	mayor := pos
+	// Comparar y encontrar el mayor de los hijos si existe
+	if indxIzq < len(arreglo) && cmp(arreglo[mayor], arreglo[indxIzq]) < 0 {
+		mayor = indxIzq
+	}
+	if indxDer < len(arreglo) && cmp(arreglo[mayor], arreglo[indxDer]) < 0 {
+		mayor = indxDer
+	}
+	// Swap si el mayor es alguno de los hijos
+	if mayor != pos {
+		swap(&arreglo[pos], &arreglo[mayor])
+		downHeap(mayor, arreglo, cmp)
+	}
 }
 
 // upHeap(pos, arreglo) toma una posicion en arreglo de un elemento y el arreglo
@@ -87,8 +105,9 @@ func upHeap[T any](pos int, arreglo []T, cmp func(T, T) int) {
 	actual := arreglo[pos]
 
 	// Comparar padre con hijo
+	// Si actual necesita ir antes, swap, sino salir de recursion
 	if cmp(actual, padre) > 0 {
-		swap(&actual, &padre)
+		swap(&arreglo[posPadre], &arreglo[pos])
 	} else {
 		return
 	}
