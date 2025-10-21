@@ -39,9 +39,9 @@ func (heap heapArr[T]) Desencolar() T {
 	}
 	primerElem := heap.arreglo[0]
 	// Swap ultimo elemento y downheap al primer elemnto
-	heap.arreglo[0] = heap.arreglo[heap.cantidad]
-	downHeap(0, heap.arreglo[:heap.cantidad], heap.cmp)
 	heap.cantidad--
+	heap.arreglo[0] = heap.arreglo[heap.cantidad]
+	downHeap(0, heap.arreglo[:heap.cantidad+1], heap.cmp)
 	// Chequear redimension
 	if heap.cantidad < heap.capacidad/4 {
 		heap.redimensionar(heap.capacidad / 2)
@@ -58,8 +58,11 @@ func (heap heapArr[T]) Cantidad() int {
 // CrearHeap(cmp) toma funcion de comparacion cmp
 // y devuelve una instancia de Heap con la prioridad pasada
 func CrearHeap[T any](funcion_cmp func(T, T) int) ColaPrioridad[T] {
-	heap := heapArr[T]{cantidad: 0, cmp: funcion_cmp}
-	heap.redimensionar(0)
+	heap := heapArr[T]{
+		cantidad: 0,
+		cmp:      funcion_cmp,
+	}
+	heap.redimensionar(1)
 	return &heap
 }
 
@@ -72,7 +75,7 @@ func CrearHeapArr[T any](arreglo []T, funcion_cmp func(T, T) int) ColaPrioridad[
 	heap := heapArr[T]{
 		arreglo:   aux,
 		cantidad:  len(arreglo),
-		capacidad: len(arreglo),
+		capacidad: len(arreglo) + 1,
 		cmp:       funcion_cmp,
 	}
 	return &heap
@@ -86,7 +89,8 @@ func CrearHeapArr[T any](arreglo []T, funcion_cmp func(T, T) int) ColaPrioridad[
 // y redimensiona el arreglo interno a la nueva capacidad
 func (heap *heapArr[T]) redimensionar(capacidad int) {
 	aux := make([]T, capacidad)
-	copy(heap.arreglo, aux)
+	copy(aux, heap.arreglo)
+	heap.arreglo = aux
 	heap.capacidad = capacidad
 }
 
