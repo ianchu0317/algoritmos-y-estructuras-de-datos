@@ -58,7 +58,9 @@ func CrearHeapArr[T any](arreglo []T, funcion_cmp func(T, T) int) ColaPrioridad[
 // heap.redimensionar(nuevaCapacidad) toma una capacidad en enteros
 // y redimensiona el arreglo interno a la nueva capacidad
 func (heap *heapArr[T]) redimensionar(capacidad int) {
-
+	aux := make([]T, capacidad)
+	copy(heap.arreglo, aux)
+	heap.capacidad = capacidad
 }
 
 // swap toma dos elementos y los intercambia de lugar
