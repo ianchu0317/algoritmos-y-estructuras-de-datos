@@ -60,18 +60,34 @@ func cargarHeapArr[T any](heap TDAColaPrioridad.ColaPrioridad[T], arr []T) {
 	}
 }
 
+// testOrdenDesencolar(t, arr, heap) toma un arreglo y un heap.
+// Itera el arreglo y compara si coincide con orden de desencolado
+func testOrdenDesencolar[T any](t *testing.T, arr []T, heap TDAColaPrioridad.ColaPrioridad[T]) {
+	for _, elem := range arr {
+		require.Equal(t, elem, heap.Desencolar(), "El orden del heap deberia coincidir con el arreglo esperado")
+	}
+}
+
 // Tests especificos
 func TestCasosEspecificos(t *testing.T) {
-	//arr := []int{1, 6, 3, 9, 5, 2, 4, 8, 7, 0}
-	//arrMax := []int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
-	//arrMin := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	arr := []int{1, 6, 3, 9, 5, 2, 4, 8, 7, 0}
+	arrMax := []int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
+	arrMin := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 
 	// Crear heaps de maximos y minimos y chequear vacios
 	heapMax := TDAColaPrioridad.CrearHeap[int](cmpIntMax)
 	heapMin := TDAColaPrioridad.CrearHeap[int](cmpIntMin)
 	testsHeapVacio(t, heapMax)
 	testsHeapVacio(t, heapMin)
-
+	// Cargar heaps de maximos y minimos con arr
+	cargarHeapArr(heapMax, arr)
+	cargarHeapArr(heapMin, arr)
+	// CHequear orden de desencolado
+	testOrdenDesencolar(t, arrMax, heapMax)
+	testOrdenDesencolar(t, arrMin, heapMin)
+	// chequear nuevamente heap vacio
+	testsHeapVacio(t, heapMax)
+	testsHeapVacio(t, heapMin)
 }
 
 // Test volumen
