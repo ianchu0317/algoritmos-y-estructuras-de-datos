@@ -69,7 +69,7 @@ func CrearHeap[T any](funcion_cmp func(T, T) int) ColaPrioridad[T] {
 // CrearHeapArr toma un arreglo y una funcion de comparacion
 // y crea un Heap a partir de la prioridad y los elementos del arreglo
 func CrearHeapArr[T any](arreglo []T, funcion_cmp func(T, T) int) ColaPrioridad[T] {
-	aux := make([]T, len(arreglo))
+	aux := make([]T, len(arreglo)+1)
 	copy(aux, arreglo)
 	heapify(aux, funcion_cmp)
 	heap := heapArr[T]{
@@ -86,7 +86,7 @@ func HeapSort[T any](arr []T, funcion_cmp func(T, T) int) {
 	// Heapify el arreglo
 	heapify(arr, funcion_cmp)
 	// Swap primer y ultimo elemento
-	// Downheap del primer elemento al anteultimo
+	// Downheap del primer elemento ultimo elemento relativo
 	for i := 0; i < len(arr); i++ {
 		swap(&arr[0], &arr[len(arr)-1-i])
 		downHeap(0, arr[:len(arr)-1-i], funcion_cmp)
