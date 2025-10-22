@@ -1,6 +1,7 @@
 package cola_prioridad_test
 
 import (
+	"math/rand"
 	TDAColaPrioridad "tdas/cola_prioridad"
 	"testing"
 
@@ -106,8 +107,50 @@ func TestCrearHeapArr(t *testing.T) {
 	testsHeapVacio(t, heapMin)
 }
 
-// Test volumen
+// crearArregloDesordenado toma cantidad y rango en enteros positivos.
+// Devuelve un arreglo de largo 'cantidad' desordenado de numeros aleatorios dentro del rango.
+func crearArregloDesordenado(cantidad, rango int) []int {
+	nuevoArr := make([]int, cantidad)
+	for i := range nuevoArr {
+		numRandom := rand.Intn(rango)
+		nuevoArr[i] = numRandom
+	}
+	return nuevoArr
+}
 
-// Test heapify
+// countinSort ordena un arreglo de numeros enteros dentro del rango
+func countingSort(arr []int, rango int) []int {
+	frecuencias := make([]int, rango)
+	for _, num := range arr {
+		frecuencias[num]++
+	}
+	inicios := make([]int, rango)
+	for i := 1; i < rango; i++ {
+		inicios[i] = inicios[i-1] + frecuencias[i-1]
+	}
+	ordenado := make([]int, len(arr))
+	for _, num := range arr {
+		indxInicio := inicios[num]
+		ordenado[indxInicio] = num
+		inicios[num]++
+	}
+	return ordenado
+}
+
+// testDosArreglosIguales chequea si dos arreglos son iguales
+func testDosArreglosIguales[T any](t *testing.T, arr1, arr2 []T) {
+	require.Equal(t, len(arr1), len(arr2), "El largo de los dos arreglos debe ser igual")
+	for i := 0; i < len(arr1); i++ {
+		require.Equal(t, arr1[i], arr2[i], "El elemento en la misma posicion de los dos arreglos debe ser igual")
+	}
+}
 
 // Test heapsort enteros
+func TestHeapSort(t *testing.T) {
+	arr1 := crearArregloDesordenado(10, 100)
+	ordenado1 := countingSort(arr1, 100)
+	TDAColaPrioridad.HeapSort(arr1, cmpIntMax)
+	testDosArreglosIguales(t, arr1, ordenado1)
+}
+
+// Test volumen

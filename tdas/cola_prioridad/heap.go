@@ -82,6 +82,16 @@ func CrearHeapArr[T any](arreglo []T, funcion_cmp func(T, T) int) ColaPrioridad[
 }
 
 // *** HeapSort ***
+func HeapSort[T any](arr []T, funcion_cmp func(T, T) int) {
+	// Heapify el arreglo
+	heapify(arr, funcion_cmp)
+	// Swap primer y ultimo elemento
+	// Downheap del primer elemento al anteultimo
+	for i := 0; i < len(arr); i++ {
+		swap(&arr[0], &arr[len(arr)-1-i])
+		downHeap(0, arr[:len(arr)-1-i], funcion_cmp)
+	}
+}
 
 // *** Funciones auxiliares ***
 
