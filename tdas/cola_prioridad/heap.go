@@ -71,7 +71,7 @@ func CrearHeap[T any](funcion_cmp func(T, T) int) ColaPrioridad[T] {
 func CrearHeapArr[T any](arreglo []T, funcion_cmp func(T, T) int) ColaPrioridad[T] {
 	aux := make([]T, len(arreglo)+1)
 	copy(aux, arreglo)
-	heapify(aux, funcion_cmp)
+	heapify(aux[:len(arreglo)], funcion_cmp)
 	heap := heapArr[T]{
 		arreglo:   aux,
 		cantidad:  len(arreglo),
