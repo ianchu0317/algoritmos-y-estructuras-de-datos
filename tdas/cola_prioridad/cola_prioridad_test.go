@@ -145,12 +145,43 @@ func testDosArreglosIguales[T any](t *testing.T, arr1, arr2 []T) {
 	}
 }
 
-// Test heapsort enteros
 func TestHeapSort(t *testing.T) {
+	// Test heapsort con un arreglo de enteros
+	// Distintos metodos dde ordenamiento deberia dar lo mismo
 	arr1 := crearArregloDesordenado(10, 100)
 	ordenado1 := countingSort(arr1, 100)
-	TDAColaPrioridad.HeapSort(arr1, cmpIntMax)
+	TDAColaPrioridad.HeapSort[int](arr1, cmpIntMax)
 	testDosArreglosIguales(t, arr1, ordenado1)
 }
 
+func crearArregloOrdenado[T any](arr []T, cmp func(T, T) int) []T {
+	ordenado := make([]T, len(arr))
+	copy(ordenado, arr)
+	TDAColaPrioridad.HeapSort(ordenado, cmp)
+	return ordenado
+}
+
 // Test volumen
+func _testVolumen(t *testing.T, volumen int) {
+	// crear arr desordenado y ordenado
+	arr := crearArregloDesordenado(volumen, 100)
+	ordenadoMenorAMayor := crearArregloOrdenado(arr, cmpIntMax)
+	ordenadoMayorAMenor := crearArregloOrdenado(arr, cmpIntMin)
+	// Cargar heaps
+	heapMin := TDAColaPrioridad.CrearHeap[int](cmpIntMin)
+	heapMax := TDAColaPrioridad.CrearHeap[int](cmpIntMax)
+	cargarHeapArr(heapMin, arr)
+	cargarHeapArr(heapMax, arr)
+	// Orden de desencolado debe ser igual
+	testOrdenDesencolar(t, ordenadoMenorAMayor, heapMin)
+	testOrdenDesencolar(t, ordenadoMayorAMenor, heapMax)
+	testsHeapVacio(t, heapMin)
+	testsHeapVacio(t, heapMax)
+}
+
+func TestVolumen(t *testing.T) {
+	volumenes := []int{1000, 10000, 40000, 400000, 1000000}
+	for _, volumen := range volumenes {
+		_testVolumen(t, volumen)
+	}
+}
