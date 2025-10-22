@@ -90,6 +90,22 @@ func TestCasosEspecificos(t *testing.T) {
 	testsHeapVacio(t, heapMin)
 }
 
+// Tests para heaps creados desde el arreglo
+func TestCrearHeapArr(t *testing.T) {
+	arr := []int{1, 6, 3, 9, 5, 2, 4, 8, 7, 0}
+	arrMax := []int{9, 8, 7, 6, 5, 4, 3, 2, 1, 0}
+	arrMin := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	// Crear heaps de maximos y minimos y chequear vacios
+	heapMax := TDAColaPrioridad.CrearHeapArr[int](arr, cmpIntMax)
+	heapMin := TDAColaPrioridad.CrearHeapArr[int](arr, cmpIntMin)
+	// CHequear orden de desencolado
+	testOrdenDesencolar(t, arrMax, heapMax)
+	testOrdenDesencolar(t, arrMin, heapMin)
+	// chequear nuevamente heap vacio
+	testsHeapVacio(t, heapMax)
+	testsHeapVacio(t, heapMin)
+}
+
 // Test volumen
 
 // Test heapify
