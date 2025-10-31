@@ -29,6 +29,7 @@ func CrearServidor(usuarios []string) Servidor {
 // *** Primitivas Algogram ***
 
 func (servidor *AlgoGram) Login(nombre string) {
+	// Complejidad O(1) -> asignación de variables y operaciones con hash de O(1)
 	if servidor.sesion != nil {
 		fmt.Println("Error: Ya habia un usuario loggeado")
 		return
@@ -42,7 +43,14 @@ func (servidor *AlgoGram) Login(nombre string) {
 }
 
 func (servidor *AlgoGram) Logout() {
-
+	// Complejidad O(1) -> asignacion de variables
+	if servidor.sesion == nil {
+		fmt.Println("Error: no habia usuario loggeado")
+		return
+	}
+	nombre := servidor.sesion.nombre
+	servidor.sesion = nil
+	fmt.Println("Adios", nombre)
 }
 
 func (servidor *AlgoGram) Publicar() {
