@@ -17,7 +17,7 @@ type Servidor interface {
 	// DEBE Haber usuario en la sesión actual para publicar.
 	// Imprime 'Post publicado' si publica exitosamente.
 	// En caso que no hubiera usuario loggeado, se imprime 'Error: no habia usuario logeado'.
-	Publicar()
+	Publicar(contenido string)
 
 	// VerProxFeed() devuelve la proxima publicacion del feed del usuario actual.
 	// Si usuario no tiene mas publicaciones o no esta loggeado se imprime 'Usuario no loggeado o no hay mas posts para ver'.

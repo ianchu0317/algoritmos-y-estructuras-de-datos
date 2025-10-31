@@ -53,7 +53,11 @@ func (servidor *AlgoGram) Logout() {
 	fmt.Println("Adios", nombre)
 }
 
-func (servidor *AlgoGram) Publicar() {
+func (servidor *AlgoGram) Publicar(contenido string) {
+	// Crear post
+	// Acceder cada Usuario de usuarios
+	// 	- Actualizar sus feeds
+	// Agregar post a parte de posts
 
 }
 
