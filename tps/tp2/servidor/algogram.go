@@ -23,3 +23,27 @@ func CrearServidor(usuarios []string) Servidor {
 }
 
 // Primitivas Algogram
+
+func (servidor *AlgoGram) Login(nombre string) {
+
+}
+
+func (servidor *AlgoGram) Logout() {
+
+}
+
+func (servidor *AlgoGram) Publicar() {
+
+}
+
+func (servidor *AlgoGram) VerProxFeed() {
+
+}
+
+func (servidor *AlgoGram) Likear(id int) {
+
+}
+
+func (servidor AlgoGram) MostrarLikes(id int) {
+
+}
