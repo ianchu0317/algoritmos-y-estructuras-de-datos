@@ -1,6 +1,9 @@
 package servidor
 
-import diccionario "tdas/diccionario"
+import (
+	"strings"
+	Diccionario "tdas/diccionario"
+)
 
 type Post struct {
 	id            int
@@ -8,17 +11,19 @@ type Post struct {
 	creador       string
 	afinidad      int
 	cantidadLikes int
-	likes         diccionario.DiccionarioOrdenado[string, string]
+	likes         Diccionario.DiccionarioOrdenado[string, string]
 }
 
 // CrearPost (id, contenido, creador), toma nuevo ID de la publicacion, creador de publicacion,
 // y contenido de la publicacion. Devuelve puntero al post creado
 func CrearPost(nuevoId, afinidad int, creadorPost, contenido string) *Post {
 	return &Post{
-		id:        nuevoId,
-		creador:   creadorPost,
-		contenido: contenido,
-		afinidad:  afinidad,
+		id:            nuevoId,
+		creador:       creadorPost,
+		contenido:     contenido,
+		afinidad:      afinidad,
+		cantidadLikes: 0,
+		likes:         Diccionario.CrearABB[string, string](strings.Compare),
 	}
 }
 
