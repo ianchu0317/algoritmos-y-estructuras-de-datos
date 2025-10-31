@@ -10,8 +10,7 @@ type Usuario struct {
 // CrearUsuario(nombre) toma un nombre y devuelve un puntero a usuario
 func CrearUsuario(nombre string) *Usuario {
 	return &Usuario{
-		nombre:nombre,
-		feed: Heap.CrearHeap[*Post]()
+		nombre: nombre,
+		feed:   Heap.CrearHeap[*Post](compararPost),
 	}
 }
-
