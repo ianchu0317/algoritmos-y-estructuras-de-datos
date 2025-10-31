@@ -1,6 +1,7 @@
 package servidor
 
 import (
+	"fmt"
 	Diccionario "tdas/diccionario"
 )
 
@@ -28,7 +29,16 @@ func CrearServidor(usuarios []string) Servidor {
 // *** Primitivas Algogram ***
 
 func (servidor *AlgoGram) Login(nombre string) {
-
+	if servidor.sesion != nil {
+		fmt.Println("Error: Ya habia un usuario loggeado")
+		return
+	}
+	if !servidor.usuarios.Pertenece(nombre) {
+		fmt.Println("Error: usuario no existente")
+		return
+	}
+	servidor.sesion = servidor.usuarios.Obtener(nombre)
+	fmt.Println("Hola", nombre)
 }
 
 func (servidor *AlgoGram) Logout() {

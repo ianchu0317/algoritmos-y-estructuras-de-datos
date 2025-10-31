@@ -8,5 +8,6 @@ func main() {
 	usuarios := []string{"papa", "manzana", "banana"}
 	servidor := servidor.CrearServidor(usuarios)
 
-	servidor.Login("papa")
+	servidor.Login("manzana")
+	servidor.Login("manzana")
 }
