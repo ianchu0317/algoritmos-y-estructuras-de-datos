@@ -14,4 +14,8 @@ func main() {
 	servidor.Login("manzana")
 	servidor.Logout()
 	servidor.Logout()
+	servidor.Publicar("hola hwyy")
+	servidor.Login("manzana")
+	servidor.Publicar("Segundo publicacion")
+	servidor.Logout()
 }

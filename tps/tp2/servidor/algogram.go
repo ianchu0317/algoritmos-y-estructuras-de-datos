@@ -54,11 +54,25 @@ func (servidor *AlgoGram) Logout() {
 }
 
 func (servidor *AlgoGram) Publicar(contenido string) {
-	// Crear post
-	// Acceder cada Usuario de usuarios
-	// 	- Actualizar sus feeds
-	// Agregar post a parte de posts
+	if servidor.sesion == nil {
+		fmt.Println("Error: no habia usuario loggeado")
+		return
+	}
+	// Complejidad: O(1) + O(u * log(posts)) + O(1)
+	nuevoPost := CrearPost(servidor.proximoPostId, servidor.sesion.nombre, contenido)
 
+	for iter := servidor.usuarios.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
+		nombreActual, usuarioActual := iter.VerActual()
+		if nombreActual != servidor.sesion.nombre {
+			afinidad := servidor.calcularAfinidad(nombreActual, servidor.sesion.nombre)
+			postFeed := crearPostEnFeed(afinidad, nuevoPost)
+			usuarioActual.feed.Encolar(postFeed)
+		}
+	}
+
+	servidor.posts.Guardar(servidor.proximoPostId, nuevoPost)
+	servidor.proximoPostId++
+	fmt.Println("Post publicado")
 }
 
 func (servidor *AlgoGram) VerProxFeed() {
@@ -74,6 +88,11 @@ func (servidor AlgoGram) MostrarLikes(id int) {
 }
 
 // *** Funciones auxiliares ***
+
+// hayLoggeado devuelve True si hay algun usuario en la sesion actual, false en caso contrario
+func (servidor AlgoGram) hayLoggeado() bool {
+	return servidor.sesion != nil
+}
 
 func (servidor *AlgoGram) registrarUsuarios(usuarios []string) {
 	// Para cada usuario en la lista:

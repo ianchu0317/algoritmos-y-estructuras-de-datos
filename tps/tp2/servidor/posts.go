@@ -15,7 +15,7 @@ type Post struct {
 
 // CrearPost (id, contenido, creador), toma nuevo ID de la publicacion, creador de publicacion,
 // y contenido de la publicacion. Devuelve puntero al post creado
-func CrearPost(nuevoId, afinidad int, creadorPost, contenido string) *Post {
+func CrearPost(nuevoId int, creadorPost, contenido string) *Post {
 	return &Post{
 		id:            nuevoId,
 		creador:       creadorPost,
