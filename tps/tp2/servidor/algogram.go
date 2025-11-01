@@ -53,9 +53,8 @@ func (servidor *AlgoGram) Logout() {
 		fmt.Println("Error: no habia usuario loggeado")
 		return
 	}
-	nombre := servidor.sesion.nombre
 	servidor.sesion = nil
-	fmt.Println("Adios", nombre)
+	fmt.Println("Adios")
 }
 
 func (servidor *AlgoGram) Publicar(contenido string) {
@@ -89,6 +88,7 @@ func (servidor *AlgoGram) VerProxFeed() {
 	siguientePost := servidor.sesion.feed.Desencolar().post
 	fmt.Println("Post ID", siguientePost.id)
 	fmt.Println(siguientePost.creador, "dijo:", siguientePost.contenido)
+	fmt.Println("Likes:", siguientePost.likes.Cantidad())
 }
 
 func (servidor *AlgoGram) Likear(id int) {

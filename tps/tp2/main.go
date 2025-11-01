@@ -4,38 +4,32 @@ import (
 	"algogram/servidor"
 )
 
+// cargarUsuarios toma un path de archivo y devuelve los usuarios contenidos en el mismo
+func cargarUsuarios(archivo string) []string {
+	usuarios := []string{}
+	return usuarios
+}
+
 func main() {
-	usuarios := []string{"papa", "manzana", "banana"}
+	usuarios := []string{"chorch", "cacatua2030", "mondi", "chicho1994", "eldiego"}
 	servidor := servidor.CrearServidor(usuarios)
 
+	servidor.Login("chicho1994")
+	servidor.Publicar("TIene todo el dinero del mundo, pero hay algo que no puede comprar... un dinosaurio")
 	servidor.Logout()
-	servidor.Login("manzana")
+	servidor.Login("chorch")
+	servidor.Publicar("te corto internert")
+	servidor.Publicar("es por el teorema de chuck norris")
 	servidor.Logout()
-	servidor.Login("manzana")
-	servidor.Logout()
-	servidor.Logout()
-	servidor.Publicar("hola hwyy")
-	servidor.Login("manzana")
-	servidor.Publicar("primera publicacion")
-	servidor.Publicar("Segundo publicacion")
+	servidor.Login("cacatua2030")
 	servidor.VerProxFeed()
-	servidor.Logout()
-	servidor.Login("papa")
-	servidor.Publicar("tercera publicacion")
-	servidor.Likear(1)
 	servidor.VerProxFeed()
 	servidor.VerProxFeed()
 	servidor.Logout()
-	servidor.Login("manzana")
-	servidor.Publicar("Cuarta publicacion")
+	servidor.Login("mondi")
+	servidor.VerProxFeed()
+	servidor.VerProxFeed()
 	servidor.Logout()
-	servidor.Likear(1)
-	servidor.Login("banana")
-	servidor.Likear(1)
+	servidor.Login("chicho1994")
 	servidor.VerProxFeed()
-	servidor.VerProxFeed()
-	servidor.VerProxFeed()
-	servidor.VerProxFeed()
-	servidor.VerProxFeed()
-	servidor.MostrarLikes(1)
 }
