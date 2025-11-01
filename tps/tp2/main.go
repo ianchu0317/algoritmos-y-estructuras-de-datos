@@ -29,10 +29,13 @@ func main() {
 	servidor.Login("manzana")
 	servidor.Publicar("Cuarta publicacion")
 	servidor.Logout()
+	servidor.Likear(1)
 	servidor.Login("banana")
+	servidor.Likear(1)
 	servidor.VerProxFeed()
 	servidor.VerProxFeed()
 	servidor.VerProxFeed()
 	servidor.VerProxFeed()
 	servidor.VerProxFeed()
+	servidor.MostrarLikes(1)
 }

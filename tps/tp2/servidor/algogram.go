@@ -101,7 +101,24 @@ func (servidor *AlgoGram) Likear(id int) {
 }
 
 func (servidor AlgoGram) MostrarLikes(id int) {
+	if !servidor.posts.Pertenece(id) {
+		fmt.Println("Error: Post inexistente o sin likes")
+		return
+	}
 
+	post := servidor.posts.Obtener(id)
+	likes := post.likes
+
+	if likes.Cantidad() == 0 {
+		fmt.Println("Error: Post inexistente o sin likes")
+		return
+	}
+
+	fmt.Println("El post tiene", likes.Cantidad(), "likes:")
+	likes.Iterar(func(nombre, _ string) bool {
+		fmt.Println("	", nombre)
+		return true
+	})
 }
 
 // *** Funciones auxiliares ***
