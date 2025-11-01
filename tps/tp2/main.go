@@ -17,5 +17,13 @@ func main() {
 	servidor.Publicar("hola hwyy")
 	servidor.Login("manzana")
 	servidor.Publicar("Segundo publicacion")
+	servidor.VerProxFeed()
 	servidor.Logout()
+	servidor.Login("papa")
+	servidor.VerProxFeed()
+	servidor.VerProxFeed()
+	servidor.Logout()
+	servidor.Login("banana")
+	servidor.VerProxFeed()
+	servidor.VerProxFeed()
 }

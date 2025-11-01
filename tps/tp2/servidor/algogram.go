@@ -30,7 +30,7 @@ func CrearServidor(usuarios []string) Servidor {
 
 func (servidor *AlgoGram) Login(nombre string) {
 	// Complejidad O(1) -> asignación de variables y operaciones con hash de O(1)
-	if servidor.sesion != nil {
+	if servidor.hayLoggeado() {
 		fmt.Println("Error: Ya habia un usuario loggeado")
 		return
 	}
@@ -44,7 +44,7 @@ func (servidor *AlgoGram) Login(nombre string) {
 
 func (servidor *AlgoGram) Logout() {
 	// Complejidad O(1) -> asignacion de variables
-	if servidor.sesion == nil {
+	if !servidor.hayLoggeado() {
 		fmt.Println("Error: no habia usuario loggeado")
 		return
 	}
@@ -54,7 +54,7 @@ func (servidor *AlgoGram) Logout() {
 }
 
 func (servidor *AlgoGram) Publicar(contenido string) {
-	if servidor.sesion == nil {
+	if !servidor.hayLoggeado() {
 		fmt.Println("Error: no habia usuario loggeado")
 		return
 	}
@@ -76,7 +76,14 @@ func (servidor *AlgoGram) Publicar(contenido string) {
 }
 
 func (servidor *AlgoGram) VerProxFeed() {
-
+	if !servidor.hayLoggeado() || servidor.sesion.feed.EstaVacia() {
+		fmt.Println("Usuario no loggeado o no hay mas posts para ver")
+		return
+	}
+	// Complejidad O(log(posts))
+	siguientePost := servidor.sesion.feed.Desencolar().post
+	fmt.Println("Post ID", siguientePost.id)
+	fmt.Println(siguientePost.creador, "dijo:", siguientePost.contenido)
 }
 
 func (servidor *AlgoGram) Likear(id int) {
