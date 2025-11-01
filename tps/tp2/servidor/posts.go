@@ -13,6 +13,11 @@ type Post struct {
 	likes         Diccionario.DiccionarioOrdenado[string, string]
 }
 
+type postEnFeed struct {
+	afinidad int
+	post     *Post
+}
+
 // CrearPost (id, contenido, creador), toma nuevo ID de la publicacion, creador de publicacion,
 // y contenido de la publicacion. Devuelve puntero al post creado
 func CrearPost(nuevoId int, creadorPost, contenido string) *Post {
@@ -23,11 +28,6 @@ func CrearPost(nuevoId int, creadorPost, contenido string) *Post {
 		cantidadLikes: 0,
 		likes:         Diccionario.CrearABB[string, string](strings.Compare),
 	}
-}
-
-type postEnFeed struct {
-	afinidad int
-	post     *Post
 }
 
 // crearPostEnFeed toma afinidad del usuario creador con usuario del feed, y el puntero al post a guardar.
