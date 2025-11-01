@@ -22,6 +22,7 @@ func main() {
 	servidor.Logout()
 	servidor.Login("papa")
 	servidor.Publicar("tercera publicacion")
+	servidor.Likear(1)
 	servidor.VerProxFeed()
 	servidor.VerProxFeed()
 	servidor.Logout()

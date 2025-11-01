@@ -87,7 +87,17 @@ func (servidor *AlgoGram) VerProxFeed() {
 }
 
 func (servidor *AlgoGram) Likear(id int) {
-
+	if !servidor.hayLoggeado() || !servidor.posts.Pertenece(id) {
+		fmt.Println("Error: Usuario no loggeado o Post inexistente")
+		return
+	}
+	// Chequear errores
+	// Obtener el post indicado -> actualizar su valor de like
+	// Agregar a ABB -> actualizar cantidad de likes
+	post := servidor.posts.Obtener(id)
+	post.likes.Guardar(servidor.sesion.nombre, "")
+	post.cantidadLikes++
+	fmt.Println("Post likeado")
 }
 
 func (servidor AlgoGram) MostrarLikes(id int) {
