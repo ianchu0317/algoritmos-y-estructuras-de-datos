@@ -28,9 +28,14 @@ func CrearServidor(usuarios []string) Servidor {
 
 // *** Primitivas Algogram ***
 
+// hayLoggeado devuelve True si hay algun usuario en la sesion actual, false en caso contrario
+func (servidor AlgoGram) HayLoggeado() bool {
+	return servidor.sesion != nil
+}
+
 func (servidor *AlgoGram) Login(nombre string) {
 	// Complejidad O(1) -> asignación de variables y operaciones con hash de O(1)
-	if servidor.hayLoggeado() {
+	if servidor.HayLoggeado() {
 		fmt.Println("Error: Ya habia un usuario loggeado")
 		return
 	}
@@ -44,7 +49,7 @@ func (servidor *AlgoGram) Login(nombre string) {
 
 func (servidor *AlgoGram) Logout() {
 	// Complejidad O(1) -> asignacion de variables
-	if !servidor.hayLoggeado() {
+	if !servidor.HayLoggeado() {
 		fmt.Println("Error: no habia usuario loggeado")
 		return
 	}
@@ -54,7 +59,7 @@ func (servidor *AlgoGram) Logout() {
 }
 
 func (servidor *AlgoGram) Publicar(contenido string) {
-	if !servidor.hayLoggeado() {
+	if !servidor.HayLoggeado() {
 		fmt.Println("Error: no habia usuario loggeado")
 		return
 	}
@@ -76,7 +81,7 @@ func (servidor *AlgoGram) Publicar(contenido string) {
 }
 
 func (servidor *AlgoGram) VerProxFeed() {
-	if !servidor.hayLoggeado() || servidor.sesion.feed.EstaVacia() {
+	if !servidor.HayLoggeado() || servidor.sesion.feed.EstaVacia() {
 		fmt.Println("Usuario no loggeado o no hay mas posts para ver")
 		return
 	}
@@ -87,7 +92,7 @@ func (servidor *AlgoGram) VerProxFeed() {
 }
 
 func (servidor *AlgoGram) Likear(id int) {
-	if !servidor.hayLoggeado() || !servidor.posts.Pertenece(id) {
+	if !servidor.HayLoggeado() || !servidor.posts.Pertenece(id) {
 		fmt.Println("Error: Usuario no loggeado o Post inexistente")
 		return
 	}
@@ -115,11 +120,6 @@ func (servidor AlgoGram) MostrarLikes(id int) {
 }
 
 // *** Funciones auxiliares ***
-
-// hayLoggeado devuelve True si hay algun usuario en la sesion actual, false en caso contrario
-func (servidor AlgoGram) hayLoggeado() bool {
-	return servidor.sesion != nil
-}
 
 // registrarUsuarios toma una lista de nombres de usuarios y los registra en el servidor.
 // Guarda en el servidor su orden de registro.

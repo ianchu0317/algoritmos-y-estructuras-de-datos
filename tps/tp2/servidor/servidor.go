@@ -3,6 +3,9 @@ package servidor
 // Interfaz de servidor
 
 type Servidor interface {
+	// HayLoggeado devuelve True si hay algun usuario en la sesion actual, false en caso contrario
+	HayLoggeado() bool
+
 	// Login(nombre) toma un nombre de usuario (cadena) e inicia sesión en servidor.
 	// Si el usuario está en el servidor, se imprime 'Hola <nombre>'.
 	// Si el usuario no existe en servidor, se imprime 'Error: usuario no existente'.
