@@ -3,7 +3,6 @@ package main
 import (
 	"algogram/servidor"
 	"bufio"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -25,7 +24,6 @@ func cargarUsuarios(pathArchivo string) []string {
 // procesarLinea toma una linea de string y devuelve el comando y el parametro de la linea
 func procesarLinea(texto string) (string, string) {
 	textoSlice := strings.Split(texto, " ")
-	fmt.Println(len(textoSlice))
 	return textoSlice[0], strings.Join(textoSlice[1:], " ")
 }
 
@@ -56,19 +54,15 @@ func ejecutarComando(servidor servidor.Servidor, lineaActual string) {
 }
 
 func main() {
-	//archivo := os.Args[1]
-	//usuarios := cargarUsuarios(archivo)
+	archivo := os.Args[1]
+	usuarios := cargarUsuarios(archivo)
 
-	//servidor := servidor.CrearServidor(usuarios)
+	servidor := servidor.CrearServidor(usuarios)
 
 	// Leer STDIN
-	cmd, param := procesarLinea("login  chicho we are boludos")
-	fmt.Println(cmd)
-	fmt.Println(param)
-	/*
-		scanner := bufio.NewScanner(os.Stdin)
-		for scanner.Scan() {
-			lineaActual := scanner.Text()
-			ejecutarComando(servidor, lineaActual)
-		}*/
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		lineaActual := scanner.Text()
+		ejecutarComando(servidor, lineaActual)
+	}
 }
