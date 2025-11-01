@@ -96,9 +96,7 @@ func (servidor *AlgoGram) Likear(id int) {
 		fmt.Println("Error: Usuario no loggeado o Post inexistente")
 		return
 	}
-	// Chequear errores
-	// Obtener el post indicado -> actualizar su valor de like
-	// Agregar a ABB -> actualizar cantidad de likes
+	// Complejidad O(log(likes))
 	post := servidor.posts.Obtener(id)
 	post.likes.Guardar(servidor.sesion.nombre, "")
 	post.cantidadLikes++
@@ -111,7 +109,7 @@ func (servidor AlgoGram) MostrarLikes(id int) {
 		return
 	}
 	likes := servidor.obtenerLikes(id)
-
+	// complejidad: O(likes)
 	fmt.Println("El post tiene", likes.Cantidad(), "likes:")
 	likes.Iterar(func(nombre, _ string) bool {
 		fmt.Println("	", nombre)
@@ -124,9 +122,6 @@ func (servidor AlgoGram) MostrarLikes(id int) {
 // registrarUsuarios toma una lista de nombres de usuarios y los registra en el servidor.
 // Guarda en el servidor su orden de registro.
 func (servidor *AlgoGram) registrarUsuarios(usuarios []string) {
-	// Para cada usuario en la lista:
-	// - Crear usuario y guardar en hash al puntero
-	// - Guardar orden de registro de la lista
 	for i, nombre := range usuarios {
 		usuario := CrearUsuario(nombre)
 		servidor.usuarios.Guardar(nombre, usuario)
