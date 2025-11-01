@@ -3,9 +3,10 @@ package main
 import (
 	"algogram/servidor"
 	"bufio"
+	"fmt"
 	"os"
-
-	"golang.org/x/text/cases"
+	"strconv"
+	"strings"
 )
 
 // cargarUsuarios toma un path de archivo y devuelve los usuarios contenidos en el mismo
@@ -23,50 +24,51 @@ func cargarUsuarios(pathArchivo string) []string {
 
 // procesarLinea toma una linea de string y devuelve el comando y el parametro de la linea
 func procesarLinea(texto string) (string, string) {
-	comando := texto
-	parametro := texto
-	return comando, parametro
+	textoSlice := strings.Split(texto, " ")
+	fmt.Println(len(textoSlice))
+	return textoSlice[0], strings.Join(textoSlice[1:], " ")
+}
+
+// toma un parametro y devuelve en entero
+func obtenerID(parametro string) int {
+	num, _ := strconv.Atoi(parametro) // asumir que no hay error en conversion
+	return num
 }
 
 // ejecutarServidor toma un servidor, un comando y los paramtros correspondientes al comando y lo ejecuta en el servidor.
-func ejecutarComando(servidor servidor.Servidor, comando, parametro string) {
-	switch comando 
+func ejecutarComando(servidor servidor.Servidor, lineaActual string) {
+	comando, parametro := procesarLinea(lineaActual)
+
+	switch comando {
+	case "login":
+		servidor.Login(parametro)
+	case "logout":
+		servidor.Logout()
+	case "publicar":
+		servidor.Publicar(parametro)
+	case "ver_siguiente_feed":
+		servidor.VerProxFeed()
+	case "likear_post":
+		servidor.Likear(obtenerID(parametro))
+	case "mostrar_likes":
+		servidor.MostrarLikes(obtenerID(parametro))
 	}
 }
 
 func main() {
-	archivo := os.Args[1]
-	usuarios := cargarUsuarios(archivo)
-	servidor := servidor.CrearServidor(usuarios)
-	// Leer STDIN
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		lineaActual := scanner.Text()
-		cmd, parametro := procesarLinea(lineaActual)
-		ejecutarComando(servidor, cmd, parametro)
-	}
-	// Debug
-	/*
-		usuarios := []string{"chorch", "cacatua2030", "mondi", "chicho1994", "eldiego"}
-		servidor := servidor.CrearServidor(usuarios)
+	//archivo := os.Args[1]
+	//usuarios := cargarUsuarios(archivo)
 
-		servidor.Login("chicho1994")
-		servidor.Publicar("TIene todo el dinero del mundo, pero hay algo que no puede comprar... un dinosaurio")
-		servidor.Logout()
-		servidor.Login("chorch")
-		servidor.Publicar("te corto internert")
-		servidor.Publicar("es por el teorema de chuck norris")
-		servidor.Logout()
-		servidor.Login("cacatua2030")
-		servidor.VerProxFeed()
-		servidor.VerProxFeed()
-		servidor.VerProxFeed()
-		servidor.Logout()
-		servidor.Login("mondi")
-		servidor.VerProxFeed()
-		servidor.VerProxFeed()
-		servidor.Logout()
-		servidor.Login("chicho1994")
-		servidor.VerProxFeed()
-	*/
+	//servidor := servidor.CrearServidor(usuarios)
+
+	// Leer STDIN
+	cmd, param := procesarLinea("login  chicho we are boludos")
+	fmt.Println(cmd)
+	fmt.Println(param)
+	/*
+		scanner := bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			lineaActual := scanner.Text()
+			ejecutarComando(servidor, lineaActual)
+		}*/
 }
