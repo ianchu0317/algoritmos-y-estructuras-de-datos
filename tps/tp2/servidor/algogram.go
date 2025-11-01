@@ -112,7 +112,7 @@ func (servidor AlgoGram) MostrarLikes(id int) {
 	// complejidad: O(likes)
 	fmt.Println("El post tiene", likes.Cantidad(), "likes:")
 	likes.Iterar(func(nombre, _ string) bool {
-		fmt.Println("	", nombre)
+		fmt.Printf("\t%s\n", nombre)
 		return true
 	})
 }
