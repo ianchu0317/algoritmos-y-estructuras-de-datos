@@ -1,9 +1,11 @@
 package main
 
 import (
+	"algogram/servidor"
 	"bufio"
-	"fmt"
 	"os"
+
+	"golang.org/x/text/cases"
 )
 
 // cargarUsuarios toma un path de archivo y devuelve los usuarios contenidos en el mismo
@@ -19,10 +21,30 @@ func cargarUsuarios(pathArchivo string) []string {
 	return usuarios
 }
 
+// procesarLinea toma una linea de string y devuelve el comando y el parametro de la linea
+func procesarLinea(texto string) (string, string) {
+	comando := texto
+	parametro := texto
+	return comando, parametro
+}
+
+// ejecutarServidor toma un servidor, un comando y los paramtros correspondientes al comando y lo ejecuta en el servidor.
+func ejecutarComando(servidor servidor.Servidor, comando, parametro string) {
+	switch comando 
+	}
+}
+
 func main() {
 	archivo := os.Args[1]
-	usuarios1 := cargarUsuarios(archivo)
-	fmt.Println(usuarios1)
+	usuarios := cargarUsuarios(archivo)
+	servidor := servidor.CrearServidor(usuarios)
+	// Leer STDIN
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		lineaActual := scanner.Text()
+		cmd, parametro := procesarLinea(lineaActual)
+		ejecutarComando(servidor, cmd, parametro)
+	}
 	// Debug
 	/*
 		usuarios := []string{"chorch", "cacatua2030", "mondi", "chicho1994", "eldiego"}
