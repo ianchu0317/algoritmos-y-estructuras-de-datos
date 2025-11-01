@@ -9,7 +9,6 @@ type Post struct {
 	id            int
 	contenido     string
 	creador       string
-	afinidad      int
 	cantidadLikes int
 	likes         Diccionario.DiccionarioOrdenado[string, string]
 }
@@ -21,14 +20,27 @@ func CrearPost(nuevoId, afinidad int, creadorPost, contenido string) *Post {
 		id:            nuevoId,
 		creador:       creadorPost,
 		contenido:     contenido,
-		afinidad:      afinidad,
 		cantidadLikes: 0,
 		likes:         Diccionario.CrearABB[string, string](strings.Compare),
 	}
 }
 
-// compararPost toma 2 posts y devuevle:
+type postEnFeed struct {
+	afinidad int
+	post     *Post
+}
+
+// crearPostEnFeed toma afinidad del usuario creador con usuario del feed, y el puntero al post a guardar.
+// Devuelve puntero del post a guardar en el feed.
+func crearPostEnFeed(afinidad int, post *Post) *postEnFeed {
+	return &postEnFeed{
+		afinidad: afinidad,
+		post:     post,
+	}
+}
+
+// compararPost toma 2 posts del feed y devuevle 'num':
 // num > 0 si post1 es menor a post2, 0 si son iguales, num < 0 si post1 es mayor a post2
-func compararPost(post1, post2 *Post) int {
+func compararPost(post1, post2 *postEnFeed) int {
 	return post2.afinidad - post1.afinidad
 }
