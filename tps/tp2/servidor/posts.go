@@ -38,9 +38,3 @@ func crearPostEnFeed(afinidad int, post *Post) *postEnFeed {
 		post:     post,
 	}
 }
-
-// compararPost toma 2 posts del feed y devuevle 'num':
-// num > 0 si post1 es menor a post2, 0 si son iguales, num < 0 si post1 es mayor a post2
-func compararPost(post1, post2 *postEnFeed) int {
-	return post2.afinidad - post1.afinidad
-}
