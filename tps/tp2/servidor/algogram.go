@@ -101,18 +101,11 @@ func (servidor *AlgoGram) Likear(id int) {
 }
 
 func (servidor AlgoGram) MostrarLikes(id int) {
-	if !servidor.posts.Pertenece(id) {
+	if !servidor.posts.Pertenece(id) || servidor.obtenerLikes(id).Cantidad() == 0 {
 		fmt.Println("Error: Post inexistente o sin likes")
 		return
 	}
-
-	post := servidor.posts.Obtener(id)
-	likes := post.likes
-
-	if likes.Cantidad() == 0 {
-		fmt.Println("Error: Post inexistente o sin likes")
-		return
-	}
+	likes := servidor.obtenerLikes(id)
 
 	fmt.Println("El post tiene", likes.Cantidad(), "likes:")
 	likes.Iterar(func(nombre, _ string) bool {
@@ -128,6 +121,8 @@ func (servidor AlgoGram) hayLoggeado() bool {
 	return servidor.sesion != nil
 }
 
+// registrarUsuarios toma una lista de nombres de usuarios y los registra en el servidor.
+// Guarda en el servidor su orden de registro.
 func (servidor *AlgoGram) registrarUsuarios(usuarios []string) {
 	// Para cada usuario en la lista:
 	// - Crear usuario y guardar en hash al puntero
@@ -144,6 +139,11 @@ func (servidor AlgoGram) calcularAfinidad(usuario1, usuario2 string) int {
 	ordenUsuario1 := servidor.ordenRegistro.Obtener(usuario1)
 	ordenUsuario2 := servidor.ordenRegistro.Obtener(usuario2)
 	return abs(ordenUsuario1 - ordenUsuario2)
+}
+
+// obtenerLikes toma un ID y devuelve el diccionario ordenado de los likes
+func (servidor AlgoGram) obtenerLikes(id int) Diccionario.DiccionarioOrdenado[string, string] {
+	return servidor.posts.Obtener(id).likes
 }
 
 // abs(num) toma un numero y devuelve el valor absoluto (modulo)
