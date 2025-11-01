@@ -85,3 +85,18 @@ func (servidor *AlgoGram) registrarUsuarios(usuarios []string) {
 		servidor.ordenRegistro.Guardar(nombre, i)
 	}
 }
+
+// calcularAfinidad(u1, u2) Toma dos nombres de usuarios y devuelve su afinidad según orden de registro.
+func (servidor AlgoGram) calcularAfinidad(usuario1, usuario2 string) int {
+	ordenUsuario1 := servidor.ordenRegistro.Obtener(usuario1)
+	ordenUsuario2 := servidor.ordenRegistro.Obtener(usuario2)
+	return abs(ordenUsuario1 - ordenUsuario2)
+}
+
+// abs(num) toma un numero y devuelve el valor absoluto (modulo)
+func abs(num int) int {
+	if num < 0 {
+		return -num
+	}
+	return num
+}
