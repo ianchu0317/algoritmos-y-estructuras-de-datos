@@ -23,8 +23,11 @@ func cargarUsuarios(pathArchivo string) []string {
 
 // procesarLinea toma una linea de string y devuelve el comando y el parametro de la linea
 func procesarLinea(texto string) (string, string) {
-	textoSlice := strings.Split(texto, " ")
-	return textoSlice[0], strings.Join(textoSlice[1:], " ")
+	indxEspacio := strings.Index(texto, " ")
+	if indxEspacio == -1 {
+		return texto, ""
+	}
+	return texto[:indxEspacio], texto[indxEspacio+1:]
 }
 
 // toma un parametro y devuelve en entero
