@@ -92,7 +92,6 @@ func (servidor *AlgoGram) Likear(id int) {
 		fmt.Println("Error: Usuario no loggeado o Post inexistente")
 		return
 	}
-	// Complejidad O(log(likes))
 	post := servidor.obtenerPostPorID(id)
 	post.AgregarLike(servidor.sesion.ObtenerNombre())
 	fmt.Println("Post likeado")
@@ -111,7 +110,6 @@ func (servidor AlgoGram) MostrarLikes(id int) {
 		return
 	}
 
-	// complejidad: O(likes)
 	fmt.Println("El post tiene", post.ObtenerLikes(), "likes:")
 	post.IterarLikes(func(nombre, _ string) bool {
 		fmt.Printf("\t%s\n", nombre)
