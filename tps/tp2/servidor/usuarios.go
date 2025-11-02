@@ -21,7 +21,9 @@ func crearUsuario(nombre string) *usuario {
 // num > 0 si post1 tiene menor id a post2, num < 0 si post1 tiene mayor id a post2.
 func compararPost(post1, post2 *postEnFeed) int {
 	if post2.afinidad == post1.afinidad {
-		return post2.post.id - post1.post.id
+		id2, _, _ := post2.post.ObtenerInformacion()
+		id1, _, _ := post1.post.ObtenerInformacion()
+		return id2 - id1
 	}
 	return post2.afinidad - post1.afinidad
 }
