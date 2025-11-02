@@ -88,7 +88,7 @@ func (servidor *AlgoGram) VerProxFeed() {
 }
 
 func (servidor *AlgoGram) Likear(id int) {
-	if !servidor.HayLoggeado() || !servidor.posts.Pertenece(id) {
+	if !servidor.HayLoggeado() || !servidor.hayPostConID(id) {
 		fmt.Println("Error: Usuario no loggeado o Post inexistente")
 		return
 	}
@@ -99,7 +99,7 @@ func (servidor *AlgoGram) Likear(id int) {
 }
 
 func (servidor AlgoGram) MostrarLikes(id int) {
-	if !servidor.posts.Pertenece(id) {
+	if !servidor.hayPostConID(id) {
 		fmt.Println("Error: Post inexistente o sin likes")
 		return
 	}
@@ -132,8 +132,13 @@ func (servidor *AlgoGram) registrarUsuarios(usuarios []string) {
 }
 
 // obtenerPostPorID devuelve el post que coincide con el ID pasado
-func (servidor *AlgoGram) obtenerPostPorID(id int) Post {
+func (servidor AlgoGram) obtenerPostPorID(id int) Post {
 	return servidor.posts.Obtener(id)
+}
+
+// hayPostConID devuelve True si hay un post con ese ID, en caso contrario devuelve False
+func (servidor AlgoGram) hayPostConID(id int) bool {
+	return servidor.posts.Pertenece(id)
 }
 
 // calcularAfinidad(u1, u2) Toma dos nombres de usuarios y devuelve su afinidad según orden de registro.
