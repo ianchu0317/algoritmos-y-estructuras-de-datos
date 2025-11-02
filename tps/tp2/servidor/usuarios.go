@@ -8,11 +8,30 @@ type usuario struct {
 }
 
 // CrearUsuario(nombre) toma un nombre y devuelve un puntero a usuario
-func crearUsuario(nombre string) *usuario {
+func crearUsuario(nombre string) Usuario {
 	return &usuario{
 		nombre: nombre,
 		feed:   Heap.CrearHeap[*postEnFeed](compararPost),
 	}
+}
+
+// Primitivas Usuario
+
+func (usuario *usuario) ObtenerNombre() string {
+	return usuario.nombre
+}
+
+func (usuario *usuario) FeedEstaVacia() bool {
+	return usuario.feed.EstaVacia()
+}
+
+func (usuario *usuario) ActualizarFeed(post Post, afinidad int) {
+	postFeed := crearPostEnFeed(afinidad, post)
+	usuario.feed.Encolar(postFeed)
+}
+
+func (usuario *usuario) ObtenerProxPost() Post {
+	return usuario.feed.Desencolar().post
 }
 
 // compararPost toma 2 posts del feed y devuevle 'num':

@@ -6,10 +6,10 @@ import (
 )
 
 type AlgoGram struct {
-	sesion        *usuario
-	usuarios      Diccionario.Diccionario[string, *usuario] // Hash de nombre -> usuario
-	posts         Diccionario.Diccionario[int, Post]        // Hash de id -> post
-	ordenRegistro Diccionario.Diccionario[string, int]      // Hash de nombre -> orden de la lista (para calc afinidad)
+	sesion        Usuario
+	usuarios      Diccionario.Diccionario[string, Usuario] // Hash de nombre -> usuario
+	posts         Diccionario.Diccionario[int, Post]       // Hash de id -> post
+	ordenRegistro Diccionario.Diccionario[string, int]     // Hash de nombre -> orden de la lista (para calc afinidad)
 	proximoPostId int
 }
 
@@ -17,7 +17,7 @@ type AlgoGram struct {
 func CrearServidor(usuarios []string) Servidor {
 	servidor := AlgoGram{
 		sesion:        nil,
-		usuarios:      Diccionario.CrearHash[string, *usuario](func(a, b string) bool { return a == b }),
+		usuarios:      Diccionario.CrearHash[string, Usuario](func(a, b string) bool { return a == b }),
 		posts:         Diccionario.CrearHash[int, Post](func(a, b int) bool { return a == b }),
 		ordenRegistro: Diccionario.CrearHash[string, int](func(a, b string) bool { return a == b }),
 		proximoPostId: 0,
@@ -62,15 +62,15 @@ func (servidor *AlgoGram) Publicar(contenido string) {
 		fmt.Println("Error: no habia usuario loggeado")
 		return
 	}
+	nombreLoggeado := servidor.sesion.ObtenerNombre()
 	// Complejidad: O(1) + O(u * log(posts)) + O(1)
-	nuevoPost := crearPost(servidor.proximoPostId, servidor.sesion.nombre, contenido)
+	nuevoPost := crearPost(servidor.proximoPostId, nombreLoggeado, contenido)
 
 	for iter := servidor.usuarios.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
 		nombreActual, usuarioActual := iter.VerActual()
-		if nombreActual != servidor.sesion.nombre {
-			afinidad := servidor.calcularAfinidad(nombreActual, servidor.sesion.nombre)
-			postFeed := crearPostEnFeed(afinidad, nuevoPost)
-			usuarioActual.feed.Encolar(postFeed)
+		if nombreActual != nombreLoggeado {
+			afinidad := servidor.calcularAfinidad(nombreActual, nombreLoggeado)
+			usuarioActual.ActualizarFeed(nuevoPost, afinidad)
 		}
 	}
 
@@ -80,12 +80,12 @@ func (servidor *AlgoGram) Publicar(contenido string) {
 }
 
 func (servidor *AlgoGram) VerProxFeed() {
-	if !servidor.HayLoggeado() || servidor.sesion.feed.EstaVacia() {
+	if !servidor.HayLoggeado() || servidor.sesion.FeedEstaVacia() {
 		fmt.Println("Usuario no loggeado o no hay mas posts para ver")
 		return
 	}
 	// Complejidad O(log(posts))
-	proxPost := servidor.sesion.feed.Desencolar().post
+	proxPost := servidor.sesion.ObtenerProxPost()
 	id, creador, contenido := proxPost.ObtenerInformacion()
 	fmt.Println("Post ID", id)
 	fmt.Println(creador, "dijo:", contenido)
@@ -99,7 +99,7 @@ func (servidor *AlgoGram) Likear(id int) {
 	}
 	// Complejidad O(log(likes))
 	post := servidor.posts.Obtener(id)
-	post.AgregarLike(servidor.sesion.nombre)
+	post.AgregarLike(servidor.sesion.ObtenerNombre())
 	fmt.Println("Post likeado")
 }
 

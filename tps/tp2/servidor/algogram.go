@@ -37,6 +37,9 @@ type Servidor interface {
 }
 
 type Usuario interface {
+	// ObtenerNOmbre devuelve el nombre del usuario actual
+	ObtenerNombre() string
+
 	// Actualizar toma un post y actualiza el feed del usuario
 	ActualizarFeed(post Post, afinidad int)
 
