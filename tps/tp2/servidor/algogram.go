@@ -99,7 +99,6 @@ func (servidor *AlgoGram) Likear(id int) {
 	// Complejidad O(log(likes))
 	post := servidor.posts.Obtener(id)
 	post.likes.Guardar(servidor.sesion.nombre, "")
-	post.cantidadLikes++
 	fmt.Println("Post likeado")
 }
 
