@@ -36,3 +36,17 @@ func crearPostEnFeed(afinidad int, post *post) *postEnFeed {
 		post:     post,
 	}
 }
+
+// Primitivas de Posts
+
+func (post *post) AgregarLIke(nombre string) {
+	post.likes.Guardar(nombre, "")
+}
+
+func (post *post) ObtenerLikes() int {
+	return post.likes.Cantidad()
+}
+
+func (post *post) IterarLikes(visitar func(nombre, _ string) bool) {
+	post.likes.Iterar(visitar)
+}
