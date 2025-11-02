@@ -55,5 +55,5 @@ type Post interface {
 	ObtenerLikes() int
 
 	// IterarLikes recive una funcion para iterar todos los nombres de usuarios que likearon el post
-	IterarLikes(func(nombre string) bool)
+	IterarLikes(func(nombre, _ string) bool)
 }

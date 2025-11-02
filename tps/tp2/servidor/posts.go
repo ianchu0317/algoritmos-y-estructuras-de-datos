@@ -14,12 +14,12 @@ type post struct {
 
 type postEnFeed struct {
 	afinidad int
-	post     *post
+	post     Post
 }
 
 // CrearPost (id, contenido, creador), toma nuevo ID de la publicacion, creador de publicacion,
 // y contenido de la publicacion. Devuelve puntero al post creado
-func crearPost(nuevoId int, creadorPost, contenido string) *post {
+func crearPost(nuevoId int, creadorPost, contenido string) Post {
 	return &post{
 		id:        nuevoId,
 		creador:   creadorPost,
@@ -30,7 +30,7 @@ func crearPost(nuevoId int, creadorPost, contenido string) *post {
 
 // crearPostEnFeed toma afinidad del usuario creador con usuario del feed, y el puntero al post a guardar.
 // Devuelve puntero del post a guardar en el feed.
-func crearPostEnFeed(afinidad int, post *post) *postEnFeed {
+func crearPostEnFeed(afinidad int, post Post) *postEnFeed {
 	return &postEnFeed{
 		afinidad: afinidad,
 		post:     post,
@@ -39,7 +39,7 @@ func crearPostEnFeed(afinidad int, post *post) *postEnFeed {
 
 // Primitivas de Posts
 
-func (post *post) AgregarLIke(nombre string) {
+func (post *post) AgregarLike(nombre string) {
 	post.likes.Guardar(nombre, "")
 }
 
