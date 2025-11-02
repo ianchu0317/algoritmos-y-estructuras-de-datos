@@ -39,6 +39,10 @@ func crearPostEnFeed(afinidad int, post Post) *postEnFeed {
 
 // Primitivas de Posts
 
+func (post *post) HayLikes() bool {
+	return post.likes.Cantidad() != 0
+}
+
 func (post *post) ObtenerInformacion() (int, string, string) {
 	return post.id, post.creador, post.contenido
 }

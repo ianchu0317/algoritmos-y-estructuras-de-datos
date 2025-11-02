@@ -99,19 +99,26 @@ func (servidor *AlgoGram) Likear(id int) {
 	}
 	// Complejidad O(log(likes))
 	post := servidor.posts.Obtener(id)
-	post.likes.Guardar(servidor.sesion.nombre, "")
+	post.AgregarLike(servidor.sesion.nombre)
 	fmt.Println("Post likeado")
 }
 
 func (servidor AlgoGram) MostrarLikes(id int) {
-	if !servidor.posts.Pertenece(id) || servidor.obtenerLikes(id).Cantidad() == 0 {
+	if !servidor.posts.Pertenece(id) {
 		fmt.Println("Error: Post inexistente o sin likes")
 		return
 	}
-	likes := servidor.obtenerLikes(id)
+
+	post := servidor.posts.Obtener(id)
+
+	if !post.HayLikes() {
+		fmt.Println("Error: Post inexistente o sin likes")
+		return
+	}
+
 	// complejidad: O(likes)
-	fmt.Println("El post tiene", likes.Cantidad(), "likes:")
-	likes.Iterar(func(nombre, _ string) bool {
+	fmt.Println("El post tiene", post.ObtenerLikes(), "likes:")
+	post.IterarLikes(func(nombre, _ string) bool {
 		fmt.Printf("\t%s\n", nombre)
 		return true
 	})
@@ -134,11 +141,6 @@ func (servidor AlgoGram) calcularAfinidad(usuario1, usuario2 string) int {
 	ordenUsuario1 := servidor.ordenRegistro.Obtener(usuario1)
 	ordenUsuario2 := servidor.ordenRegistro.Obtener(usuario2)
 	return abs(ordenUsuario1 - ordenUsuario2)
-}
-
-// obtenerLikes toma un ID y devuelve el diccionario ordenado de los likes
-func (servidor AlgoGram) obtenerLikes(id int) Diccionario.DiccionarioOrdenado[string, string] {
-	return servidor.posts.Obtener(id).likes
 }
 
 // abs(num) toma un numero y devuelve el valor absoluto (modulo)

@@ -48,6 +48,9 @@ type Usuario interface {
 }
 
 type Post interface {
+	// HayLikes deveulve True si hay likes, False si hay 0 likes
+	HayLikes() bool
+
 	// ObtenerInformacion devuelve el id, creador y contenido del Post
 	ObtenerInformacion() (int, string, string)
 
