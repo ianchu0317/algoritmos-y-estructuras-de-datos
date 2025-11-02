@@ -35,3 +35,18 @@ type Servidor interface {
 	// En caso de no existir la publicacion o no tiene likes imprime 'Error: Post inexistente o sin likes'.
 	MostrarLikes(id int)
 }
+
+type Usuario interface {
+	ActualizarFeed(post)
+}
+
+type Post interface {
+	// AgregarLike toma un nombre de usuario y marca al post como likeado
+	AgregarLike(nombre string)
+
+	// ObtenerLikes devuelve la cantidad de likes de una publicacion
+	ObtenerLikes() int
+
+	// IterarLikes recive una funcion para iterar todos los nombres de usuarios que likearon el post
+	IterarLikes(func(nombre string) bool)
+}
