@@ -1,59 +1,149 @@
 package servidor
 
-// Interfaz de servidor
+import (
+	"fmt"
+	Diccionario "tdas/diccionario"
+)
 
-type Servidor interface {
-	// HayLoggeado devuelve True si hay algun usuario en la sesion actual, false en caso contrario
-	HayLoggeado() bool
-
-	// Login(nombre) toma un nombre de usuario (cadena) e inicia sesión en servidor.
-	// Si el usuario está en el servidor, se imprime 'Hola <nombre>'.
-	// Si el usuario no existe en servidor, se imprime 'Error: usuario no existente'.
-	// Si ya hay usuario en la sesión actual, se imrpime 'Error: Ya haboa un usuario loggeado'.
-	Login(nombre string)
-
-	// Logout() cierra sesión del usuario actual imprimiendo 'Adios <usuario>'.
-	// Si no hay usuario en la sesión actual imprime 'Error: no habia usuario loggeado'.
-	Logout()
-
-	// Publicar(contenido) toma un contenido en formato cadena y crea un contenido en el servidor.
-	// DEBE Haber usuario en la sesión actual para publicar.
-	// Imprime 'Post publicado' si publica exitosamente.
-	// En caso que no hubiera usuario loggeado, se imprime 'Error: no habia usuario logeado'.
-	Publicar(contenido string)
-
-	// VerProxFeed() devuelve la proxima publicacion del feed del usuario actual.
-	// Si usuario no tiene mas publicaciones o no esta loggeado se imprime 'Usuario no loggeado o no hay mas posts para ver'.
-	VerProxFeed()
-
-	// Likear(id) toma el id de una publicación y le da like.
-	// Si hay usuario loggeado y post existe entonces imprime 'Post likeado'.
-	// De lo contrario 'Error: Usuario no loggeado o Post inexistente'.
-	Likear(id int)
-
-	// MostrarLikes(id) toma el id de una publicación existente y devuelve la cantidad de likes con los usuarios que likearon.
-	// En caso de no existir la publicacion o no tiene likes imprime 'Error: Post inexistente o sin likes'.
-	MostrarLikes(id int)
+type AlgoGram struct {
+	sesion        *usuario
+	usuarios      Diccionario.Diccionario[string, *usuario] // Hash de nombre -> usuario
+	posts         Diccionario.Diccionario[int, *post]       // Hash de id -> post
+	ordenRegistro Diccionario.Diccionario[string, int]      // Hash de nombre -> orden de la lista (para calc afinidad)
+	proximoPostId int
 }
 
-type Usuario interface {
-	// Actualizar toma un post y actualiza el feed del usuario
-	ActualizarFeed(post Post, afinidad int)
-
-	// FeedEstaVacia devuelve True si feed del usuario está vacia, de lo contrario devuelve False
-	FeedEstaVacia() bool
-
-	// ObtenerProxPost devuelve el proximo post del feed
-	ObtenerProxPost() Post
+// CrearServidor devuelve un servidor de Algogram
+func CrearServidor(usuarios []string) Servidor {
+	servidor := AlgoGram{
+		sesion:        nil,
+		usuarios:      Diccionario.CrearHash[string, *usuario](func(a, b string) bool { return a == b }),
+		posts:         Diccionario.CrearHash[int, *post](func(a, b int) bool { return a == b }),
+		ordenRegistro: Diccionario.CrearHash[string, int](func(a, b string) bool { return a == b }),
+		proximoPostId: 0,
+	}
+	servidor.registrarUsuarios(usuarios)
+	return &servidor
 }
 
-type Post interface {
-	// AgregarLike toma un nombre de usuario y marca al post como likeado
-	AgregarLike(nombre string)
+// *** Primitivas Algogram ***
 
-	// ObtenerLikes devuelve la cantidad de likes de una publicacion
-	ObtenerLikes() int
+// hayLoggeado devuelve True si hay algun usuario en la sesion actual, false en caso contrario
+func (servidor AlgoGram) HayLoggeado() bool {
+	return servidor.sesion != nil
+}
 
-	// IterarLikes recive una funcion para iterar todos los nombres de usuarios que likearon el post
-	IterarLikes(func(nombre string) bool)
+func (servidor *AlgoGram) Login(nombre string) {
+	// Complejidad O(1) -> asignación de variables y operaciones con hash de O(1)
+	if servidor.HayLoggeado() {
+		fmt.Println("Error: Ya habia un usuario loggeado")
+		return
+	}
+	if !servidor.usuarios.Pertenece(nombre) {
+		fmt.Println("Error: usuario no existente")
+		return
+	}
+	servidor.sesion = servidor.usuarios.Obtener(nombre)
+	fmt.Println("Hola", nombre)
+}
+
+func (servidor *AlgoGram) Logout() {
+	// Complejidad O(1) -> asignacion de variables
+	if !servidor.HayLoggeado() {
+		fmt.Println("Error: no habia usuario loggeado")
+		return
+	}
+	servidor.sesion = nil
+	fmt.Println("Adios")
+}
+
+func (servidor *AlgoGram) Publicar(contenido string) {
+	if !servidor.HayLoggeado() {
+		fmt.Println("Error: no habia usuario loggeado")
+		return
+	}
+	// Complejidad: O(1) + O(u * log(posts)) + O(1)
+	nuevoPost := crearPost(servidor.proximoPostId, servidor.sesion.nombre, contenido)
+
+	for iter := servidor.usuarios.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
+		nombreActual, usuarioActual := iter.VerActual()
+		if nombreActual != servidor.sesion.nombre {
+			afinidad := servidor.calcularAfinidad(nombreActual, servidor.sesion.nombre)
+			postFeed := crearPostEnFeed(afinidad, nuevoPost)
+			usuarioActual.feed.Encolar(postFeed)
+		}
+	}
+
+	servidor.posts.Guardar(servidor.proximoPostId, nuevoPost)
+	servidor.proximoPostId++
+	fmt.Println("Post publicado")
+}
+
+func (servidor *AlgoGram) VerProxFeed() {
+	if !servidor.HayLoggeado() || servidor.sesion.feed.EstaVacia() {
+		fmt.Println("Usuario no loggeado o no hay mas posts para ver")
+		return
+	}
+	// Complejidad O(log(posts))
+	siguientePost := servidor.sesion.feed.Desencolar().post
+	fmt.Println("Post ID", siguientePost.id)
+	fmt.Println(siguientePost.creador, "dijo:", siguientePost.contenido)
+	fmt.Println("Likes:", siguientePost.likes.Cantidad())
+}
+
+func (servidor *AlgoGram) Likear(id int) {
+	if !servidor.HayLoggeado() || !servidor.posts.Pertenece(id) {
+		fmt.Println("Error: Usuario no loggeado o Post inexistente")
+		return
+	}
+	// Complejidad O(log(likes))
+	post := servidor.posts.Obtener(id)
+	post.likes.Guardar(servidor.sesion.nombre, "")
+	fmt.Println("Post likeado")
+}
+
+func (servidor AlgoGram) MostrarLikes(id int) {
+	if !servidor.posts.Pertenece(id) || servidor.obtenerLikes(id).Cantidad() == 0 {
+		fmt.Println("Error: Post inexistente o sin likes")
+		return
+	}
+	likes := servidor.obtenerLikes(id)
+	// complejidad: O(likes)
+	fmt.Println("El post tiene", likes.Cantidad(), "likes:")
+	likes.Iterar(func(nombre, _ string) bool {
+		fmt.Printf("\t%s\n", nombre)
+		return true
+	})
+}
+
+// *** Funciones auxiliares ***
+
+// registrarUsuarios toma una lista de nombres de usuarios y los registra en el servidor.
+// Guarda en el servidor su orden de registro.
+func (servidor *AlgoGram) registrarUsuarios(usuarios []string) {
+	for i, nombre := range usuarios {
+		usuario := crearUsuario(nombre)
+		servidor.usuarios.Guardar(nombre, usuario)
+		servidor.ordenRegistro.Guardar(nombre, i)
+	}
+}
+
+// calcularAfinidad(u1, u2) Toma dos nombres de usuarios y devuelve su afinidad según orden de registro.
+func (servidor AlgoGram) calcularAfinidad(usuario1, usuario2 string) int {
+	ordenUsuario1 := servidor.ordenRegistro.Obtener(usuario1)
+	ordenUsuario2 := servidor.ordenRegistro.Obtener(usuario2)
+	return abs(ordenUsuario1 - ordenUsuario2)
+}
+
+// obtenerLikes toma un ID y devuelve el diccionario ordenado de los likes
+func (servidor AlgoGram) obtenerLikes(id int) Diccionario.DiccionarioOrdenado[string, string] {
+	return servidor.posts.Obtener(id).likes
+}
+
+// abs(num) toma un numero y devuelve el valor absoluto (modulo)
+func abs(num int) int {
+	if num < 0 {
+		return -num
+	}
+	return num
 }
