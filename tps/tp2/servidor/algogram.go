@@ -6,8 +6,8 @@ import (
 )
 
 type AlgoGram struct {
-	sesion        *Usuario
-	usuarios      Diccionario.Diccionario[string, *Usuario] // Hash de nombre -> usuario
+	sesion        *usuario
+	usuarios      Diccionario.Diccionario[string, *usuario] // Hash de nombre -> usuario
 	posts         Diccionario.Diccionario[int, *post]       // Hash de id -> post
 	ordenRegistro Diccionario.Diccionario[string, int]      // Hash de nombre -> orden de la lista (para calc afinidad)
 	proximoPostId int
@@ -17,7 +17,7 @@ type AlgoGram struct {
 func CrearServidor(usuarios []string) Servidor {
 	servidor := AlgoGram{
 		sesion:        nil,
-		usuarios:      Diccionario.CrearHash[string, *Usuario](func(a, b string) bool { return a == b }),
+		usuarios:      Diccionario.CrearHash[string, *usuario](func(a, b string) bool { return a == b }),
 		posts:         Diccionario.CrearHash[int, *post](func(a, b int) bool { return a == b }),
 		ordenRegistro: Diccionario.CrearHash[string, int](func(a, b string) bool { return a == b }),
 		proximoPostId: 0,
@@ -122,7 +122,7 @@ func (servidor AlgoGram) MostrarLikes(id int) {
 // Guarda en el servidor su orden de registro.
 func (servidor *AlgoGram) registrarUsuarios(usuarios []string) {
 	for i, nombre := range usuarios {
-		usuario := CrearUsuario(nombre)
+		usuario := crearUsuario(nombre)
 		servidor.usuarios.Guardar(nombre, usuario)
 		servidor.ordenRegistro.Guardar(nombre, i)
 	}

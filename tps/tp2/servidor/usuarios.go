@@ -2,14 +2,14 @@ package servidor
 
 import Heap "tdas/cola_prioridad"
 
-type Usuario struct {
+type usuario struct {
 	nombre string
 	feed   Heap.ColaPrioridad[*postEnFeed]
 }
 
 // CrearUsuario(nombre) toma un nombre y devuelve un puntero a usuario
-func CrearUsuario(nombre string) *Usuario {
-	return &Usuario{
+func crearUsuario(nombre string) *usuario {
+	return &usuario{
 		nombre: nombre,
 		feed:   Heap.CrearHeap[*postEnFeed](compararPost),
 	}
