@@ -37,7 +37,14 @@ type Servidor interface {
 }
 
 type Usuario interface {
-	ActualizarFeed(post)
+	// Actualizar toma un post y actualiza el feed del usuario
+	ActualizarFeed(post Post, afinidad int)
+
+	// FeedEstaVacia devuelve True si feed del usuario está vacia, de lo contrario devuelve False
+	FeedEstaVacia() bool
+
+	// ObtenerProxPost devuelve el proximo post del feed
+	ObtenerProxPost() Post
 }
 
 type Post interface {
