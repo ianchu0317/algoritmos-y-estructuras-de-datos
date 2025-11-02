@@ -48,6 +48,9 @@ type Usuario interface {
 }
 
 type Post interface {
+	// ObtenerInformacion devuelve el id, creador y contenido del Post
+	ObtenerInformacion() (int, string, string)
+
 	// AgregarLike toma un nombre de usuario y marca al post como likeado
 	AgregarLike(nombre string)
 

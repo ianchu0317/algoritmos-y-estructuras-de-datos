@@ -8,7 +8,7 @@ import (
 type AlgoGram struct {
 	sesion        *usuario
 	usuarios      Diccionario.Diccionario[string, *usuario] // Hash de nombre -> usuario
-	posts         Diccionario.Diccionario[int, *post]       // Hash de id -> post
+	posts         Diccionario.Diccionario[int, Post]        // Hash de id -> post
 	ordenRegistro Diccionario.Diccionario[string, int]      // Hash de nombre -> orden de la lista (para calc afinidad)
 	proximoPostId int
 }
@@ -18,7 +18,7 @@ func CrearServidor(usuarios []string) Servidor {
 	servidor := AlgoGram{
 		sesion:        nil,
 		usuarios:      Diccionario.CrearHash[string, *usuario](func(a, b string) bool { return a == b }),
-		posts:         Diccionario.CrearHash[int, *post](func(a, b int) bool { return a == b }),
+		posts:         Diccionario.CrearHash[int, Post](func(a, b int) bool { return a == b }),
 		ordenRegistro: Diccionario.CrearHash[string, int](func(a, b string) bool { return a == b }),
 		proximoPostId: 0,
 	}
@@ -85,10 +85,11 @@ func (servidor *AlgoGram) VerProxFeed() {
 		return
 	}
 	// Complejidad O(log(posts))
-	siguientePost := servidor.sesion.feed.Desencolar().post
-	fmt.Println("Post ID", siguientePost.id)
-	fmt.Println(siguientePost.creador, "dijo:", siguientePost.contenido)
-	fmt.Println("Likes:", siguientePost.likes.Cantidad())
+	proxPost := servidor.sesion.feed.Desencolar().post
+	id, creador, contenido := proxPost.ObtenerInformacion()
+	fmt.Println("Post ID", id)
+	fmt.Println(creador, "dijo:", contenido)
+	fmt.Println("Likes:", proxPost.ObtenerLikes())
 }
 
 func (servidor *AlgoGram) Likear(id int) {
