@@ -93,7 +93,7 @@ func (servidor *AlgoGram) Likear(id int) {
 		return
 	}
 	// Complejidad O(log(likes))
-	post := servidor.posts.Obtener(id)
+	post := servidor.obtenerPostPorID(id)
 	post.AgregarLike(servidor.sesion.ObtenerNombre())
 	fmt.Println("Post likeado")
 }
@@ -104,7 +104,7 @@ func (servidor AlgoGram) MostrarLikes(id int) {
 		return
 	}
 
-	post := servidor.posts.Obtener(id)
+	post := servidor.obtenerPostPorID(id)
 
 	if !post.HayLikes() {
 		fmt.Println("Error: Post inexistente o sin likes")
@@ -129,6 +129,11 @@ func (servidor *AlgoGram) registrarUsuarios(usuarios []string) {
 		servidor.usuarios.Guardar(nombre, usuario)
 		servidor.ordenRegistro.Guardar(nombre, i)
 	}
+}
+
+// obtenerPostPorID devuelve el post que coincide con el ID pasado
+func (servidor *AlgoGram) obtenerPostPorID(id int) Post {
+	return servidor.posts.Obtener(id)
 }
 
 // calcularAfinidad(u1, u2) Toma dos nombres de usuarios y devuelve su afinidad según orden de registro.
