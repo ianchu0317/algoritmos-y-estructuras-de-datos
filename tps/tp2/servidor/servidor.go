@@ -28,13 +28,11 @@ func CrearServidor(usuarios []string) Servidor {
 
 // *** Primitivas Algogram ***
 
-// hayLoggeado devuelve True si hay algun usuario en la sesion actual, false en caso contrario
 func (servidor AlgoGram) HayLoggeado() bool {
 	return servidor.sesion != nil
 }
 
 func (servidor *AlgoGram) Login(nombre string) {
-	// Complejidad O(1) -> asignación de variables y operaciones con hash de O(1)
 	if servidor.HayLoggeado() {
 		fmt.Println("Error: Ya habia un usuario loggeado")
 		return
@@ -48,7 +46,6 @@ func (servidor *AlgoGram) Login(nombre string) {
 }
 
 func (servidor *AlgoGram) Logout() {
-	// Complejidad O(1) -> asignacion de variables
 	if !servidor.HayLoggeado() {
 		fmt.Println("Error: no habia usuario loggeado")
 		return
@@ -63,7 +60,6 @@ func (servidor *AlgoGram) Publicar(contenido string) {
 		return
 	}
 	nombreLoggeado := servidor.sesion.ObtenerNombre()
-	// Complejidad: O(1) + O(u * log(posts)) + O(1)
 	nuevoPost := crearPost(servidor.proximoPostId, nombreLoggeado, contenido)
 
 	for iter := servidor.usuarios.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
@@ -84,7 +80,6 @@ func (servidor *AlgoGram) VerProxFeed() {
 		fmt.Println("Usuario no loggeado o no hay mas posts para ver")
 		return
 	}
-	// Complejidad O(log(posts))
 	proxPost := servidor.sesion.ObtenerProxPost()
 	id, creador, contenido := proxPost.ObtenerInformacion()
 	fmt.Println("Post ID", id)
