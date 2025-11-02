@@ -8,7 +8,7 @@ import (
 type AlgoGram struct {
 	sesion        *Usuario
 	usuarios      Diccionario.Diccionario[string, *Usuario] // Hash de nombre -> usuario
-	posts         Diccionario.Diccionario[int, *Post]       // Hash de id -> post
+	posts         Diccionario.Diccionario[int, *post]       // Hash de id -> post
 	ordenRegistro Diccionario.Diccionario[string, int]      // Hash de nombre -> orden de la lista (para calc afinidad)
 	proximoPostId int
 }
@@ -18,7 +18,7 @@ func CrearServidor(usuarios []string) Servidor {
 	servidor := AlgoGram{
 		sesion:        nil,
 		usuarios:      Diccionario.CrearHash[string, *Usuario](func(a, b string) bool { return a == b }),
-		posts:         Diccionario.CrearHash[int, *Post](func(a, b int) bool { return a == b }),
+		posts:         Diccionario.CrearHash[int, *post](func(a, b int) bool { return a == b }),
 		ordenRegistro: Diccionario.CrearHash[string, int](func(a, b string) bool { return a == b }),
 		proximoPostId: 0,
 	}
@@ -63,7 +63,7 @@ func (servidor *AlgoGram) Publicar(contenido string) {
 		return
 	}
 	// Complejidad: O(1) + O(u * log(posts)) + O(1)
-	nuevoPost := CrearPost(servidor.proximoPostId, servidor.sesion.nombre, contenido)
+	nuevoPost := crearPost(servidor.proximoPostId, servidor.sesion.nombre, contenido)
 
 	for iter := servidor.usuarios.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
 		nombreActual, usuarioActual := iter.VerActual()

@@ -5,7 +5,7 @@ import (
 	Diccionario "tdas/diccionario"
 )
 
-type Post struct {
+type post struct {
 	id        int
 	contenido string
 	creador   string
@@ -14,13 +14,13 @@ type Post struct {
 
 type postEnFeed struct {
 	afinidad int
-	post     *Post
+	post     *post
 }
 
 // CrearPost (id, contenido, creador), toma nuevo ID de la publicacion, creador de publicacion,
 // y contenido de la publicacion. Devuelve puntero al post creado
-func CrearPost(nuevoId int, creadorPost, contenido string) *Post {
-	return &Post{
+func crearPost(nuevoId int, creadorPost, contenido string) *post {
+	return &post{
 		id:        nuevoId,
 		creador:   creadorPost,
 		contenido: contenido,
@@ -30,7 +30,7 @@ func CrearPost(nuevoId int, creadorPost, contenido string) *Post {
 
 // crearPostEnFeed toma afinidad del usuario creador con usuario del feed, y el puntero al post a guardar.
 // Devuelve puntero del post a guardar en el feed.
-func crearPostEnFeed(afinidad int, post *Post) *postEnFeed {
+func crearPostEnFeed(afinidad int, post *post) *postEnFeed {
 	return &postEnFeed{
 		afinidad: afinidad,
 		post:     post,
