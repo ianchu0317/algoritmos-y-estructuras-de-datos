@@ -10,7 +10,7 @@ def crear_grafo() -> Grafo:
     A -> B
     A -> C
     """
-    grafo = Grafo(True)
+    grafo = Grafo(False)
     grafo.agregar_vertice("A")
     grafo.agregar_vertice("B")
     grafo.agregar_vertice("C")
@@ -48,6 +48,22 @@ def bfs(grafo: Grafo, v):
     return padres
 
 
+def dfs(grafo: Grafo, v):
+    visitados = set()
+    padres = dict()
+    visitados.add(v)
+    padres[v] = ""
+    _dfs(v, grafo, visitados, padres)
+    return padres
+
+def _dfs(v, grafo: Grafo, visitados: set, padres: dict):
+    for w, _ in grafo.adyacentes(v):
+        if w not in visitados:
+            visitados.add(w)
+            padres[w] = v
+            _dfs(w, grafo, visitados, padres)   
+
+
 if __name__ == '__main__':
     grafo1 = crear_grafo()
     """
@@ -59,3 +75,4 @@ if __name__ == '__main__':
     print(grafo1.adyacentes("B"))
     """
     print(bfs(grafo1, "A"))
+    print(dfs(grafo1, "C"))

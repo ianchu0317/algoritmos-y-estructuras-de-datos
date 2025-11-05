@@ -14,7 +14,7 @@ class Grafo:
         Devuelve True si el grafo es dirigido, 
         False en caso contrario
         """
-        return self.es_dirigido
+        return self.dirigido
     
     def cantidad(self) -> int:
         """
