@@ -84,7 +84,7 @@ class Grafo:
         obtener_vertices
         devuelve una lista con todos los vertices del grafo
         """
-        return self.vertices.keys()
+        return list(self.vertices.keys())
     
     
     
