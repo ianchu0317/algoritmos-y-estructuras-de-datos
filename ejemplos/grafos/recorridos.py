@@ -1,5 +1,5 @@
 from grafos import Grafo
-
+from collections import deque
 
 def crear_grafo() -> Grafo:
     """
@@ -24,12 +24,38 @@ def crear_grafo() -> Grafo:
     
     return grafo
 
+
+# BFS
+def bfs(grafo: Grafo, v):
+    cola = deque()
+    padres = dict()
+    visitados = set()
+    
+    cola.append(v)
+    padres[v] = ""
+    
+    while len(cola) > 0:
+        v = cola.popleft()
+        print("Ahora con v: ", v)
+        for w, _ in grafo.adyacentes(v):
+            if w not in visitados:
+                padres[w] = v
+                visitados.add(w)
+                cola.append(w)
+                print("w adyacente:", w)
+        print()
+
+    return padres
+
+
 if __name__ == '__main__':
     grafo1 = crear_grafo()
+    """
     print(grafo1.obtener_vertices())
     print(grafo1.adyacentes("A")) # A -> B, C, D
     print(grafo1.adyacentes("B")) # B -> D
     grafo1.borrar_arista("A", "B")
     print(grafo1.adyacentes("A")) 
     print(grafo1.adyacentes("B"))
-    
+    """
+    print(bfs(grafo1, "A"))
