@@ -38,7 +38,11 @@ class Grafo:
         grafo.borrar_vertice(v)
         Borra el vertice `v` del grafo. Borra todos los grados del vertice.
         """
-        # Borrar el vertice del grafo
+        for v, aristas in self.vertices:
+            if v != vertice:
+                for arista, peso in aristas:
+                    if arista == vertice:
+                        aristas.remove((arista, peso))
         self.vertices.pop(vertice)
     
     # Aristas
@@ -57,8 +61,16 @@ class Grafo:
         grafo.borrar_arista(v, w)
         Borra arista que va de V a W. Si no es dirigido borra la otra relación tambien.
         """
-        # Hallar el 
-        self.vertices[v]
+        for arista, peso in self.vertices[v]:
+            if arista == w:
+                self.vertices[v].remove((arista, peso))
+                break
+        
+        if not self.es_dirigido:
+            for arista, peso in self.vertices[w]:
+                if arista == v:
+                    self.vertices[w].remove((arista, peso))
+                    break
     
     def adyacentes(self, v) -> list:
         """
@@ -72,4 +84,7 @@ class Grafo:
         obtener_vertices
         devuelve una lista con todos los vertices del grafo
         """
+        return self.vertices.keys()
+    
+    
     
