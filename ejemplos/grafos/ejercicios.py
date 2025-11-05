@@ -5,9 +5,10 @@ import random
 # Ejercicio: dado un grafo no dirigido, ver si hay ciclo o no
 Procedimiento: Mejor utilizar dfs -> 
 si estoy en un nodo y su adyacente ya visitado y no es el padre,entonces hay ciclo, sino no
+- > la funcion auxiliar devuelve si hay ciclos y donde comenzar a reconstruir
 """
 
-def hay_ciclo(grafo: Grafo) -> bool:
+def hay_ciclo(grafo: Grafo) -> list:
     # Estructuras auxiliares 
     padres = dict()
     visitados = set()
@@ -16,15 +17,26 @@ def hay_ciclo(grafo: Grafo) -> bool:
     padres[v] = ""
     visitados.add(v)
     
-    return _dfs_hay_ciclo(v, grafo, padres, visitados)
+    # Reconstruir camino si hay ciclo
+    hay_ciclo, w = _dfs_hay_ciclo(v, grafo, padres, visitados)
+    if hay_ciclo:
+        return reconstruir_camino(w, padres)
+    return None
 
-def _dfs_hay_ciclo(v, grafo: Grafo, padres: dict, visitados: set) -> bool:
+def _dfs_hay_ciclo(v: str, grafo: Grafo, padres: dict, visitados: set) -> tuple[bool, str]:
     for w in grafo.adyacentes(v):
         if w not in visitados:
             visitados.add(w)
             padres[w] = v
             _dfs_hay_ciclo(v, grafo, padres, visitados)
         elif w != padres[v]:
-            return True
-    return False
+            return True, v
+    return False, ""
 
+
+def reconstruir_camino(v: str, padres: dict) -> list:
+    camino = []
+    while v != "":
+        camino.append(v)
+        v = padres[v]
+    return camino
