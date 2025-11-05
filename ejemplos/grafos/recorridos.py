@@ -27,6 +27,17 @@ def crear_grafo() -> Grafo:
 
 # BFS
 def bfs(grafo: Grafo, v):
+    """
+    - Inicializar estructuras auxiliares
+    (Agregar vertice de inicio a estructuras auxiliares)
+    
+    - Repetir siempre y cuando la cola no este vacia
+        - Desencolar el vertice
+        - Para cada adyacente del vertice si no esta visitado
+            - Encolar a la cola
+            - Marcar como visitado -> me aseguro que cada vertice de la cola a visitar no esta visitado
+            - Hacer lo que tenga que hacer (padres, distancia, etc)
+    """
     cola = deque()
     padres = dict()
     visitados = set()
@@ -36,19 +47,25 @@ def bfs(grafo: Grafo, v):
     
     while len(cola) > 0:
         v = cola.popleft()
-        print("Ahora con v: ", v)
         for w, _ in grafo.adyacentes(v):
             if w not in visitados:
                 padres[w] = v
                 visitados.add(w)
                 cola.append(w)
-                print("w adyacente:", w)
-        print()
-
     return padres
 
 
 def dfs(grafo: Grafo, v):
+    """
+    - Inicializar las estructuras auxiliares
+    (Agregar vertice de inicio a estructuras auxiliares (padres, visitados, etc))
+    
+    - LLamar una funcion auxiliar recursiva para el vertice
+        - Para cada vertice adyacente no visitado
+            - Marcar como visitado
+            - Operaciones
+            - Llamada recursiva de ese vértice
+    """
     visitados = set()
     padres = dict()
     visitados.add(v)
@@ -74,5 +91,5 @@ if __name__ == '__main__':
     print(grafo1.adyacentes("A")) 
     print(grafo1.adyacentes("B"))
     """
-    print(bfs(grafo1, "A"))
-    print(dfs(grafo1, "C"))
+    print("bfs: ", bfs(grafo1, "A"))
+    print("dfs: ", dfs(grafo1, "C"))
