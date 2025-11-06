@@ -16,7 +16,7 @@ class Grafo:
         """
         return self.dirigido
     
-    def cantidad(self) -> int:
+    def obtener_cantidad(self) -> int:
         """
         grafo.cantidad() -> int
         Devuelve la cantidad de vertices que hay en el grafo
@@ -24,16 +24,17 @@ class Grafo:
         return self.cantidad
     
     # Métodos de vertice
-    def agregar_vertice(self, vertice: str):
+    def agregar_vertice(self, vertice):
         """
         grafo.agregar_vertice(v)
         Toma un vertice `v` y lo agrega al grafo
         """
         # Crear una lista vacia de aristas para el vertice
         self.vertices[vertice] = []
+        self.cantidad += 1
     
     
-    def borrar_vertice(self, vertice: str):
+    def borrar_vertice(self, vertice):
         """
         grafo.borrar_vertice(v)
         Borra el vertice `v` del grafo. Borra todos los grados del vertice.
@@ -44,7 +45,8 @@ class Grafo:
                     if arista == vertice:
                         aristas.remove((arista, peso))
         self.vertices.pop(vertice)
-    
+        self.cantidad -= 1
+        
     # Aristas
     def agregar_arista(self, v, w, peso=0):
         """
