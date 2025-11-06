@@ -7,11 +7,29 @@ Orden topológico con BFS:
 - Es un BFS normal pero encola sólo grados de entradas 0
 """
 
-def orden_bfs(grafo: Grafo):
+def orden_bfs(grafo: Grafo) -> list:
     """
-    orden_bfs toma un grafo y devuelve su recorrido de padres en orden topologico
+    orden_bfs toma un grafo y devuelve una lista de orden
     """
+    g_entrada = calcular_grados_entrada(grafo)
+    cola = deque()
+    orden = []
     
+    for v in grafo.obtener_vertices():
+        if g_entrada[v] == 0:
+            cola.append(v)
+            orden.append(v)
+    
+    while len(cola) > 0:
+        v = cola.popleft()
+        for w, _ in grafo.adyacentes(v):
+            g_entrada[w] -= 1
+            if g_entrada[w] == 0:
+                cola.append(w)
+                orden.append(w)
+
+    return orden
+            
 
 
 def calcular_grados_entrada(grafo: Grafo) -> dict:
@@ -66,5 +84,4 @@ def crear_grafo_ejemplo() -> Grafo:
 if __name__ == '__main__':
     grafo_materias = crear_grafo_ejemplo()
     print(grafo_materias.obtener_vertices())
-    g_entrada = calcular_grados_entrada(grafo_materias)
-    print(g_entrada)
+    print(orden_bfs(grafo_materias))
