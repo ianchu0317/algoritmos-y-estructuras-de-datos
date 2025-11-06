@@ -4,7 +4,18 @@ from collections import deque
 
 """
 Orden topológico con BFS:
-- Es un BFS normal pero encola sólo grados de entradas 0
+- Es un BFS normal pero encola sólo grados de entradas 0.
+
+Algoritmo BFS Topológico:
+    - Calculo grados de entrada  O(V + E)
+    - encolar grados de entrada 0 O(v + e)
+    - mientras cola no esta vacia:  O(V)
+        - Desencolar un vertice
+        - Ver sus adyacentes    O(E)
+            - Para cada adyacente restar 1
+            - Si es 0 encolar
+                - Actualizar orden
+Complejidad: O(v + E)
 """
 
 def orden_bfs(grafo: Grafo) -> list:
