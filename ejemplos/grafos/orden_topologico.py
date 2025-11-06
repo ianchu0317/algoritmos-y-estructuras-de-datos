@@ -1,11 +1,39 @@
 from grafos import Grafo
+from collections import deque
 
 
+"""
+Orden topológico con BFS:
+- Es un BFS normal pero encola sólo grados de entradas 0
+"""
 
 def orden_bfs(grafo: Grafo):
     """
     orden_bfs toma un grafo y devuelve su recorrido de padres en orden topologico
     """
+    
+
+
+def calcular_grados_entrada(grafo: Grafo) -> dict:
+    """
+    calcular_grados_entrada
+    devuelve un diccionario con grados de entrada de cada vertice
+    """
+    grados = dict()
+    for v in grafo.obtener_vertices():
+        grados[v] = 0
+    for v in grafo.obtener_vertices():
+        for w in grafo.obtener_vertices():
+            if (v, 0) in grafo.adyacentes(w):
+                grados[v] += 1
+    return grados
+
+
+
+"""
+Funciones Auxiliares XD
+"""
+    
 def crear_grafo_ejemplo() -> Grafo:
     grafo = Grafo(True)
     # Variables (valor a poner) de vertices
@@ -38,3 +66,5 @@ def crear_grafo_ejemplo() -> Grafo:
 if __name__ == '__main__':
     grafo_materias = crear_grafo_ejemplo()
     print(grafo_materias.obtener_vertices())
+    g_entrada = calcular_grados_entrada(grafo_materias)
+    print(g_entrada)
