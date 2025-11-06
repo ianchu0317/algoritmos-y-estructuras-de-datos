@@ -1,3 +1,4 @@
+import random
 from grafos import Grafo
 from collections import deque
 
@@ -59,6 +60,44 @@ def calcular_grados_entrada(grafo: Grafo) -> dict:
 
 
 """
+Orden Topológico con DFS
+- Es un DFS pero eligiendo vértices random
+
+Elegir vertices random hasta que todos los vertices estén visitados:
+- Para cada vértice (V):
+    - Si no está visitado::::
+    - Ver adyacentes -> para cada adyacente (W)
+        - Si no está visitado
+            - Marcar como visitado
+            - Llamada recursiva para ese adyacente
+    - Apilar el vértice (V)
+
+- Revertir desapilar todo y devolver orden
+"""
+
+def orden_dfs(grafo: Grafo) -> list:
+    visitado = set()
+    pila = deque()
+    orden = []
+    
+    for v in grafo.obtener_vertices():
+        if v not in visitado:
+            visitado.add(v)
+            _visitar_dfs(v, grafo, visitado, pila)
+
+    while len(pila) > 0:
+        orden.append(pila.pop())
+
+    return orden
+
+def _visitar_dfs(v, grafo: Grafo, visitado: set, pila: deque):
+    for w, _ in grafo.adyacentes(v):
+        if w not in visitado:
+            visitado.add(w)
+            _visitar_dfs(w, grafo, visitado, pila)
+    pila.append(v)    
+
+"""
 Funciones Auxiliares XD
 """
     
@@ -95,3 +134,4 @@ if __name__ == '__main__':
     grafo_materias = crear_grafo_ejemplo()
     print(grafo_materias.obtener_vertices())
     print(orden_bfs(grafo_materias))
+    print(orden_dfs(grafo_materias))
