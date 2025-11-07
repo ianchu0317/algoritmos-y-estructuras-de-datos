@@ -1,5 +1,6 @@
 from grafos import Grafo
 from tdas.heap import Heap
+from tdas.union_find import UnionFind
 import random
 
 
@@ -54,6 +55,45 @@ def mst_prim(grafo: Grafo) -> Grafo:
     return arbol
 
 
+"""
+Algoritmo de Kruskal
+- Crear estructuras auxiliares (arbol, conjuntos, aristas)
+- Obtener todos los aristas del arbol O(V + E)
+- Ordenar aristas
+- Para cada aristas ordenada:
+    - Si esa arista que une v a w ya están unidas: pasar
+    - Sino: unirlas y agregar arista al arbol
+- Devolver arbol
+"""
+
+def mst_kruskal(grafo: Grafo) -> Grafo:
+    # Crear estructuras auxiliares
+    arbol = Grafo(False)
+    union = UnionFind(grafo.obtener_vertices())
+    aristas = sorted(obtener_aristas(grafo), key=lambda a: a[2])
+    
+    # Poner vertices de grafo original a arbol
+    for v in grafo.obtener_vertices():
+        arbol.agregar_vertice(v)
+        
+    # Ir por cada arista e insertar en nuevo arbol si no son conexo
+    for v, w, peso in aristas:
+        if union.find(v) != union.find(w):
+            arbol.agregar_arista(v, w, peso)
+            union.union(v, w)
+    
+    return arbol
+
+
+def obtener_aristas(grafo: Grafo) -> list:
+    aristas = []
+    visitados = set()
+    for v in grafo.obtener_vertices():
+        for w, peso in grafo.adyacentes(v):
+            if w not in visitados:
+                aristas.append((v, w, peso))                
+    return aristas
+
 
 # Crear Arbol de prueba
 
@@ -85,3 +125,6 @@ if __name__ == '__main__':
     
     grafo_mst_prim = mst_prim(grafo_mst)
     print(grafo_mst_prim.adyacentes("F"))
+    
+    grafo_mst_kruskal = mst_kruskal(grafo_mst)
+    print(grafo_mst_kruskal.adyacentes("F"))
