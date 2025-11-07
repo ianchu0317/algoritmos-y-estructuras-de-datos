@@ -55,3 +55,28 @@ def dijkstra(grafo: Grafo, v):
     return distancias, padres
 
 
+
+"""
+Grafo de ejemplo imagenes/distancias_ejemplo
+"""
+def crear_grafo() -> Grafo:
+    grafo = Grafo(False)
+    
+    for x in range(7):
+        grafo.agregar_vertice(x)
+        
+    grafo.agregar_arista(0,1,2)
+    grafo.agregar_arista(0,2, 6)
+    grafo.agregar_arista(1,3,5)
+    grafo.agregar_arista(2, 3, 8)
+    grafo.agregar_arista(3, 5, 15)
+    grafo.agregar_arista(3, 4, 10)
+    grafo.agregar_arista(4, 6, 2)
+    grafo.agregar_arista(5, 6, 6)
+    
+    return grafo
+
+if __name__ == '__main__':
+    grafo = crear_grafo()
+    dist_dijkstra, padres_dikstra = dijkstra(grafo, 0)
+    print(dist_dijkstra)
