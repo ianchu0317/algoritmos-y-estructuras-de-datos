@@ -63,13 +63,13 @@ class Heap:
     def cantidad(self):
         return len(self.datos)
     
-    def apilar(self, elem):
+    def encolar(self, elem):
         if not self.max_heap:
             heapq.heappush(self.datos, elem)
     
-    def desapilar(self):
+    def desencolar(self):
         if not self.max_heap:
-            return heapq.heappop()
+            return heapq.heappop(self.datos)
 
 
 
@@ -97,3 +97,9 @@ class UnionFind:
         otro = self.find(v)
         self.grupos[otro] = nuevo_grupo
     
+if __name__ == '__main__':
+    h = Heap()
+    h.encolar(3)
+    h.encolar(1)
+    print(h.desencolar())
+    print(h.desencolar())
