@@ -54,6 +54,50 @@ def dijkstra(grafo: Grafo, v):
         visitados.add(v)
     return distancias, padres
 
+"""
+# Algoritmo Bellman-Ford
+- Inicializar estructuras a utilizar: padres, distancias
+- Inicializar distancias: todos en infinito menos el primer elemento
+- Obtener vertices
+
+Repetir v - 1 veces:
+    - Para cada arista (v, w, peso) de ese vertice:
+        - si la distancia es menor a distancia actual: -> if dist[v] + peso_vw < dist[w]
+            - actualizar padres + distancia
+- devolver distancias, padres
+
+Complejidad O(v + e) + O(V*E)
+"""
+
+def bellman_ford(grafo: Grafo, v):
+    distancias = dict()
+    padres = dict()
+    aristas = obtener_aristas(grafo)
+    
+    for w in grafo.obtener_vertices():
+        distancias[w] = float('inf')
+    distancias[v] = 0
+    padres[v] = None
+    
+    for _ in range(grafo.obtener_cantidad() - 1):
+        for a in aristas:
+            v, w, dist_vw = a
+            if distancias[v] + dist_vw < distancias[w]: 
+                distancias[w] = distancias[v] + dist_vw
+                padres[w] = v
+                
+    return distancias, padres        
+
+
+def obtener_aristas(grafo: Grafo) -> list:
+    aristas = []
+    visitados = set()
+    for v in grafo.obtener_vertices():
+        for w, peso in grafo.adyacentes(v):
+            if w not in visitados:
+                aristas.append((v, w, peso))
+        visitados.add(v)
+    return aristas
 
 
 """
@@ -79,4 +123,6 @@ def crear_grafo() -> Grafo:
 if __name__ == '__main__':
     grafo = crear_grafo()
     dist_dijkstra, padres_dikstra = dijkstra(grafo, 0)
-    print(dist_dijkstra)
+    print(dist_dijkstra, padres_dikstra)
+    dist_bellmanford, padres_bellmanford = bellman_ford(grafo, 0)
+    print(dist_bellmanford, padres_bellmanford)
