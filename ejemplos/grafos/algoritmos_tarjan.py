@@ -1,5 +1,5 @@
 from grafos import Grafo
-
+from tdas.pila import Pila
 
 """
 Algoritmo de Tarjan: 
@@ -63,6 +63,66 @@ def dfs_puntos_articulacion(v, grafo: Grafo, pt_a: set, visitados: set, padres: 
         elif w != padres[v]:
             mas_bajo[v] = min(mas_bajo[w], orden[v])
 
+
+
+"""
+Tarjan CFS
+- Inicializar estructuras auxiliares 
+- DFS
+    - Inicializar variables auxiliares a utilizar
+    - Llamada recursiva para cada vertice adyacente si no es visitado
+    - Si fue visitado (apilado), entonces me quedo con su orden(v) -> mas_bajo[v] = min(mas_bajo[v], orden(w))
+    - Cierre de cfs desapilar todo y agregar a lista de componentes
+
+Sirve para detectar componentes fuertemente conexos O(V + E) ya que utliza dfs normal
+"""
+
+def tarjan_cfs(grafo: Grafo):
+    cfcs = []
+    visitados = set()
+    contador_orden = [0]
+    pila = Pila()
+    apilados = set()
+    orden = dict()
+    mas_bajo = dict()
+    
+    for v in grafo.obtener_vertices():
+        if v not in visitados:
+            dfs_cfcs_tarjan(v, grafo, cfcs, visitados, pila, apilados, orden, mas_bajo, contador_orden)
+    return cfcs 
+
+def dfs_cfcs_tarjan(v, grafo: Grafo, cfcs: list, visitados: set, pila: Pila, apilados: set, orden: dict, mas_bajo: dict, contador_orden: list):
+    # Actualizar variables del vertice actual
+    # Actualizar orden
+    orden[v] = mas_bajo[v] = contador_orden[0]
+    contador_orden[0] += 1
+    # Marcar como visitado
+    visitados.add(v)
+    # Apilar a la pila
+    pila.apilar(v)
+    apilados.add(v)
+
+    for w, _ in grafo.adyacentes(v):
+        if w not in visitados:
+            dfs_cfcs_tarjan(w, grafo, cfcs, visitados, pila, apilados, orden, mas_bajo, contador_orden)
+            mas_bajo[v] = min(mas_bajo[w], orden[v])
+        elif w in apilados:
+            # Para evitar rearmar camino, esta operacion hace que mas_bajo[v] != orden[v]
+            mas_bajo[v] = min(mas_bajo[v], orden[w])
+        
+    # Rearmar camino "volver al inicio de su ciclo"
+    if orden[v] == mas_bajo[v]:
+        cfc = []
+        while True:
+            w = pila.desapilar()
+            apilados.remove(w)
+            cfc.append(w)
+            if w == v:
+                break        
+        cfcs.append(cfc)
+            
+
+# Funciones auxiliares
 def crear_grafo_pto_articulacion():
     grafo = Grafo(False)
     
@@ -81,9 +141,25 @@ def crear_grafo_pto_articulacion():
     return grafo
 
 def crear_grafo_cfc():
-    pass
+    grafo = Grafo(True)
+        
+    grafo.agregar_vertice("A")
+    grafo.agregar_vertice("B") 
+    grafo.agregar_vertice("C")
+    grafo.agregar_vertice("D")
+    grafo.agregar_vertice("E")
+    
+    grafo.agregar_arista("A", "B")
+    grafo.agregar_arista("B", "C") 
+    grafo.agregar_arista("C", "A")  # Ciclo A-B-C-A
+    grafo.agregar_arista("B", "D")
+    grafo.agregar_arista("D", "E")
+    
+    return grafo
 
 
 if __name__ == '__main__':
     grafo_pt_a = crear_grafo_pto_articulacion()
     print(tarjan_puntos_articulacion(grafo_pt_a))
+    grafo_cfs = crear_grafo_cfc()
+    print(tarjan_cfs(grafo_cfs))
