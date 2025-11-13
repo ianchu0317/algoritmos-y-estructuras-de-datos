@@ -43,15 +43,14 @@ def dijkstra(grafo: Grafo, v):
 
         if v in visitados:
             continue
+        visitados.add(v)
 
         for w, dist in grafo.adyacentes(v):
-            if w not in visitados:
-                nueva_distancia = distancias[v] + dist 
-                if distancias[w] == None or distancias[w] > nueva_distancia:
-                    distancias[w] = nueva_distancia
-                    padres[w] = v
-                    heap.encolar((nueva_distancia, w))
-        visitados.add(v)
+            nueva_distancia = distancias[v] + dist 
+            if distancias[w] == None or distancias[w] > nueva_distancia:
+                distancias[w] = nueva_distancia
+                padres[w] = v
+                heap.encolar((nueva_distancia, w))
     return distancias, padres
 
 """
