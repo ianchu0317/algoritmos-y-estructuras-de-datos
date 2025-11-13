@@ -13,33 +13,37 @@ def hay_ciclo(grafo: Grafo) -> list:
     # Estructuras auxiliares 
     padres = dict()
     visitados = set()
-    # Elegir un vertice random (como es no dirigido no importa)
-    v = random.choice(grafo.obtener_vertices())
-    padres[v] = ""
-    visitados.add(v)
     
-    # Reconstruir camino si hay ciclo
-    hay_ciclo, w = _dfs_hay_ciclo(v, grafo, padres, visitados)
-    if hay_ciclo:
-        return reconstruir_camino(w, padres)
+    # Elegir un vertice random (como es no dirigido no importa) 
+    #    -> realizar para todos los vertices del grafo (por si hay componente no conexo)
+    for v in grafo:
+        if v not in visitados:
+            padres[v] = None
+            visitados.add(v)
+            hay_ciclo, inicio, fin = _dfs_hay_ciclo(v, grafo, padres, visitados)
+            if hay_ciclo:
+                return reconstruir_camino(padres, inicio, fin)
     return None
 
-def _dfs_hay_ciclo(v: str, grafo: Grafo, padres: dict, visitados: set) -> tuple[bool, str]:
+def _dfs_hay_ciclo(v: str, grafo: Grafo, padres: dict, visitados: set):
     for w in grafo.adyacentes(v):
         if w not in visitados:
             visitados.add(w)
             padres[w] = v
-            _dfs_hay_ciclo(v, grafo, padres, visitados)
+            resultado = _dfs_hay_ciclo(w, grafo, padres, visitados)
+            if resultado[0]:
+                return resultado
         elif w != padres[v]:
-            return True, v
-    return False, ""
+            return True, v, w
+    return False, None, None
 
 
-def reconstruir_camino(v: str, padres: dict) -> list:
+def reconstruir_camino(padres: dict, inicio, fin) -> list:
     camino = []
-    while v != "":
-        camino.append(v)
-        v = padres[v]
+    camino.append(inicio)
+    while inicio != fin:
+        inicio = padres[inicio]
+        camino.append(inicio)
     return camino
 
 
@@ -197,3 +201,4 @@ def cantidad_depredadores(ecosistema: Grafo) -> dict:
         for presa, _ in ecosistema.adyacentes(animal):
             depredadores[presa] += 1
     return depredadores
+
