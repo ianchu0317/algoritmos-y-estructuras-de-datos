@@ -1,4 +1,5 @@
 from grafos import Grafo
+from tdas.cola import Cola
 import random
 
 """
@@ -40,3 +41,61 @@ def reconstruir_camino(v: str, padres: dict) -> list:
         camino.append(v)
         v = padres[v]
     return camino
+
+
+"""
+Ejercicio 15:
+Un autor decidió escribir un libro con varias tramas que se puede leer de forma no lineal. 
+Es decir, por ejemplo, después del capítulo 1 puede leer el 2 o el 73; 
+pero la historia no tiene sentido si se abordan estos últimos antes que el 1.
+
+Siendo un aficionado de la computación, el autor ahora necesita un orden para publicar su obra, 
+y decidió modelar este problema como un grafo dirigido, en dónde los capítulos son los vértices 
+y sus dependencias las aristas. Así existen, por ejemplo, las aristas (v1, v2) y (v1, v73).
+
+Escribir un algoritmo que devuelva un orden en el que se puede leer la historia sin obviar ningún capítulo. 
+Indicar la complejidad del algoritmo.
+"""
+
+def orden_lectura(libro: Grafo) -> list:
+    """
+    orden_lectura() toma un libro y devuelve una lista [v1, v2, v3, ... v_n]
+    
+    Ya que el grafo es dirigido, donde cada vertice es un capitulo y las aristas son las dependencias,
+    la idea es realizar un recorrido topológico. Para mi approach prefiero bfs topológico:
+        - Contar grados de entradas de cada capitulo (la cantidad de capitulos dependentientes de cada) O(v + e)
+        - Encolar los capitulos que no dependen de nadie. O(v) -> todos los vertices en el peor caso
+        - Mientras haya elementos pendientes en la cola O(v + E):
+            - Restar los adyacentes y encolarlos si ya no dependen de nadie
+            - Agregar la lista el capitulo actual
+        - Devolver la lista de orden
+    Complejidad: O(v + e)
+    """
+    grado = calcular_dependencia_capitulo(libro)
+    cola = Cola()
+    
+    for v in libro.obtener_vertices():
+        if grado[v] == 0:
+            cola.encolar(v)
+    
+    orden_capitulos = []
+    while not cola.esta_vacia():
+        v = cola.desencolar()
+        for w, _ in libro.adyacentes(v):
+            grado[w] -= 1
+            if grado[w] == 0:
+                cola.encolar(w)
+        orden_capitulos.append(v)
+        
+    return orden_capitulos
+
+
+def calcular_dependencia_capitulo(grafo: Grafo) -> dict:
+    grado = dict()
+    for v in grafo.obtener_vertices():
+        grado[v] = 0 
+    for v in grafo.obtener_vertices():
+        for w, _ in grafo.adyacentes(v):
+            grado[w] += 1
+    return grado
+
