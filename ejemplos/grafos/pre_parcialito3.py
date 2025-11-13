@@ -85,6 +85,7 @@ def reconstruir_camino(padres, a, b):
         camino.append(b)
     return reversed(camino)
 
+
 """
 Ejercicio 3:
 Implementar un algoritmo que reciba un grafo no dirigido y determine
@@ -93,6 +94,24 @@ que hay en el mismo.
 
 Indicar y justificar la complejidad del algoritmo implementeado.
 """
+def ejercicio_3(grafo: Grafo) -> int:
+    """
+    La idea para este ejercicio es iterar por cada componente:
+        Para cada componente:
+            DFS
+            - Calcular la cantidad de vertices totales
+            - Calcular la cantidad de aristas totales
+            Calcular aristas maximos disponibles para componente = v*(v-1)/2 - aristas_componente
+    return aristas_maximos_disponibles
+    """
+
+    visitados = set()
+    cant_max_aristas = 0
+    for v in grafo:
+        if v not in visitados:
+            componente = set()
+            
+    return cant_max_aristas
 
 """
 Ejercicio 4:
