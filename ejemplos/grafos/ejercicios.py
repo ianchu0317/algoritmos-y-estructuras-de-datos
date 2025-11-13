@@ -133,3 +133,67 @@ def calc_g_entrada_no_dirigido(grafo: Grafo) -> dict:
         # Calcular cantidad de aristas O(v)
         grados[v] = len(grafo.adyacentes(v))
     return grados
+
+
+
+"""
+Ejercicio 21:
+Contamos con un grafo dirigido que modela un ecosistema. 
+En dicho grafo, cada vértice es una especie, y cada arista (v, w) indica que v es depredador natural de w. 
+
+Considerando la horrible tendencia del ser humano por llevar a la extinción especies, 
+algo que nos puede interesar es saber si existe alguna especie que, si llegara a desaparecer, 
+rompería todo el ecosistema: quienes la depredan no tienen un sustituto (y, por ende, pueden desaparecer también) 
+y/o quienes eran depredados por esta ya no tienen amenazas, por lo que crecerán descontroladamente. 
+
+Implementar un algoritmo que reciba un grafo de dichas características 
+y devuelva una lista de todas las especies que cumplan lo antes mencionado. 
+
+Indicar y justificar la complejidad del algoritmo implementado.
+"""
+
+
+def especies_ecosistema(ecosistema: Grafo) -> set:
+    """
+    especies_ecosistema devuelve una lista de especies a tener en cuenta
+
+    los puntos claves del enunciado son:
+        - Si un depredador solo tiene una presa, entonces presa es importante 
+            -> si v solo tiene 1 grado salida, entonces w es importante 
+        - Si una presa solo tiene un depredador, entonces depredador es importante
+            -> si w solo tiene 1 grado entrada, entonces v es importante
+    
+    Pasos:
+        - calcular grados de entrada O(v + e) y salida O(v + e) de cada vertice
+        - Iterar cada vertice y sus adyacentes para chequear condiciones O(v + e)
+        - Devolver resultado O(1)
+    Complejidad O(v + e)
+    """
+    
+    depredadores = cantidad_depredadores(ecosistema)
+    presas = cantidad_presas(ecosistema)
+    especies = set()
+    
+    for animal in ecosistema.obtener_vertices():
+        for presa, _ in ecosistema.adyacentes(animal):
+            if presas[animal] == 1:
+                especies.add(presa)
+            if depredadores[presa] == 1:
+                especies.add(animal)
+    
+    return especies
+
+def cantidad_presas(ecosistema: Grafo) -> dict:
+    presas = dict()
+    for animal in ecosistema.obtener_vertices():
+        presas[animal] = len(ecosistema.adyacentes(animal))
+    return presas
+
+def cantidad_depredadores(ecosistema: Grafo) -> dict:
+    depredadores = dict()
+    for animal in ecosistema.obtener_vertices():
+        depredadores[animal] = 0
+    for animal in ecosistema.obtener_vertices():
+        for presa, _ in ecosistema.adyacentes(animal):
+            depredadores[presa] += 1
+    return depredadores
