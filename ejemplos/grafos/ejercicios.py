@@ -202,3 +202,54 @@ def cantidad_depredadores(ecosistema: Grafo) -> dict:
             depredadores[presa] += 1
     return depredadores
 
+
+
+"""
+Ejercicio 23:
+El diámetro de una red es el máximo de las distancias mínimas entre todos los vértices de la misma. 
+Implementar un algoritmo que permita obtener el diámetro de una red, para el caso de un grafo no dirigido y no pesado.
+
+Indicar el orden del algoritmo propuesto.
+"""
+def obtener_diametro(grafo: Grafo) -> int:
+    """
+    devolver diametro de un grafo (no dirigido y no pesado)
+    
+    Para cada vertice hallar la mayor distancia minima
+    -> para cada v vertices realizar bfs para hallar el maximo distancia minimo de ese vertice a otros
+    Para los valores hallados de esos hallar el maximo.
+    
+    Complejidad V * O(v + e) = O(v² + v*e)
+    """
+    
+    diametro = 0
+    
+    for v in grafo.obtener_vertices():
+        max_distancia_v = bfs_distancia_max(v, grafo)
+        if max_distancia_v > diametro:
+            diametro = max_distancia_v
+        
+    return diametro
+
+def bfs_distancia_max(v, grafo) -> int:
+    cola = Cola()
+    visitados = set()
+    distancias = dict()
+    
+    cola.encolar(v)
+    visitados.add(v)
+    distancias[v] = 0
+    max_dist = 0
+    
+    while len(cola) > 0:
+        v = cola.desencolar()
+        
+        for w, _ in grafo.adyacentes(v):
+            if w not in visitados:
+                visitados.add(w)
+                cola.encolar(w)
+                distancias[w] = distancias[v] + 1
+                if distancias[w] > max_dist:
+                    max_dist = distancias[w]
+                    
+    return max_dist
