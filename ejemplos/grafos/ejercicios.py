@@ -99,3 +99,37 @@ def calcular_dependencia_capitulo(grafo: Grafo) -> dict:
             grado[w] += 1
     return grado
 
+
+"""
+Ejercicio 17: Implementar una función que reciba un grafo no dirigido, y que compruebe la siguiente afirmación: 
+“La cantidad de vértices de grado IMPAR es PAR”. 
+Indicar y justificar el orden del algoritmo si el grafo está implementado como matriz de adyacencia.
+"""
+
+def comprobar_afirmacion(grafo: Grafo) -> bool:
+    """
+    comprobar_afirmacion(grafo) toma un grafo y comprueba si cumple "La cantidad de vertices de grado impar es par"
+    
+    Para resolver primero calculamos el grado de cada vertice O(V²), 
+    luego iteramos cada vertice contando la cantidad de vertices con grado impar. O(v)
+    Finalmente devolvemos el booleano con la afirmacion -> True si es afirmativo, False si es Falso
+    
+    La complejidad final es O(v²)
+    """
+    grados = calc_g_entrada_no_dirigido(grafo)  #  O(v²)
+    cantidad_v_grado_impar = 0
+    
+    # Iterar para cada vertice O(v)
+    for v in grafo.obtener_vertices():
+        if grados[v] % 2 == 1:
+            cantidad_v_grado_impar += 1
+    
+    return cantidad_v_grado_impar % 2 == 0
+
+def calc_g_entrada_no_dirigido(grafo: Grafo) -> dict:
+    grados = dict()
+    # Iterar para cada vertice O(v)
+    for v in grafo.obtener_vertices():
+        # Calcular cantidad de aristas O(v)
+        grados[v] = len(grafo.adyacentes(v))
+    return grados
