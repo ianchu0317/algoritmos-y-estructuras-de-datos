@@ -253,3 +253,71 @@ def bfs_distancia_max(v, grafo) -> int:
                     max_dist = distancias[w]
                     
     return max_dist
+
+
+"""
+Ejercicio 32:
+Se tiene un Grafo no dirigido G, y un árbol de tendido mínimo T, de G. 
+Se obtiene una de las aristas de G, que no se encuentra en T, y se le reduce el peso. 
+Dar un algoritmo lineal que permita determinar el nuevo árbol de tendido mínimo T'
+(notar que T' podría ser igual a T). 
+
+Justificar la complejidad del algoritmo.
+"""
+
+def obtener_mst_arista_nueva(mst: Grafo, nueva_arista):
+    """
+    Como es mst, una propiedad es que hay un solo camino de un vertice a otro.
+    Si agrego otro awrista (v, w, peso_vw) entonces hay un nuevo camino a v->w y genera un ciclo.
+    La idea entonces es eliminar al arista con mayor distancia de ese ciclo.
+    
+    Sin agregar el nuevo vertice todavía, hacer un bfs de v->w,
+    y si en ese camino hay algun arista con peso mayor a nuevo_peso entonces peso=nuevo_peso y listo
+    
+    La complejidad queda lineal ya que es un BFS normal. 
+    En el peor de los casos se visitan todos los vertices y aristas así que es O(V + E)
+    
+    
+    ** Procedimiento ** 
+    - BFS hasta encontrar arista con peso mayor al peso de nuevo arista en camiono de v->w
+    - Si hay, borrar ese vertice y agregar el nuevo
+    - Si no hay, devolver mst normal
+    """
+    
+    v, w, nuevo_peso = nueva_arista
+    v_max, w_max = buscar_arista_con_peso_mayor(v, w, nuevo_peso, mst)
+    nuevo_mst = mst
+    
+    if v_max:
+        nuevo_mst.borrar_arista(v_max, w_max)
+        nuevo_mst.agregar_arista(v, w, nuevo_peso)
+    
+    return nuevo_mst
+    
+
+def buscar_arista_con_peso_mayor(origen, destino, nuevo_peso, grafo: Grafo):
+    v_max = None
+    w_max = None
+    cola = Cola()
+    visitados = set()
+    
+    peso_max = nuevo_peso
+    cola.encolar(origen)
+    visitados.add(origen)
+    
+    while not cola.esta_vacia():
+        v = cola.desencolar()
+        
+        if v == destino:
+            return v_max, w_max
+        
+        for w, peso_vw in grafo.adyacentes(v):
+            if w not in visitados:
+                cola.encolar(w)
+                visitados.add(w)
+                if peso_vw > peso_max:
+                    peso_max = peso_vw
+                    v_max = v
+                    w_max = w
+                
+    return v_max, w_max
