@@ -129,7 +129,7 @@ def ejercicio_3(grafo: Grafo) -> int:
     """
     La idea para este ejercicio es iterar por cada componente:
         Para cada componente:
-            DFS
+            Recorrer la compoentne ya sea con BFS, DFS O(v + e)
             - Calcular la cantidad de vertices totales
             - Calcular la cantidad de aristas totales
             Calcular aristas maximos disponibles para componente = v*(v-1)/2 - aristas_componente
@@ -140,10 +140,32 @@ def ejercicio_3(grafo: Grafo) -> int:
     cant_max_aristas = 0
     for v in grafo:
         if v not in visitados:
-            componente = set()
-            
+            cant_max_aristas += bfs_hallar_max_aristas(v, grafo, visitados)
     return cant_max_aristas
 
+def bfs_hallar_max_aristas(v, grafo: Grafo, visitados: set):
+    cola = Cola()
+    vertices = 0
+    aristas = 0
+    
+    visitados.add(v)
+    cola.encolar(v)
+
+    while not cola.esta_vacia():
+        v = cola.desencolar()
+        vertices += 1
+            
+        for w in grafo.adyacentes(v):
+            aristas += 1
+            if w not in visitados:
+                cola.encolar(w)
+                visitados.add(w)
+    
+    aristas //= 2
+    return (vertices * (vertices - 1)//2) - aristas
+        
+    
+    
 """
 Ejercicio 4:
 Implementar un algoritmo que, dado un grafo pesado 8con pesos positivos, un vértice v, y otro w,
