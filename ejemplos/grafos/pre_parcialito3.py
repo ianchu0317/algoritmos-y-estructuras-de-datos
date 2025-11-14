@@ -1,5 +1,6 @@
 from grafos import Grafo
 from tdas.heap import Heap
+from tdas.cola import Cola
 
 """
 Ejercicio 1: 
@@ -12,9 +13,39 @@ Indicar compeljidad de la funcion.
 def ejercicio_1(grafo: Grafo):
     """
     El punto clave en este ejercicio es ver que para que haya un solo orden topologico,
-    Tiene que ser una lista
+    al iterarlo como orden topológico, la estructura auxiliar (pila/cola) debe tener un solo elemento.
+    Si no verifica eso devolver False, sino True.
+    
+    Como es un orden topológico normal, la complejidad queda O(v + e)
     """
-    pass
+    cola = Cola()
+    g_entrada = grados_entrada(grafo)
+    
+    for v in grafo:
+        if g_entrada[v] == 0:
+            cola.encolar(v)
+    
+    while not cola.esta_vacia():
+        v = cola.desencolar()
+    
+        if not cola.esta_vacia():
+            return False
+    
+        for w in grafo.adyacentes(v):
+            g_entrada[w] -= 1
+            if g_entrada[w] == 0:
+                cola.encolar(w)
+
+    return True
+
+def grados_entrada(grafo: Grafo):
+    grados = dict()
+    for v in grafo:
+        grados[v] = 0
+    for v in grafo:
+        for w in grafo.adyacentes(v):
+            grados[w] += 1
+    return grados
 
 
 """
