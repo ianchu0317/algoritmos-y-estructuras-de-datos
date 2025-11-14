@@ -396,3 +396,75 @@ def obtener_aristas_disponibles(grilla: dict, grafo: Grafo):
     return aristas
 
 
+
+"""
+EJERCICIO 34:
+
+Daniel está a punto de casarse y tiene un problema: 
+gastó casi todo su dinero en la luna de miel. 
+Contrató un salón para la fiesta donde sólo hay 2 mesas (muy, muy grandes, pero 2 en fin). 
+Debe repartir a los n invitados entre las dos mesas, y su esposo le indicó una condición: 
+en cada mesa debe sentarse gente que se lleve bien entre todos ellos. 
+Daniel cuenta con la información de quién se lleva bien con quién, 
+y necesita poder determinar si hay alguna forma de separar en dos grupos de gente donde en cada grupo 
+todos se lleven bien entre sí.
+
+a. Modelar este problema utilizando grafos, indicando claramente qué son los vértices y qué las aristas.
+
+b. Implementar un algoritmo que reciba un grafo como el modelado en el punto (a) 
+y devuelva ambos grupos de personas. Indicar y justificar la complejidad del algoritmo implementado.
+
+IMPORTANTE: tener en cuenta que resolver el problema de forma directa puede ser difícil.
+Recomendamos plantearse el problema inverso: 
+poder separar en dos grupos tal que en ningúno de los grupos haya un par que no se lleven bien.
+"""
+
+def organizar_mesas(grafo: Grafo):
+    """
+    **Modelacion**
+    El grafo modelado es un grafo no dirigido:
+    Vertice: personas invitadas
+    aristas: Quien no se lleva bien con quien
+    
+    Entonces por ejemplo 
+    P1 no se lleva bien con p2 => arista(p1, p2)
+    
+    Con este modelado cada conjunto bipartito seria una mesa.
+    
+    **PASOS**
+    Utilizar un dfs para pintar cada conjunto
+    
+    **COmplejidad**
+    Como es un dfs la complejidad es O(v +e) quie en este caso seria O(personas + relaciones malas)
+    En el peor de los casos todos van en la mesa 1 si e es 0, osea si nadie se llva mal con nadie 
+    y hay v conjuntos conexos
+    """
+    conj_1 = set()
+    conj_2 = set()
+    visitados = set()
+    
+    for v in grafo:
+        if v not in visitados:
+            visitados.add(v)
+            conj_1.add(v)
+            if not dfs_hallar_conjuntos(v, grafo, conj_1, conj_2, visitados):
+                return False
+    return conj_1, conj_2
+
+def dfs_hallar_conjuntos(v, grafo: Grafo, conj_1: set, conj_2: set, visitados: set):
+    for w in grafo.adyacentes(v):
+        if w not in visitados:
+            visitados.add(w)
+            if v in conj_1:
+                conj_2.add(w)
+            else:
+                conj_1.add(w)
+            if not dfs_hallar_conjuntos(w, grafo, conj_1, conj_2, visitados):
+                return False            
+        # Caso hipotetico de que no se puede armar mesas
+        else:
+            if v in conj_1 and w in conj_1:
+                return False
+            elif v in conj_2 and w in conj_2:
+                return False
+    return True
