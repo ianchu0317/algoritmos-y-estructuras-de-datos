@@ -468,3 +468,36 @@ def dfs_hallar_conjuntos(v, grafo: Grafo, conj_1: set, conj_2: set, visitados: s
             elif v in conj_2 and w in conj_2:
                 return False
     return True
+
+
+"""
+Ejercicio 35:
+Implementar un algoritmo que reciba un grafo no dirigido 
+y determine la cantidad mínima de aristas que debería agregársele para que el grafo sea conexo.
+Obviamente, si el grafo ya es conexo el algoritmo debe devolver 0. 
+Indicar y justificar la complejidad del algoritmo implementado.
+"""
+
+def calcular_min_aristas_grafo_conexo(grafo: Grafo):
+    """
+    La idea es calcular la cantidad de componentes conexos en un grafo no dirigido.
+    Y la cantidad de aristas a agregar es Componentes - 1.
+    Es como el caso de un arbol E = V - 1.
+    
+    Complejidad O(v + e) utilizo un dfs
+    """
+    
+    visitados = set()
+    comp_conexo = 0
+    for v in grafo:
+        if v not in visitados:
+            visitados.add(v)
+            _dfs(v, grafo, visitados)
+            comp_conexo += 1
+    return comp_conexo - 1
+            
+def _dfs(v, grafo: Grafo, visitados: set):
+    for w in grafo.adyacentes(v):
+        if w not in visitados:
+            visitados.add(w)
+            _dfs(w, grafo, visitados)
