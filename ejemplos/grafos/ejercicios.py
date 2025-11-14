@@ -321,3 +321,78 @@ def buscar_arista_con_peso_mayor(origen, destino, nuevo_peso, grafo: Grafo):
                     w_max = w
                 
     return v_max, w_max
+
+
+"""
+Ejercicio 33: 
+Como todos sabemos, Taller de Programación I implica programar mucho. 
+El equipo de Federico esta desarrollando un Age of Empires y le asignaron el modulo de movimientos. 
+Dispone de un mapa, podríamos decir una grilla, donde se puede ver para cada celda su contenido 
+(por ejemplo si está libre, si es agua, un árbol, etc). Fede tiene que implementar un algoritmo que, 
+a partir de una unidad (por ejemplo un soldado), en una celda en especifico encuentre el camino a una celda objetivo. 
+Considerar que entre celdas puede haber diferencia de alturas 
+por lo que puede costarle mas (o menos) a una unidad ir de una celda a otra. 
+Por supuesto que no puede ser cualquier camino, si no el que haga que la unidad llegue más rápido a su objetivo.
+
+a. Modelar el problema usando Grafos especificando de forma completa todos sus componentes.
+
+b. Implementar un algoritmo que a partir de una celda de origen y una de destino, 
+retorne el camino que tiene que hacer la unidad, indicando y justificando la complejidad final.
+"""
+
+def camino_rapido(grilla: dict, grafo: Grafo, origen, destino):
+    """
+    Como el enunciado ya menciona camino, entonces la idea es buscar el camino rapido: caminos minimos.
+    Luego el dato menciona que puede costar más (pesos positivos) o costar menos (pesos negativos).
+    Teniendo esto en cuenta, podemos saber más o menos que se trata de Bellman ford el algoritmo a implementar
+    
+    **Modelacion**
+    Para modelar esto sabemos que cada celda esta conctada a otra celda por medio de caminos, entonces:
+    Vertices: Celdas del mapa
+    Aristas: Caminos que conectan distintas celdas
+    PEso de arista: Costo de recorrer el camino para ir de una celda a otra
+    
+    **Pasos**
+    - Obtener aristas disponibles O(v + e)
+    - Bellman ford con las aristas disponibles "LIBRES" O(v * e)
+    - Reconstruir camino O(E)
+    
+    La complejidad final es:
+    O((v-1)*e) = O(v*e), que en terminos de la modelacion sería
+    O(celdas*caminos)
+    
+    -> CAMBIAR MODELADO POR DIJKSTRA, donde PESOS SON TRIEMPO DE RECORRER CAMINO >0
+    (me da fiaca cambiar)
+    """
+    
+    aristas = obtener_aristas_disponibles(grilla, grafo)
+    dist = dict()
+    padres = dict()
+
+    for v in grafo:
+        dist[v] = float('inf')
+    dist[origen] = 0
+    padres[origen] = None
+    
+    for _ in range(grafo.cantidad() - 1):
+        for arista in aristas:
+            v, w, peso_vw = arista
+            nueva_dist = dist[v] + peso_vw
+            if nueva_dist < dist[w]:
+                dist[w] = nueva_dist
+                padres[w] = v
+    
+    return reconstruir_camino(padres, origen, destino)
+            
+    
+
+def obtener_aristas_disponibles(grilla: dict, grafo: Grafo):
+    aristas = []
+    for v in grafo:
+        if grilla[v] == "LIBRE":
+            for w in grafo.adyacentes(v):
+                if grilla[w] == "LIBRE":
+                    aristas.append((v, w, grafo.peso(v, w)))
+    return aristas
+
+
