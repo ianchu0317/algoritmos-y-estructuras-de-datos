@@ -220,3 +220,82 @@ def ejercicio_4(grafo: Grafo, a, b) -> int:
                 caminos[w] += caminos[v]
     # Si llega acá es que nunca encontró a B
     return 0
+
+
+"""
+Ejercicio 5
+Adam es un historiador que está analizando los datos de entrevistas realizadas a mienmbros de una aldea cercana al mar Báltico.
+Con estas recopilaciones busca aprender sobre personas que vivieron allí por los últimos 200 años. 
+De las entrevistas escuchó cosas sobre n personas a quienes llamaremos P1, P2, ... Pn. 
+También pudo obtener información sobre cuadno estas personas vivieron, en relacion a otras. Se tienen datos de forma:
+- Para algun i y algun j, P_i fallecio antes que P_j haya nacido
+- Para algun i y algun j, hubo algun momento en el cual P_i y P_j estuvieron vivos al mismo tiempo.
+
+Como es de esperar, a veces las historias pueden haber algunas inconsistencias. 
+Adam necesita de un algoritmo que determine si la informacion recolectada es al menos consistente.
+Es decir, hay algun orden valido en el que los eventos (nacimientos y fallecimientos) pudieran haberse dado?
+
+Modelar el problema utilizando lo visto sobre grafos.
+Implementar un afuncion que reciba un grafo que hayas modelado, que determine si m datos recpilados son consistentes.
+
+Indicar y justificar la complejdiad del algoritmo implementado (en función de las variables del problema)
+
+Pista: pensar que el nacimiento de una persona, y su fallecimiento son eventos por separado
+"""
+
+def ejercicio_5(grafo: Grafo):
+    """
+    Acá hay dos partes principales: modelado y funcion
+    La parte de implementación es sólo orden topológico ->yua que nos pide ORDEN Válido De EVENTOS
+    
+    ****
+    Y modelado podemos pensar así:
+    Cada vértice de grafo son EVENTOS -> nacimientos y fallecimientos de personas
+    Cada arista es la precedencia de un evento a otro
+    
+    Por ende el grafo por ejemplo:
+    p1 fallecio antes que p2 naciera, entonces
+    F1 -> N2
+    
+    Y naturalemente
+    N1 -> F1, siendo n1 nacimiento de p1 y F1 fallecimiento de P1
+    
+    **Complejidad**
+    Por cada persona tengo un arista p_i -> n_i
+    Para cada enunciado de tipo "p_i faccecio antes que p_j" tengo un arista
+    Para cada enunciado de tipo "p_i y p_j convivieron en algun momento" tengo 2 aristas
+        ( Ya que p_i nacio antes que muera p_j y viceversa )
+    
+    Entonces:
+        Vertices: 2 x persona
+        Aristas: 
+            - Precedencias naturales -> 1 arista (por persona)
+            - Datos "fallecio antes" -> 1 arista
+            - Datos "Convivieron" -> 2 arista
+            -> Total aristas: Persona + Dato + 2* Dato 
+            En el peor de los casos son todos los datos convivieron
+            Así que aristas <= Persona + 2*dato
+    
+    Si mi algoritmo es de O(v + e) entonces
+    Por ende tengo O( 2 Personas +  Persona  + 2 Datos ) esto se acota a O(personas + datos)
+    """
+    
+    orden = []
+    cola = Cola()
+    g_entrada = grados_entrada(grafo)
+    
+    for v in grafo:
+        if g_entrada[v] == 0:
+            cola.encolar(v)
+    
+    while not cola.esta_vacia():
+        v = cola.desencolar()
+        orden.append(v)
+        
+        for w in grafo.adyacentes(v):
+            g_entrada[w] -= 1
+            if g_entrada[w] == 0:
+                cola.encolar(w)
+    
+    # Si tiene consistencia no tiene ciclos
+    return len(orden) == len(grafo.obtener_vertices())
