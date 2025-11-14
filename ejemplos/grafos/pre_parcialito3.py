@@ -168,9 +168,55 @@ def bfs_hallar_max_aristas(v, grafo: Grafo, visitados: set):
     
 """
 Ejercicio 4:
-Implementar un algoritmo que, dado un grafo pesado 8con pesos positivos, un vértice v, y otro w,
+Implementar un algoritmo que, dado un grafo pesado con pesos positivos, un vértice v, y otro w,
 determine la cantidad de caminos mínimos que hay de v a w dentro del grafo. Considerar que, justamente
 podrían haber varios caminos de una misma distancia, que a su vez sean la mínima. 
 
 Inidicar y justificar la complejidad del algoritmo implementado
 """
+
+def ejercicio_4(grafo: Grafo, a, b) -> int:
+    """
+    La idea en este ejercicio, como nos pide grafo PESADO con PESOS POSITIVOS y hallar CAMINO MINIMO,
+    lo primero que tenemos que pensar es en Dijkstra. Primero lo implementamos y luego realizamos el cambio.
+    
+    Observamos que si v == w entonces quiere decir que ya llegamos al destino, entonces devolver la cantidad de caminos.
+    Como se calcula un nuevo camino?
+        Cuando tenemos nueva_dist < dist[w] quiere decir que tenemos un nuevo camino mínimo para llegar a w
+            Entonces caminos[w] = 1 -> OJO la idea es ser igual la cantidad de caminos para llegar al padre
+            Entonces caminos[w] = caminos[v]
+        Pero si tenemos nueva_dist == dist[w] quiere decir que hay otro camino con misma distancia para llegar a w
+            Entonces caminos[w] += 1
+    """
+    
+    heap = Heap()
+    dist = dict()
+    visitados = set()
+    caminos = dict()
+    
+    for v in grafo:
+        dist[v] = float('inf')
+    dist[a] = 0
+    heap.encolar((a, 0))
+    caminos[a] = 1
+    
+    while not heap.esta_vacia():
+        v, _ = heap.desencolar()
+
+        if v == b:
+            return caminos[b]
+        
+        if v in visitados:
+            continue
+        visitados.add(v)    
+    
+        for w, peso_vw in grafo.adyacentes(v):
+            nueva_dist = dist[v] + peso_vw
+            if nueva_dist < dist[w]:
+                dist[w] = nueva_dist
+                heap.encolar((w, nueva_dist))
+                caminos[w] = caminos[v]
+            elif nueva_dist == dist[w]:
+                caminos[w] += caminos[v]
+    # Si llega acá es que nunca encontró a B
+    return 0
