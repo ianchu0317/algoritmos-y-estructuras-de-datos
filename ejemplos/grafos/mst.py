@@ -1,5 +1,6 @@
 from grafos import Grafo
 from tdas.heap import Heap
+from tdas.cola import Cola
 from tdas.union_find import UnionFind
 import random
 
@@ -118,7 +119,60 @@ def crear_grafo_mst() -> Grafo:
     grafo.agregar_arista("F", "D", 2)
 
     return grafo
+
+def parcialito_3() -> Grafo:
+    grafo = Grafo(False)
     
+    a = "A"
+    b = "B"
+    c = "C"
+    d = "D"
+    e = "E"
+    f = "F"
+    g = "G"
+    i = "I"
+    j = "J"
+    
+    letras = [a, b, c, d, e, f, g, i, j]
+    for l in letras:
+        grafo.agregar_vertice(l)
+    
+    grafo.agregar_arista(a, e, 1)
+    grafo.agregar_arista(a, d, 7)
+    grafo.agregar_arista(e, d, 5)
+    grafo.agregar_arista(e, f, 3)
+    grafo.agregar_arista(f, g, 4)
+    grafo.agregar_arista(e, g, 2)
+    grafo.agregar_arista(g, d, 7)
+    grafo.agregar_arista(c, d, 6)
+    grafo.agregar_arista(i, d, 6)
+    grafo.agregar_arista(g, i, 6)
+    grafo.agregar_arista(c, i, 1)
+    grafo.agregar_arista(c, j, 0)
+    grafo.agregar_arista(i, j, 2)
+
+    return grafo
+
+def imprimir_arbol_nivel(grafo: Grafo, origen):
+    cola = Cola()
+    visitados = set()
+    orden = dict()
+    
+    orden[origen] = 0
+    visitados.add(origen)
+    cola.encolar(origen)
+    
+    while not cola.esta_vacia():
+        v = cola.desencolar()
+        print(f"\nHijos de '{v}', orden: {orden[v]}")
+        for w, _ in grafo.adyacentes(v):
+            if w not in visitados:
+                print(w)
+                visitados.add(w)
+                orden[w] = orden[v] + 1
+                cola.encolar(w)
+                
+
 
 if __name__ == '__main__':
     grafo_mst = crear_grafo_mst()
@@ -128,3 +182,7 @@ if __name__ == '__main__':
     
     grafo_mst_kruskal = mst_kruskal(grafo_mst)
     print(grafo_mst_kruskal.adyacentes("F"))
+    
+    grafo_p3 = parcialito_3()
+    kruskal = mst_kruskal(grafo_p3)
+    imprimir_arbol_nivel(kruskal, "E")
