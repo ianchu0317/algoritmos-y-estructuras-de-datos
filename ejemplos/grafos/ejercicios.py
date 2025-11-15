@@ -586,6 +586,7 @@ def ej2_p3_1c2025(grafo: Grafo, k: int) -> list:
     -> Se cuenta con distancia 
     
     **Complejiad**
+    O(v²*(elog(v) + v) + klog(k))
     """
     centralidad = dict()
     for v in grafo:
