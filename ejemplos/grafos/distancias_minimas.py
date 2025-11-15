@@ -100,6 +100,72 @@ def obtener_aristas(grafo: Grafo) -> list:
 
 
 """
+Centralidad: Betweeness
+
+La centralidad de un vertice es la cantidad de veces que aparece dentro de caminos minimos en un grafo.
+
+Procedimiento:
+    - Para todos los posibles (v, w) dentro del grafo le busco el camino minimo
+        - "Reconstruiyo el camino" pero a cada vertice del medio le agrego uno a la centralidad
+"""
+
+def obtener_centralidad(grafo: Grafo) -> list:
+    centralidad = dict()
+    for v in grafo.obtener_vertices():
+        centralidad[v] = 0
+    
+    for v in grafo.obtener_vertices(): 
+        for w in grafo.obtener_vertices():
+            # No tiene sentido de un vertice a si mismo
+            if v == w:
+                continue
+            
+            distancia, padres = camino_minimo_dijkstra(grafo, v, w)
+            
+            # Si no hay camino, skip
+            if not padres:
+                continue
+            
+            # Actualizar centralidad para vertices en medio
+            actual = padres[w]
+            while actual != v:
+                centralidad[actual] += 1
+                actual = padres[actual]
+    return centralidad
+            
+
+def camino_minimo_dijkstra(grafo: Grafo, origen, destino):
+    cola = Heap()
+    distancias = dict()
+    padres = dict()
+    visitados = set()
+    
+    for v in grafo.obtener_vertices():
+        distancias[v] = float('inf')
+    distancias[origen] = 0
+    padres[origen] = None
+    cola.encolar((0, origen))
+    
+    while not cola.esta_vacia():
+        _, v = cola.desencolar()
+
+        if v == destino:
+            return distancias, padres        
+        if v in visitados:
+            continue
+        visitados.add(v)
+        
+        for w, peso_vw in grafo.adyacentes(v):
+            nueva_dist = distancias[v] + peso_vw
+            if nueva_dist < distancias[w]:
+                distancias[w] = nueva_dist
+                padres[w] = v
+                cola.encolar((nueva_dist, w))
+    # Si llega hasta aca no hay camino hasta alla
+    return None, None
+
+
+"""
 Grafo de ejemplo imagenes/distancias_ejemplo
 """
 def crear_grafo() -> Grafo:
@@ -125,3 +191,4 @@ if __name__ == '__main__':
     print(dist_dijkstra, padres_dikstra)
     dist_bellmanford, padres_bellmanford = bellman_ford(grafo, 0)
     print(dist_bellmanford, padres_bellmanford)
+    print(obtener_centralidad(grafo))
