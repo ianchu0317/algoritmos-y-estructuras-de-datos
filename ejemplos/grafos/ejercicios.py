@@ -501,3 +501,49 @@ def _dfs(v, grafo: Grafo, visitados: set):
         if w not in visitados:
             visitados.add(w)
             _dfs(w, grafo, visitados)
+
+
+"""
+Ejercicio 3, parcialito 1C2025:
+Se tiene un grafo no dirigido sin pesos, que representa una huerta de zanahorias. Cada vértice representa a una zanahoria y
+cada arista (v, w) indica que v y w se encuentran lo suficientemente cerca como para que si una se pudre, entonces podrá
+“contagiar a la otra”. Luego, esta nueva zanahoria contagiada infectará a las otras que se encuentren cercanas. En una unidad
+de tiempo, una zanahoria podrida infecta a todas las que tiene a su alcance. Suponiendo que existe una única componente
+conexa en dicho grafo, implementar una función que reciba un grafo de dichas características y una zanahoria podrida inicial,
+e indique cuál o cuáles son las últimas zanahorias en pudrirse. Indicar y justificar la complejidad de la función.
+"""
+
+def ej3_p3_1c2025(grafo: Grafo, origen):
+    """
+    La idea es hacer un bfs calculando la distancia de cada zanahoria a la infectada.
+    Las ultimas en infectarse son las que se encuentran en mayor distancia.
+    
+    Osea utilizar bfs para calcular orden y luego guardar orden maximo. O(v + e)
+    Recorrer lo guardado para ver vertices que se encuentran en mayor distancia. O(v)
+    """
+    
+    cola = Cola()
+    visitados = set()
+    orden = dict()
+    
+    orden[origen] = 0
+    max_dist = 0
+    visitados.add(origen)
+    cola.encolar(origen)
+    
+    while not cola.esta_vacia():
+        v = cola.desencolar()
+        
+        for w, _ in grafo.adyacentes(v):
+            if w not in visitados:
+                visitados.add(w)
+                orden[w] = orden[v] + 1
+                cola.encolar(w)
+                if max_dist < orden[w]:
+                    max_dist = orden[w]
+    
+    vertices = []            
+    for v, dist in orden.items():
+        if dist == max_dist:
+            vertices.append(v)
+    return vertices
