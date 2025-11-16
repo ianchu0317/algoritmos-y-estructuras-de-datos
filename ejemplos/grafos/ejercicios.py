@@ -748,3 +748,41 @@ def grados_entrada(grafo: Grafo):
         for w, _ in grafo.adyacentes(v):
             g_entrada[w] += 1
     return g_entrada
+
+
+"""
+Ejercicio 1, p3 r2 1c2025:
+En nuestra huerta tenemos unos rociadores de insecticidas automáticos. Cada rociador cuenta con la dosis apropiada para
+cubrir hasta un máximo de 5 plantaciones a su alrededor. Es necesario averiguar si algún rociador tiene más de 5 plantaciones
+alrededor ya que de tener una mayor cantidad la dosis sería insuficiente. Se tiene un grafo en donde los vértices son los
+rociadores y plantas, es no pesado y dirigido (el origen de una arista es el rociador y el destino es una planta en su rango).
+Implementar una función que reciba este grafo y devuelva, en caso que un rociador tenga más de 5 plantaciones alrededor,
+el conjunto de plantaciones alrededor de dicho rociador (si hay más de un rociador que cumpla esta condición, devolver la
+información correspondiente a cualquiera de estos). En caso contrario, devolver None. Indicar y justificar la complejidad de la
+función.
+"""
+
+def ej1_p3_r2_1c2025(grafo: Grafo):
+    """
+    *Modelado*
+    Grafo dirigido no pesado donde:
+    - Vertices: Plantas / roceadores
+    - Aristas: distancia de roceado
+    
+    La idea es encontrar para cada vértice, si hay algun vértice (roceador) que tenga grados de salida mayor a 5.
+    Si hay algun vértice (roceador) que cumpla condicion; devolver las plantas (los adyacentes al roceador).
+    
+    Para eso hago un dfs para cada vertice no visitado, si hay algun vertice que cumple eso devolver sus ady.
+    
+    **Complejiad**
+    Estoy hacienod un dfs donde visito todos los vertices y los aristas exactamente una vez, mientras voy realizando
+    operaciones como condicionales y asignaciones de variables O(1).
+    
+    O(v + e) complejidad final -> O(roceadores + plantas)
+    """
+    
+    for v in grafo.obtener_vertices():
+        plantaciones = grafo.adyacentes(v)
+        if len(plantaciones) > 5:
+            return plantaciones
+    return None
