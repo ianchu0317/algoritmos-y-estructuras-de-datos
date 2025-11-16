@@ -619,3 +619,67 @@ def ej2_p3_1c2025(grafo: Grafo, k: int) -> list:
         _, v = heap.desencolar()
         resultado.append(v)
     return resultado
+
+
+
+"""
+Ejercicio 1 parcialito 3 r1, 1c2025:
+Resolvé los siguientes problemas en forma clara y legible. Podés incluir tantas funciones auxiliares como creas necesarias. Los
+algoritmos a implementar deben ser de la mejor complejidad posible dadas las características del problema.
+1. En nuestra huerta de zanahorias se está construyendo un sistema de riego. La plantación completa es muy extensa y entre
+algunas zonas no pueden ubicarse mangueras, por lo que no es tarea sencilla determinar cómo conectar las mangueras para
+hacer llegar el agua a todas las zonas.
+Se tiene un grafo pesado en el que se representan como vértices estas zonas, y las aristas determinan la distancia entre zona y
+zona (en caso de poder conectarse entre sí). Definir una función que, dado el grafo mencionado, devuelva la mejor forma de
+conectar las distintas zonas, se requiere:
+minimizar la cantidad de metros de manguera a utilizar.
+que ninguna zona quede desconectada del resto de la red.
+"""
+
+def ej1_p3_r1_1c2025(grafo: Grafo):
+    """
+    *Modelacion*
+    Para este ejercicio se modela un grafo pesado no dirigido, donde:
+    - Vertices -> zonas con plantacion
+    - Aristas -> mangueras para conectar con agua distintas zonas
+    - Peso aristas -> distancias entre distintas zonas
+    
+    El objetivo es encontrar como conectar zonas con menor cantidad de mangueras posibles.
+    Osea conectar todos los vertices, pero con menor cantidad de distancias posibles (mst)
+    
+    En este caso utilizo prim para no tener que implementar ordenamientos
+    
+    *Complejidad*
+    - Crear mst y cargar los vertices O(v)
+    - Crear un heap O(1)
+    - Cargar el arista del vertice random al heap: O(elog(e)) -> en el peor de los casos tiene todos los aristas del grafo
+    - Se itera para cada arista del grafo: E aplicando operaciones de encolar y desencolar en el heap O(e * log(e)) 
+    tambien se aplican operaciones O(1) pero se acotan
+    
+    Entonces complejidad final O(e log e) -> O(e log(v²)) -> O(2elog(v)) -> O(e log (v))
+    """
+    mst = Grafo(False)
+    heap = Heap()
+    visitados = set()
+    
+    for v in grafo:
+        mst.agregar_vertice(v)
+    
+    v = random.choice(grafo.obtener_vertices())
+    visitados.add(v)
+    for w, peso_vw in grafo.adyacentes(v):
+        heap.encolar((v, w, peso_vw))
+    
+    while not heap.esta_vacia():
+        v, w, peso_vw = heap.desencolar()
+        
+        if w in visitados:
+            continue
+        visitados.add(w)
+        mst.agregar_arista(v, w, peso_vw)
+        
+        for x, peso_wx in grafo.adyacentes(w):
+            if x not in visitados:
+                heap.encolar((w, x, peso_wx))
+    return mst
+
