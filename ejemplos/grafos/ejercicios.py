@@ -683,3 +683,68 @@ def ej1_p3_r1_1c2025(grafo: Grafo):
                 heap.encolar((w, x, peso_wx))
     return mst
 
+"""
+Ejercicio 2 parcialito 3 r1, 1c2025:
+Un ayudante de esta materia quiere comenzar a leer los libros de Sanderson. Este autor tiene distintas sagas de libros
+interconectadas en un mismo universo, sumado a distintos libros independientes. Una opción podría ser leerlos orden de salida
+cronológica, pero hay algo más importante, la consideración del autor. En la web de Sanderson se puede encontrar, por cada
+libro, un listado de cuáles son los libros que es necesario leer con anterioridad.
+a. Describir detalladamente cómo se podría representar esta información en un grafo que nos sea útil para resolver este
+problema.
+b. Implementar una función que, dado un grafo definido como en el punto a, devuelva un orden posible que nuestro ayudante
+pueda seguir. Indicar y justificar la complejidad de la función.
+"""
+
+def ej2_p3_r1_1c2025(grafo: Grafo):
+    """
+    *Modelación*
+    Podemos modelar el ejercicio con un grafo dirigido no pesado, en donde:
+    - Vertice: los distintos libros de Sanderson
+    - Aristas: libro a leer con anterioridad.
+    Entonces así por ejemplo:
+    L1 se lee antes que L2: L1 -> L2
+    
+    La idea con esto es del listado de información, crear un grafo y realizar orden topológico en ese grafo
+    
+    *Complejidad*
+    - Crear cola y estructuras auxiliares O(1)
+    - Hallar grado de entrada de cada vertice O(v + e) ya que visito cada vertice y sus adyacentes
+    - Encolar vertices de grado 0: O(v) en el peor de los casos son todos los vertices
+    - Ir desencolando todos los vertices y encolar sus adyacentes O(v + e). 
+        Adentro se realizan asignacion de variables, comparaciones O(1)
+    - Devolver orden O(1)
+    => Complejidad total O(v + e) que en este caso es O(libros + Informacion)
+    Para cada libro: l1...Ln hay n-vertices
+    Para cada informacion: L1 leer antes que l2 hay un arista
+    V = Libro
+    E = Informacion
+    """
+    
+    cola = Cola()
+    orden = []
+    g_entrada = grados_entrada(grafo)
+    
+    for v in grafo.obtener_vertices():
+        if g_entrada[v] == 0:
+            cola.encolar(v)
+            
+    while not cola.esta_vacia():
+        v = cola.desencolar()
+        orden.append(v)       
+        for w, _ in grafo.adyacentes(v):
+            g_entrada[w] -= 1
+            if g_entrada[w] == 0:
+                cola.encolar(w)
+    return orden
+    
+    
+def grados_entrada(grafo: Grafo):
+    g_entrada = dict()
+    
+    for v in grafo.obtener_vertices():
+        g_entrada[v] = 0
+    
+    for v in grafo.obtener_vertices():
+        for w, _ in grafo.adyacentes(v):
+            g_entrada[w] += 1
+    return g_entrada
