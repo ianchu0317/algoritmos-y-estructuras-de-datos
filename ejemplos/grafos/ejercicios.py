@@ -786,3 +786,64 @@ def ej1_p3_r2_1c2025(grafo: Grafo):
         if len(plantaciones) > 5:
             return plantaciones
     return None
+
+"""
+La exitosa empresa AlgoConnect está desarrollando dos aplicaciones:
+- AlgoFriends: Es una red social en donde los usuarios pueden subir imágenes y entablar relaciones. Cualquier usuario
+puede conectarse con cualquier otro.
+- AlgoBuy: Es una plataforma de ventas, en donde cada usuario se registra como comprador o vendedor. El único motivo
+de conexión posible entre usuarios es hacer consultas sobre un producto, es por esto que los compradores sólo pueden
+interactuar con vendedores, y viceversa. Cada aplicación cuenta con su propio grafo, en ambos casos los grafos son no
+dirigidos, no pesados, en donde los vértices son los usuarios y las aristas representan que dos usuarios se han conectado.
+Lamentablemente hubo un error en el software que borró las etiquetas de estos grafos, por lo que debemos re-etiquetarlos para
+saber si cada grafo corresponde a AlgoFriends o a AlgoBuy. Implementar una función que dado dos grafos nos devuelva
+dos Strings que correspondan a la asignación de cada uno de los grafos. Debe devolver "AlgoFriends", "AlgoBuy" si el
+primero correspondería al de AlgoFriends y el segundo al de AlgoBuy, "AlgoBuy", "AlgoFriends", si es lo contrario, o
+directamente None, None si dado cómo son los grafos, no es posible determinar cuál aplicación es cada uno. Indicar y justificar
+la complejidad de la función.
+"""
+
+def ej2_p3_r2_1c2025(grafo1: Grafo, grafo2: Grafo):
+    """
+    *Modelado*
+    - Vertices: usuarios
+    - Aristas: conexiones entre usuarios
+    
+    Si nos ponemos a pensar bien, AlgoFriend es un grafo no conexo cualquiera.
+    En cambio, AlgoBuy cada cliente solo tiene relacion con vendedores y vendedores tambien,
+    por lo que podemos dividir entre clientes y vendedores, donde: cada cliente no se conectan entre si y los vendedores tambien.
+    En resumen, es un grafo bipartito. Si es bipartito es algobuy.
+    
+    *Complejidad*
+    La complejidad para esto estoy realizando para ambos grafos un dfs para chequear si son bipartitos.
+    ( Ya sea bfs o dfs la complejidad es de O(v + e)).
+    2 * O(v + e) = O(v + e)
+    """
+    g1_bip = es_bipartito(grafo1)
+    g2_bip = es_bipartito(grafo2)
+    if g1_bip and not g2_bip:
+        return "AlgoBuy", "AlgoFriends"
+    elif g2_bip and not g1_bip:
+        return "AlgoFriends", "AlgoBuy"
+    return None, None 
+        
+
+def es_bipartito(grafo: Grafo):
+    cola = Cola()
+    visitados = dict()
+
+    for inicio in grafo.obtener_vertices():
+        if inicio not in visitados:
+            visitados[inicio] = 0
+            cola.encolar(inicio)
+            
+            while not cola.esta_vacia():
+                v = cola.desencolar()
+                for w, _ in grafo.adyacentes(v):
+                    if w not in visitados:
+                        visitados[w] = 1 - visitados[v]
+                        cola.encolar(w)
+                    else:
+                        if visitados[w] == visitados[v]:
+                            return False
+    return True
