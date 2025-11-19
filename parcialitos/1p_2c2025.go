@@ -98,7 +98,8 @@ func MasGrandePosible(digitos []int) int {
 	ordenados := ordenarDigitos(digitos, 10)
 	num := 0
 	// Armar numero O(n) -> visito para cada nodo de arreglo y hago operacion O(1)
-	for digito := range ordenados {
+	for i := len(ordenados) - 1; i >= 0; i-- {
+		digito := ordenados[i]
 		num = num*10 + digito
 	}
 	return num
@@ -108,7 +109,7 @@ func ordenarDigitos(arr []int, rango int) []int {
 	// Counting sort O(n + 10)
 	// Contar frecuencias O(n)
 	frecuencias := make([]int, rango)
-	for num := range arr {
+	for _, num := range arr {
 		frecuencias[num]++
 	}
 	// Calcular inicios O(k) -> O(10)
@@ -118,9 +119,8 @@ func ordenarDigitos(arr []int, rango int) []int {
 	}
 	// Ordenar elementos O(n)
 	ordenados := make([]int, len(arr))
-	maxLen := len(arr) - 1
-	for num := range arr {
-		indx := maxLen - inicios[num]
+	for _, num := range arr {
+		indx := inicios[num]
 		ordenados[indx] = num
 		inicios[num]++
 	}
