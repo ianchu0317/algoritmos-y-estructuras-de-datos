@@ -68,15 +68,13 @@ func _minimoExcluido(arr []int, ini, fin int) int {
 	// ****************************************************
 	// COmplejidad total O(log(n)) Por teorema maestro
 	// ****************************************************
-	if ini == fin {
-		if arr[ini] > ini {
-			return ini
-		} else {
-			return ini + 1
-		}
+	if ini > fin {
+		return len(arr)
 	}
 	medio := (ini + fin) / 2
-	if arr[medio] == medio {
+	if arr[medio] != medio && arr[medio-1] == medio-1 {
+		return medio
+	} else if arr[medio] == medio {
 		return _minimoExcluido(arr, medio+1, fin)
 	} else {
 		return _minimoExcluido(arr, ini, medio-1)
