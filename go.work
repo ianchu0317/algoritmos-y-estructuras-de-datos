@@ -7,4 +7,5 @@ use (
 	./tdas
 	./tps/tp0
 	./tps/tp1
+	./tps/tp2
 )
