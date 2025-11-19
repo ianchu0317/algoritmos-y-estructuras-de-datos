@@ -26,11 +26,16 @@ type colaEnlazada[T any] struct {
 }
 
 func (cola colaEnlazada[T]) Dividir() (TDACola.Cola[T], TDACola.Cola[T]) {
+	// ****************************************************
+	// COmplejidad total O(1) + O(n) = O(n)
+	// ****************************************************
+	// Declaraciones de estructuras auxiliares y asignación de variables O(1)
 	colaPar := TDACola.CrearColaEnlazada[T]()
 	colaImpar := TDACola.CrearColaEnlazada[T]()
 	actual := cola.primero
 	contador := 0
 
+	// Visitar cada n-nodo de la cola y realizar operaciones de O(1) -> n * O(1) = O(n)
 	for actual != nil {
 		if contador%2 == 0 {
 			colaPar.Encolar(actual.valor)
@@ -41,5 +46,46 @@ func (cola colaEnlazada[T]) Dividir() (TDACola.Cola[T], TDACola.Cola[T]) {
 		contador++
 	}
 
+	// Return O(1)
 	return colaPar, colaImpar
 }
+
+/*
+*** EJercicio 2 ***
+
+Implementar una función que, dado un arreglo ordenado y sin elementos repetidos de valores enteros no negativos,
+obtenga el mínimo valor que no se encuentre en el arreglo.
+Indicar y justificar adecuadamente la complejidad del algoritmo.
+*/
+
+func minimoExcluido(arr []int) int {
+	return _minimoExcluido(arr, 0, len(arr)-1)
+}
+
+func _minimoExcluido(arr []int, ini, fin int) int {
+	// ****************************************************
+	// COmplejidad total O(log(n)) Por teorema maestro
+	// ****************************************************
+	if ini == fin {
+		if arr[ini] > ini {
+			return ini
+		} else {
+			return ini + 1
+		}
+	}
+	medio := (ini + fin) / 2
+	if arr[medio] == medio {
+		return _minimoExcluido(arr, medio+1, fin)
+	} else {
+		return _minimoExcluido(arr, ini, medio-1)
+	}
+}
+
+/*
+*** Ejercicio 3 ***
+
+Implementar una función que, dado un arreglo ordenado y sin elementos repetidos de valores enteros no negativos,
+obtenga el mínimo valor que no se encuentre en el arreglo.
+Indicar y justificar adecuadamente la complejidad del algoritmo.
+*/
+// ****************************************************
