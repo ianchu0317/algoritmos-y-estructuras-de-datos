@@ -22,16 +22,19 @@ def _hay_mayoria(arr):
     hay_izq, elem_izq = _hay_mayoria(izq)
     hay_der, elem_der = _hay_mayoria(der)
     
-    cant_izq = contar_apariciones(arr, elem_izq)
-    cant_der = contar_apariciones(arr, elem_der)
+    if hay_izq and hay_der and elem_izq == elem_der:
+        return True, elem_izq
     
-    if not hay_izq and not hay_der:
-        return False, -1
+    cant_izq = contar_apariciones(arr, elem_izq) if hay_izq else 0
+    cant_der = contar_apariciones(arr, elem_der) if hay_der else 0
     
-    if elem_izq == elem_der:
-        pass
+    if cant_izq > mitad:
+        return True, elem_izq
     
-    return True, elem_izq
+    if cant_der > mitad:
+        return True, elem_der
+    
+    return False, -1
 
 def contar_apariciones(arr, num):
     contador = 0
@@ -41,10 +44,16 @@ def contar_apariciones(arr, num):
     return contador
 
 def hay_mayoria(arr):
-    res, _, _ = _hay_mayoria(arr)
+    res, _ = _hay_mayoria(arr)
     return res
 
 if __name__ == '__main__':
-    arr1 = [1, 2, 3, 1, 1, 1] # -> True
+    arr1 = [1, 2, 1, 2, 3] #-> false
+    arr2 = [1, 1, 2, 3] #-> false
+    arr3 = [1, 2, 3, 1, 1, 1] #-> true
+    arr4 = [1] # -> true
     print(hay_mayoria(arr1))
+    print(hay_mayoria(arr2))
+    print(hay_mayoria(arr3))
+    print(hay_mayoria(arr4))
     
