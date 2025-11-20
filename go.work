@@ -4,6 +4,7 @@ use (
 	./apuntes
 	./ejemplos
 	./guias
+	./parcialitos
 	./tdas
 	./tps/tp0
 	./tps/tp1
