@@ -29,9 +29,7 @@ def _hay_mayoria(arr):
         return False, -1
     
     if elem_izq == elem_der:
-        
-    if 
-    
+        pass
     
     return True, elem_izq
 
