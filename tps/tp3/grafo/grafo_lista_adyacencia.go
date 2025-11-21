@@ -2,6 +2,12 @@ package grafo
 
 import Diccionario "tdas/diccionario"
 
-type grafoListaAdy[T any] struct {
-	vertices Diccionario.Diccionario
+type grafoListaAdyacencia[T any, K Numero] struct {
+	vertices   Diccionario.Diccionario[T, K]
+	esDirigido bool
+	esPesado   bool
 }
+
+// CrearGrafo(esDirigido, esPesado) devuelve una instancia de Grafo
+
+// Primitivas de grafo

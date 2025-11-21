@@ -1,6 +1,6 @@
 package grafo
 
-type Grafo[T any] interface {
+type Grafo[T any, K Numero] interface {
 	// AgregarVertice(v) toma un vertice 'v' y lo agrega al grafo
 	AgregarVertice(v T)
 
@@ -41,4 +41,9 @@ type Grafo[T any] interface {
 
 	// Cantidad() devuelve la cantidad de vértices en el grafo
 	Cantidad() int
+}
+
+// Interfaz tipos de datos de peso de arista
+type Numero interface {
+	int | int8 | int16 | int32 | int64 | float32 | float64
 }
