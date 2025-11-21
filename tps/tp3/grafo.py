@@ -27,8 +27,7 @@ class Grafo:
         Si alguno de los vertices no existe devuelve error con "No existe vertice en grafo"
         """
         if not self.hay_vertice(v) or not self.hay_vetice(w):
-            print("No existe vertice en grafo")
-            return
+            raise ValueError("No existe vertice en grafo")
         return w in self.vertices[v]
     
     
@@ -97,8 +96,7 @@ class Grafo:
         """
         
         if not self.hay_vertice(v):
-            print("No existe vertice en grafo")
-            return
+            raise ValueError("No existe vertice en grafo")
         self.vertices.pop(v)
         # Eliminar grado de entrada
         for _, ady in self.vertices.items():
