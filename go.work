@@ -9,5 +9,4 @@ use (
 	./tps/tp0
 	./tps/tp1
 	./tps/tp2
-	./tps/tp3
 )

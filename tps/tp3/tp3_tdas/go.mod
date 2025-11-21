@@ -1,8 +1,8 @@
-module tp3
+module tp3_tdas
 
 go 1.25.0
 
-replace tdas => ./tp3_tdas
+replace tdas => .
 
 require github.com/stretchr/testify v1.11.1
 
