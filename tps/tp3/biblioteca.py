@@ -9,12 +9,12 @@ def crear_grafo_testing() -> Grafo:
     grafo = Grafo(False, vertices=vertices)
     
     grafo.agregar_arista(1, 2)
-    grafo.agregar_arista(3, 1)
-        
+    grafo.agregar_arista(3, 1, 3)
+    grafo.hay_vertice
     return grafo
     
     
     
 if __name__ == '__main__':
     grafo = crear_grafo_testing()
-    print(grafo.peso_arista(3, 3))
+    print(grafo.peso_arista(1, 3))
