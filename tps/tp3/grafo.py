@@ -1,8 +1,8 @@
 
 class Grafo:
-    def __init__(self, es_dirigido: bool):
+    def __init__(self, es_dirigido: bool, vertices=[]):
         """
-        Grafo(es_dirigido) toma dos parametros y devuelve un grafo dirigido y/o pesado
+        Grafo(es_dirigido) toma dos parametros y devuelve un grafo dirigido.
         
         Ejemplo:
             Grafo(es_dirigido=False) -> Crea un grafo no dirigido
@@ -11,6 +11,11 @@ class Grafo:
         self.vertices = dict()      # Diccionario de listas
         self.pesos = dict()         # Diccionario de diccionario
         self.es_dirigido = es_dirigido
+        
+        for v in vertices:
+            self.vertices[v] = []
+            self.pesos[v] = dict()
+        
     
     
     def hay_vertice(self, v) -> bool:
@@ -42,7 +47,7 @@ class Grafo:
         self.pesos[v] = dict()
     
         
-    def agregar_arista(self, v, w, peso_vw: 0):
+    def agregar_arista(self, v, w, peso_vw=0):
         """
         grafo.agregar_arista(v, w, peso_vw) toma dos vertices 'v' 'w' y los une.
         Si se quiere operar con grafo no pesado, no pasarle nada al parametro peso_vw (por defecto 0).
@@ -85,7 +90,7 @@ class Grafo:
         """
         obtener_vertices() devuelve una lista con los vertices del grafo
         """
-        return self.vertices.keys()
+        return list(self.vertices.keys())
 
     
     def borrar_vertice(self, v):
