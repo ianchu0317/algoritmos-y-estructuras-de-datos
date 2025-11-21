@@ -17,4 +17,4 @@ def crear_grafo_testing() -> Grafo:
     
 if __name__ == '__main__':
     grafo = crear_grafo_testing()
-    print(grafo.adyacentes(2))
+    print(grafo.peso_arista(3, 3))

@@ -17,7 +17,6 @@ class Grafo:
             self.pesos[v] = dict()
         
     
-    
     def hay_vertice(self, v) -> bool:
         """
         hay_vertice(v) toma un vertice 'v' y devuelve true si el vértice está en grafo. False en caso contrario
@@ -31,7 +30,7 @@ class Grafo:
         False en caso contrario.
         Si alguno de los vertices no existe devuelve error con "No existe vertice en grafo"
         """
-        if not self.hay_vertice(v) or not self.hay_vetice(w):
+        if not self.hay_vertice(v) or not self.hay_vertice(w):
             raise ValueError("No existe vertice en grafo")
         return w in self.vertices[v]
     
@@ -79,10 +78,13 @@ class Grafo:
     def peso_arista(self, v, w):
         """
         peso_arista(v, w) toma dos airistas y devuelve su peso si es un grafo pesado.
-        Si algun vertice ingresado no existe devuelve "Algun vertice no existe"
+        Si algun vertice ingresado no existe devuelve "Algun vertice no existe".
+        Si no hay arista entonces devuelve "No existe arista en grafo"
         """
         if not self.hay_vertice(v) or not self.hay_vertice(w):
             raise ValueError("Algun vertice no existe")
+        if not self.hay_arista(v, w):
+            raise ValueError("No existe arista en grafo")
         return self.pesos[v][w]
     
         
