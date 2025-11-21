@@ -77,9 +77,8 @@ class Grafo:
         peso_arista(v, w) toma dos airistas y devuelve su peso si es un grafo pesado.
         Si algun vertice ingresado no existe devuelve "Algun vertice no existe"
         """
-        if v not in self.vertices or w not in self.vertices:
-            print("Algun vertice no existe")
-            return
+        if not self.hay_vertice(v) or not self.hay_vertice(w):
+            raise ValueError("Algun vertice no existe")
         return self.pesos[v][w]
     
         
@@ -89,9 +88,6 @@ class Grafo:
         """
         return self.vertices.keys()
 
-    
-
-        
     
     def borrar_vertice(self, v):
         """
@@ -118,10 +114,10 @@ class Grafo:
     def borrar_arista(self, v, w):
         """
         borrar_arista(v, w) toma dos vertices del grafo y SI tienen aristas borrar la arista, sino nada
-        Si vertice ingresado no esta en grafo, deveuvle "No existe vertice en grafo"
+        Si algun vertice ingresado no esta en grafo, deveuvle "Algun vertice no existe"
         """
         if not self.hay_vertice(v) or not self.hay_vertice(w):
-            raise ValueError("No existe vertice en grafo")
+            raise ValueError("Algun vertice no existe")
 
         if w in self.vertices[v]:
             self.vertices[v].remove(w)
