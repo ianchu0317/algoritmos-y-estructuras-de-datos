@@ -124,9 +124,12 @@ class Grafo:
         """
         Toma dos vertices del grafo y SI tienen aristas borrar la arista, sino nada.
         Si algun vertice ingresado no esta en grafo, deveuvle "Algun vertice no existe"
+        Si arista no existe, devuelve: no existe arista en grafo
         """
         if not self.hay_vertice(v) or not self.hay_vertice(w):
             raise ValueError("Algun vertice no existe")
+        if not self.hay_arista(v, w):
+            raise ValueError("No existe arista en grafo")
 
         if w in self.vertices[v]:
             self.vertices[v].remove(w)
