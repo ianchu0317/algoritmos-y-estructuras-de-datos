@@ -17,7 +17,18 @@ class Grafo:
         for v in vertices:
             self.vertices[v] = []
             self.pesos[v] = dict()
+    
+    
+    def __iter__(self):
+        """
+        Inicializar iterador para vértices del grafo.
         
+        Sintaxis:
+            for v in grafo:
+                ...
+        """
+        return iter(self.vertices)
+    
     
     def hay_vertice(self, v) -> bool:
         """
