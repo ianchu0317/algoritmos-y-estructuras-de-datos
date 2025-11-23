@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from grafo import Grafo
-import biblioteca
+import biblioteca as bib
 
 class Netstats:
     """
@@ -22,6 +22,7 @@ class Netstats:
             'comunidad', 'navegacion', 'clustering'
         ]
     
+    
     def listar_operaciones(self):
         """
         Devuelve una lista de operaciones disponibles
@@ -30,8 +31,22 @@ class Netstats:
         """
         return self.operaciones
     
-    def camino():
-        pass
+    
+    def camino(self, origen, destino) -> str:
+        """
+        Toma un origen y un destino.
+        Devuelve una cadena con un camino en formato origen->destino.
+        En caso de que no hay recorrido devuelve 'No se encontro recorrido'
+        """
+        camino_minimo = bib.camino_minimo(self.red, origen, destino)
+        if not camino_minimo:
+            return "No se encontro recorrido"
+        
+        cadena_camino_minimo = " -> ".join(camino_minimo)   # O(P) en el peor de los casos
+        resultado = f"{cadena_camino_minimo}\nCosto: {len(camino_minimo)}"
+        
+        return resultado
+    
     
     def mas_importantes():
         pass
