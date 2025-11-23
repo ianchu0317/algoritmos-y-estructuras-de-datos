@@ -19,7 +19,7 @@ def camino_minimo(grafo: Grafo, origen, destino) -> list:
     
     cola.append(origen)
     padres[origen] = None
-    visitados.add(v)
+    visitados.add(origen)
     
     while len(cola) > 0:
         v = cola.popleft()

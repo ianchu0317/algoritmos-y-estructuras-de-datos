@@ -40,7 +40,7 @@ class Netstats:
             self.red.agregar_vertice(post)
         # Agregar enlace a la red si no existe
         for link in links:
-            if not self.red.hay_arista(link):
+            if not self.red.hay_vertice(link):
                 self.red.agregar_vertice(link)
             if not self.red.hay_arista(post, link):
                 self.red.agregar_arista(post, link)
@@ -66,7 +66,7 @@ class Netstats:
             return "No se encontro recorrido"
         
         cadena_camino_minimo = " -> ".join(camino_minimo)   # O(P) en el peor de los casos
-        resultado = f"{cadena_camino_minimo}\nCosto: {len(camino_minimo)}"
+        resultado = f"{cadena_camino_minimo}\nCosto: {len(camino_minimo)-1}"
         
         return resultado
     
@@ -100,4 +100,17 @@ class Netstats:
 
 if __name__ == '__main__':
     netstat = Netstats()
-    print(netstat.listar_operaciones())
+    paises1 = ["Argentina", "Francia", "Portugal", "España"]
+    paises2 = ["Portugal", "China", "Colombia"]
+    paises3 = ["Colombia", "Taiwan"]
+    
+    netstat.agregar_post(paises1[0], paises1[1:])
+    netstat.agregar_post(paises2[0], paises2[1:])
+    netstat.agregar_post(paises3[0], paises3[1:])
+    
+    # Test de caminos minimos
+    print(netstat.camino("Argentina", "Taiwan"))   # Argentina -> Portugal -> Colombia -> Taiwan  (Costo: 3)
+    print(netstat.camino("Portugal", "Taiwan"))    # Portugal -> COlombia -> Taiwan (Costo 2) 
+    print(netstat.camino("Argentina", "España"))   # Argentina -> España (Costo 1)
+    
+    
