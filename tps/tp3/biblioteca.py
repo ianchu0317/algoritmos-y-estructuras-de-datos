@@ -5,7 +5,7 @@ import heapq
 
 def camino_minimo(grafo: Grafo, origen, destino) -> list:
     """
-    Devuelve una lista con el camino mínimo desde origen hasta destino de un grafo no dirigido.
+    Devuelve una lista con el camino mínimo desde origen hasta destino de un grafo no pesado.
     En caso de no existir el camino se devuelve una lista vacía.
     
     **Parámetros**: origen y destino
@@ -48,7 +48,24 @@ def reconstruir_camino(padres: dict, ini, fin) -> list:
         fin = padres[fin]
         camino.append(fin)
     return list(reversed(camino))
+
+
+def diametro():
+    """
+    Devuelve el diametro de un grafo.
     
+    Complejiadad O(V*(V + E))
+    """
+
+
+def en_rango(grafo: Grafo, origen, rango: int) -> int:
+    """
+    Toma de parametro un grafo, vértice origen y un rango.
     
+    Devuelve la cantidad de vértices que se encuentran a ese rango del origen.
+    """
+
+
+
 if __name__ == '__main__':
     pass
