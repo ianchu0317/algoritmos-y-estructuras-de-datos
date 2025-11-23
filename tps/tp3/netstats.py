@@ -23,6 +23,29 @@ class Netstats:
         ]
     
     
+    def agregar_post(self, post: str, links: list):
+        """
+        Toma un post y sus links y los agrega a la red.
+        
+        **Ejemplo**
+        post = "Argentina"
+        links = ["Francia", "Portugal", "Espania"] 
+        netstat.agregar_post(post, links)
+        
+        lista = ["Argentina", "Francia", "Portugal", "Espania"]
+        netstat.agregar_post(lista[0], lista[1:])
+        """
+        # Agregar Publicacion a la red si no existe
+        if not self.red.hay_vertice(post):
+            self.red.agregar_vertice(post)
+        # Agregar enlace a la red si no existe
+        for link in links:
+            if not self.red.hay_arista(link):
+                self.red.agregar_vertice(link)
+            if not self.red.hay_arista(post, link):
+                self.red.agregar_arista(post, link)
+    
+    
     def listar_operaciones(self):
         """
         Devuelve una lista de operaciones disponibles
