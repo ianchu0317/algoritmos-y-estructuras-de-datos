@@ -15,11 +15,20 @@ class Netstats:
     """
     
     def __init__(self):
-        red = Grafo(True)
-        pass
+        self.red = Grafo(True)
+        self.operaciones = [
+            'camino', 'mas_importantes', 'conectados'
+            'ciclo', 'lectura', 'diametro', 'rango', 
+            'comunidad', 'navegacion', 'clustering'
+        ]
     
-    def listar_operaciones():
-        pass
+    def listar_operaciones(self):
+        """
+        Devuelve una lista de operaciones disponibles
+        
+        Complejidad O(1)
+        """
+        return self.operaciones
     
     def camino():
         pass
@@ -52,4 +61,5 @@ class Netstats:
         pass
 
 if __name__ == '__main__':
-    pass
+    netstat = Netstats()
+    print(netstat.listar_operaciones())
