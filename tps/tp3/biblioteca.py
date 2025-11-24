@@ -144,7 +144,50 @@ def camino_primer_adyacente(grafo: Grafo, origen) -> list:
         camino.append(origen)
         contador += 1
     return camino
+
+
+def obtener_cfcs(grafo: Grafo) -> list:
+    """
+    Toma un grafo dirigido y devuelve las componentes fuertemente conexas.
     
+    **Complejidad**: O(V + E)
+    """
+    cfcs = []
+    visitados = set()
+    for v in grafo:
+        if v not in visitados:
+            _dfs_cfcs(v, grafo, visitados, set(), deque(), dict(), dict(), [0], cfcs)
+    return cfcs
+
+
+def _dfs_cfcs(v, grafo: Grafo, visitados: set, 
+              apilados: set, pila: deque, orden: dict, 
+              mb: dict, contador: list, cfcs: list):
+    # Actualizar para vertice
+    visitados.add(v)
+    orden[v] = mb[v] = contador[0]
+    contador[0] += 1
+    pila.append(v)
+    apilados.add(v)
+    
+    for w in grafo.adyacentes(v):
+        if w not in visitados:
+            _dfs_cfcs(w, grafo, visitados, apilados, pila, orden, mb, contador, cfcs)
+        elif w in apilados:
+            mb[v] = min(orden[w], mb[v])
+    
+    # Crear camino componente conexo
+    if mb[v] == orden[v]:
+        cfc = []
+        while True:
+            w = pila.pop()
+            apilados.remove(w)
+            cfc.append(w)
+            if w == v:
+                break
+        cfcs.append(cfc)
+            
+        
 
 if __name__ == '__main__':
     pass
