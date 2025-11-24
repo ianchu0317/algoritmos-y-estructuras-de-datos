@@ -83,8 +83,17 @@ class Netstats:
     def lectura():
         pass
     
-    def diametro():
-        pass
+    
+    def diametro(self) -> int:
+        """
+        Permite obtener el diametro de toda la red.
+        
+        **Parametros**: ninguno
+        
+        **Complejidad**: O(P (P + L))
+        """
+        return bib.diametro(self.red)
+        
     
     def rango():
         pass
@@ -113,5 +122,8 @@ if __name__ == '__main__':
     print(netstat.camino("Portugal", "Taiwan"))    # Portugal -> COlombia -> Taiwan (Costo 2) 
     print(netstat.camino("Argentina", "España"))   # Argentina -> España (Costo 1)
     print(netstat.camino("Argentina", " "))        # No se encontro camino
+    
+    # Test de diametros
+    print(netstat.diametro())   # -> 3 Argentina a Taiwan
     
     

@@ -60,7 +60,8 @@ def diametro(grafo: Grafo) -> int:
     max_dist = 0
     for v in grafo:
         distancias = bfs_distancias(grafo, v)
-        max_dist = max(max_dist, distancias.values())
+        max_dist_v = max(distancias.values())   # Maxima distancia de minima distancia de v a todos los vertices
+        max_dist = max(max_dist, max_dist_v)   # Comparar max anterior con diametro actual 
     return max_dist
 
 
@@ -77,7 +78,7 @@ def bfs_distancias(grafo: Grafo, origen) -> dict:
     cola = deque()
     visitados = set()
     
-    distancias[origen]
+    distancias[origen] = 0
     visitados.add(origen)
     cola.append(origen)
     
