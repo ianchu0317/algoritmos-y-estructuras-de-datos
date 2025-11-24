@@ -5,7 +5,8 @@ import heapq
 
 def camino_minimo(grafo: Grafo, origen, destino) -> list:
     """
-    Devuelve una lista con el camino mínimo desde origen hasta destino de un grafo no pesado.
+    Devuelve un diccionario de distancias y de padres del origen a destino.
+    con el camino mínimo desde origen hasta destino de un grafo no pesado.
     En caso de no existir el camino se devuelve una lista vacía.
     
     **Parámetros**: origen y destino
@@ -50,12 +51,25 @@ def reconstruir_camino(padres: dict, ini, fin) -> list:
     return list(reversed(camino))
 
 
-def diametro():
+def diametro(grafo) -> int:
     """
-    Devuelve el diametro de un grafo.
+    Toma un grafo y devuelve su Diametro.
     
+    El diametro de un grafo se define como la máxima distancia de todas las distancias minimas.
     Complejiadad O(V*(V + E))
     """
+    max_dist = 0
+    for v in grafo:
+        # O(v + e)
+        distancias, padres = camino_minimo(grafo, v, None)
+        # Recorrer los vertices O(v)
+        for w in grafo:
+            if w == v:
+                continue
+            # Si distancia(v -> w) mayor a diametro actual, actualizar diametro
+            if max_dist < distancias[w]:
+                max_dist = distancias[w]
+    return max_dist
 
 
 def en_rango(grafo: Grafo, origen, rango: int) -> int:

@@ -112,5 +112,6 @@ if __name__ == '__main__':
     print(netstat.camino("Argentina", "Taiwan"))   # Argentina -> Portugal -> Colombia -> Taiwan  (Costo: 3)
     print(netstat.camino("Portugal", "Taiwan"))    # Portugal -> COlombia -> Taiwan (Costo 2) 
     print(netstat.camino("Argentina", "España"))   # Argentina -> España (Costo 1)
+    print(netstat.camino("Argentina", " "))        # No se encontro camino
     
     
