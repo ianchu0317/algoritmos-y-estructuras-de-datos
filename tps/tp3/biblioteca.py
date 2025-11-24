@@ -128,6 +128,23 @@ def en_rango(grafo: Grafo, origen, rango: int) -> int:
     return cant_en_rango
 
 
+def camino_primer_adyacente(grafo: Grafo, origen) -> list:
+    """
+    Toma un grafo y un vértice de origen.
+    Devuelve el camino formado yendo por el primer adyacente.
+    Se detiene cuando haya más adyacentes o llegado a 20 paginas
+    
+    **Complejiad**: O(n)
+    """
+    _LIMITE_PRIMER_ADY = 20
+    contador = 0
+    camino = [origen]
+    while (len(grafo.adyacentes(origen)) > 0) and (contador < _LIMITE_PRIMER_ADY):
+        origen = grafo.adyacentes(origen)[0]    
+        camino.append(origen)
+        contador += 1
+    return camino
+    
 
 if __name__ == '__main__':
     pass

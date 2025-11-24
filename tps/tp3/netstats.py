@@ -125,8 +125,17 @@ class Netstats:
     def comunidad():
         pass
     
-    def navegacion():
-        pass
+    
+    def navegacion(self, pagina) -> str:
+        """
+        Toma una pagina de origen y devuelve el camino con las paginas accediendo al primer link.
+        Se detiene cuando no hay mas links o hasta haber llegado a 20 paginas.
+        
+        **Complejidad**: O(n)
+        """
+        nav_primer_link = bib.camino_primer_adyacente(self.red, pagina)
+        return " -> ".join(nav_primer_link)
+    
     
     def clustering():
         pass
@@ -150,4 +159,9 @@ if __name__ == '__main__':
     # Test de diametros
     print(netstat.diametro())   # Argentina -> Portugal -> Colombia -> Taiwan (costo: 4)
     
+    # Test de rango
+    #print("Rango: ", netstat.rango("Argentina", 1))
+    
+    # Test de nav_primer link
+    print(netstat.navegacion("Argentina"))
     
