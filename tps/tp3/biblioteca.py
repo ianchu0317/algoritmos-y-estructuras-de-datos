@@ -5,8 +5,7 @@ import heapq
 
 def camino_minimo(grafo: Grafo, origen, destino) -> list:
     """
-    Devuelve un diccionario de distancias y de padres del origen a destino.
-    con el camino mínimo desde origen hasta destino de un grafo no pesado.
+    Devuelve una lista con el camino mínimo desde origen hasta destino de un grafo no pesado.
     En caso de no existir el camino se devuelve una lista vacía.
     
     **Parámetros**: origen y destino
@@ -51,7 +50,7 @@ def reconstruir_camino(padres: dict, ini, fin) -> list:
     return list(reversed(camino))
 
 
-def diametro(grafo) -> int:
+def diametro(grafo: Grafo) -> int:
     """
     Toma un grafo y devuelve su Diametro.
     
@@ -60,16 +59,38 @@ def diametro(grafo) -> int:
     """
     max_dist = 0
     for v in grafo:
-        # O(v + e)
-        distancias, padres = camino_minimo(grafo, v, None)
-        # Recorrer los vertices O(v)
-        for w in grafo:
-            if w == v:
-                continue
-            # Si distancia(v -> w) mayor a diametro actual, actualizar diametro
-            if max_dist < distancias[w]:
-                max_dist = distancias[w]
+        distancias = bfs_distancias(grafo, v)
+        max_dist = max(max_dist, distancias.values())
     return max_dist
+
+
+def bfs_distancias(grafo: Grafo, origen) -> dict:
+    """
+    Toma un grafo y un origen y devuelve las distancias minimas desde un origen hasta todos los demas vertices.
+    
+    **Ejemplo**
+    ```python
+    distancias = bfs_distancias(grafo, v) # Distancias es un dict
+    ```
+    """
+    distancias = dict()
+    cola = deque()
+    visitados = set()
+    
+    distancias[origen]
+    visitados.add(origen)
+    cola.append(origen)
+    
+    while len(cola) > 0:
+        v = cola.popleft()
+        for w in grafo.adyacentes(v):
+            if w not in visitados:
+                distancias[w] = distancias[v] + 1
+                visitados.add(w)
+                cola.append(w)
+    return distancias
+    
+
 
 
 def en_rango(grafo: Grafo, origen, rango: int) -> int:
