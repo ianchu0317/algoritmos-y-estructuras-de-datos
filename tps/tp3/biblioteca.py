@@ -98,8 +98,16 @@ def en_rango(grafo: Grafo, origen, rango: int) -> int:
     """
     Toma de parametro un grafo, vértice origen y un rango.
     
+    En caso de no encontrar, devuelve una lista vacia.
+    
     Devuelve la cantidad de vértices que se encuentran a ese rango del origen.
     """
+    cant_en_rango = 0
+    distancias = bfs_distancias(grafo, origen)
+    for v in distancias:
+        if distancias[v] == rango:
+            cant_en_rango += 1
+    return cant_en_rango
 
 
 
