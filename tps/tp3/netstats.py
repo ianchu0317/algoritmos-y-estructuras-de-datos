@@ -28,12 +28,15 @@ class Netstats:
         Toma un post y sus links y los agrega a la red.
         
         **Ejemplo**
+        ```
+        # Utilizando variable/lista
         post = "Argentina"
         links = ["Francia", "Portugal", "Espania"] 
         netstat.agregar_post(post, links)
-        
+        # Utilizando sublistas 
         lista = ["Argentina", "Francia", "Portugal", "Espania"]
         netstat.agregar_post(lista[0], lista[1:])
+        ```
         """
         # Agregar Publicacion a la red si no existe
         if not self.red.hay_vertice(post):
@@ -95,8 +98,19 @@ class Netstats:
         return bib.diametro(self.red)
         
     
-    def rango():
-        pass
+    def rango(self, pagina: str, n: int) -> int:
+        """
+        Permite obtener la cantidad de páginas que se encuentren 
+        excactamente a n links desde la pagina recibida por parametro.
+
+        **Parametros**: pagina y n
+        
+        **Complejidad**: O(P + L)
+        
+        **Ejemplo**
+        netstat.rango(p1, 2) -> 4 'hay 4 en ese rango'
+        """
+        return bib.en_rango(self.red, pagina, n)
     
     def comunidad():
         pass
