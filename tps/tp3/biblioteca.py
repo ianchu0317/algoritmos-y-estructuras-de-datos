@@ -50,19 +50,33 @@ def reconstruir_camino(padres: dict, ini, fin) -> list:
     return list(reversed(camino))
 
 
-def diametro(grafo: Grafo) -> int:
+def diametro(grafo: Grafo) -> list:
     """
-    Toma un grafo y devuelve su Diametro.
+    Toma un grafo y devuelve el camino de su diametro.
     
     El diametro de un grafo se define como la máxima distancia de todas las distancias minimas.
+    
+    ****
+    
     Complejiadad O(V*(V + E))
     """
+    max_dist_padres = dict()
     max_dist = 0
+    
     for v in grafo:
-        distancias, _ = bfs_distancias_padres(grafo, v)
-        max_dist_v = max(distancias.values())   # Maxima distancia de minima distancia de v a todos los vertices
-        max_dist = max(max_dist, max_dist_v)   # Comparar max anterior con diametro actual 
-    return max_dist
+        distancias, padres = bfs_distancias_padres(grafo, v)
+        for w in distancias:
+            if v == w:
+                continue
+            # Si la distancia v -> w mayor a diamtro actual, actualizar
+            if max_dist < distancias[w]:
+                max_dist = distancias[w]
+                # Para optimizar copiar una sola vez                
+                if max_dist_padres != padres:
+                    max_dist_padres = padres
+                max_dist_origen = v
+                max_dist_destino = w 
+    return reconstruir_camino(max_dist_padres, max_dist_origen, max_dist_destino)
 
 
 def bfs_distancias_padres(grafo: Grafo, origen):
