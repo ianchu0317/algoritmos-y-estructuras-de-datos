@@ -59,25 +59,28 @@ def diametro(grafo: Grafo) -> int:
     """
     max_dist = 0
     for v in grafo:
-        distancias = bfs_distancias(grafo, v)
+        distancias, _ = bfs_distancias_padres(grafo, v)
         max_dist_v = max(distancias.values())   # Maxima distancia de minima distancia de v a todos los vertices
         max_dist = max(max_dist, max_dist_v)   # Comparar max anterior con diametro actual 
     return max_dist
 
 
-def bfs_distancias(grafo: Grafo, origen) -> dict:
+def bfs_distancias_padres(grafo: Grafo, origen):
     """
-    Toma un grafo y un origen y devuelve las distancias minimas desde un origen hasta todos los demas vertices.
+    Toma un grafo y un vertice de origen y devuelve 
+    las distancias minimas y dicc de padres desde ese vertice hasta todos los demas vertices.
     
     **Ejemplo**
-    ```python
-    distancias = bfs_distancias(grafo, v) # Distancias es un dict
+    ```
+    distancias, padres = bfs_distancias_padres(grafo, v) # Distancias es un dict
     ```
     """
     distancias = dict()
     cola = deque()
     visitados = set()
+    padres = dict()
     
+    padres[origen] = None
     distancias[origen] = 0
     visitados.add(origen)
     cola.append(origen)
@@ -86,12 +89,13 @@ def bfs_distancias(grafo: Grafo, origen) -> dict:
         v = cola.popleft()
         for w in grafo.adyacentes(v):
             if w not in visitados:
+                padres[w] = v
                 distancias[w] = distancias[v] + 1
                 visitados.add(w)
                 cola.append(w)
-    return distancias
+                
+    return distancias, padres
     
-
 
 
 def en_rango(grafo: Grafo, origen, rango: int) -> int:
@@ -103,7 +107,7 @@ def en_rango(grafo: Grafo, origen, rango: int) -> int:
     Devuelve la cantidad de vértices que se encuentran a ese rango del origen.
     """
     cant_en_rango = 0
-    distancias = bfs_distancias(grafo, origen)
+    distancias, _ = bfs_distancias_padres(grafo, origen)
     for v in distancias:
         if distancias[v] == rango:
             cant_en_rango += 1
