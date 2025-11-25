@@ -178,11 +178,11 @@ def _dfs_cfcs(v, grafo: Grafo, visitados: set,
     
     # Crear camino componente conexo
     if mb[v] == orden[v]:
-        cfc = []
+        cfc = set()
         while True:
             w = pila.pop()
             apilados.remove(w)
-            cfc.append(w)
+            cfc.add(w)
             if w == v:
                 break
         cfcs.append(cfc)
