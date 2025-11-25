@@ -173,8 +173,8 @@ def _dfs_cfcs(v, grafo: Grafo, visitados: set,
     for w in grafo.adyacentes(v):
         if w not in visitados:
             _dfs_cfcs(w, grafo, visitados, apilados, pila, orden, mb, contador, cfcs)
-        elif w in apilados:
-            mb[v] = min(orden[w], mb[v])
+        if w in apilados:
+            mb[v] = min(mb[w], mb[v])
     
     # Crear camino componente conexo
     if mb[v] == orden[v]:

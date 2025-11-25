@@ -77,8 +77,21 @@ class Netstats:
     def mas_importantes():
         pass
     
-    def conectados():
-        pass
+    
+    def conectados(self, pagina):
+        """
+        Toma una pagina y muestra todas las paginas a los que podemos llegar desde pagina 
+        y que tambien pueden volver a pagina.
+        
+        **Complejidad**: O(P + L)
+        """
+        cfcs = bib.obtener_cfcs(self.red)
+        print(cfcs)
+        for cfc in cfcs:
+            if pagina in cfc:
+                return list(cfc)    # O(P)
+        return []   # Si no existe pagina en la red
+    
     
     def ciclo():
         pass
@@ -145,10 +158,12 @@ if __name__ == '__main__':
     paises1 = ["Argentina", "Francia", "Portugal", "España"]
     paises2 = ["Portugal", "China", "Colombia"]
     paises3 = ["Colombia", "Taiwan"]
+    paises4 = ["Taiwan", "Portugal"]
     
     netstat.agregar_post(paises1[0], paises1[1:])
     netstat.agregar_post(paises2[0], paises2[1:])
     netstat.agregar_post(paises3[0], paises3[1:])
+    netstat.agregar_post(paises4[0], paises4[1:])
     
     # Test de caminos minimos
     print(netstat.camino("Argentina", "Taiwan"))   # Argentina -> Portugal -> Colombia -> Taiwan  (Costo: 3)
@@ -165,3 +180,5 @@ if __name__ == '__main__':
     # Test de nav_primer link
     print(netstat.navegacion("Argentina"))
     
+    # Test conectividad (cfcs)
+    print(netstat.conectados("Colombia"))   # Taiwan -> Colombia -> portugal
