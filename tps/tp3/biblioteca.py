@@ -187,6 +187,7 @@ def _dfs_cfcs(v, grafo: Grafo, visitados: set,
                 break
         cfcs.append(cfc)
             
+
         
 
 if __name__ == '__main__':

@@ -86,11 +86,10 @@ class Netstats:
         **Complejidad**: O(P + L)
         """
         cfcs = bib.obtener_cfcs(self.red)
-        print(cfcs)
         for cfc in cfcs:
             if pagina in cfc:
-                return list(cfc)    # O(P)
-        return []   # Si no existe pagina en la red
+                return ", ".join(cfc)    # O(P)
+        return ""   # Si no existe pagina en la red
     
     
     def ciclo():
