@@ -88,5 +88,42 @@ func determinarOrdenDeAtaque(combatientes Lista[Personaje], T int) Lista[Persona
 árbol es plantable, o no. Para que lo sea, todo nodo debe cumplir: el dato del nodo debe ser mayor al dato de sus hijos (si los tiene),
 y además, el dato del nodo no puede superar la altura de dicho nodo. Implementar la primitiva en O(n), y justificar su complejidad.
 A fines del ejercicio considerar la estructura del árbol como la definida al dorso.
-
 */
+type Arbol struct {
+	dato int
+	izq  *Arbol
+	der  *Arbol
+}
+
+func (ab *Arbol) ArbolEsPlantable() bool {
+	plantable, _ := ab.esPlantableYAltura()
+	return plantable
+}
+
+func (ab *Arbol) esPlantableYAltura() (bool, int) {
+	if ab == nil {
+		return true, 0
+	}
+	// Dos llamadas recursivas, hacia izq y der -> 2T(n/2)
+	izqPlantable, altIzq := ab.izq.esPlantableYAltura()
+	derPlantable, altDer := ab.der.esPlantableYAltura()
+
+	// Operaciones O(1)
+	if !izqPlantable || !derPlantable {
+		return false, -1
+	}
+	if ab.izq != nil && ab.dato < ab.izq.dato {
+		return false, -1
+	}
+	if ab.der != nil && ab.dato < ab.der.dato {
+		return false, -1
+	}
+	altura := max(altIzq, altDer) + 1
+	if ab.dato > altura {
+		return false, -1
+	}
+	return true, altura
+}
+
+// Complejidad se puede calcular con teorema maestro
+// Ec T(n) = 2T(n/2) + O(1) -> A=2, B=2, C=0 -> logb(A)=1 > 0, COmplejidad O(n)
