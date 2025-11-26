@@ -54,3 +54,44 @@ func eliminarRepetidos(arreglo []int) []int {
 }
 
 // Complejiadad total: O(n) = O(N)
+
+/*
+Se tiene un árbol binario que representa la fase eliminatoria del mundial. En cada nodo guarda el nombre del país, así
+como la cantidad de goles que convirtió en dicha fase (incluyendo la tanda de penales, si fuera necesario). El padre
+del nodo debe si o si tener al hijo que ganó (tuvo mayor cantidad de goles). Implementar una primitiva para el árbol
+donde solamente están los nombres de los equipos en las hojas (no en los internos), y deje el árbol completado con los
+ganadores en cada fase. Se puede asumir que el árbol es o bien completo, o que al menos todos los nodos internos tienen
+exactamente 2 hijos. La cantidad de goles en la raíz no es relevante. La estructura del árbol es:
+type Arbol struct {
+pais string
+goles int
+izq *Arbol
+der *Arbol
+}
+Tomando el ejempo del dorso, si invocamos para el árbol de la izquierda, debe quedar como el de la derecha.
+*/
+
+type Arbol struct {
+	pais  string
+	goles int
+	izq   *Arbol
+	der   *Arbol
+}
+
+func (ab *Arbol) HallarGanador() {
+	if ab.izq == nil && ab.der == nil {
+		return
+	}
+	// Orden post-order
+	ab.izq.HallarGanador()
+	ab.der.HallarGanador()
+
+	// Actualizar nodo actual
+	if ab.izq.goles > ab.der.goles {
+		ab.pais = ab.izq.pais
+	} else {
+		ab.pais = ab.der.pais
+	}
+}
+
+// Complejidad por teorema maestro O(n) -> visito todos los nodos chequeando ganador
