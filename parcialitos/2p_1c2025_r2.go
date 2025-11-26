@@ -32,3 +32,25 @@ func (heap *Heap[T]) Filter(f func(T) bool) {
 	heapify(heap.arreglo, heap.cantidad, heap.cmp) // Le paso arreglo, cantidad de arreglo, funcion comparacion
 	heap.chequearRedimension()                     // Chequear redimension del arreglo si hace falta / Sino se chequea en proximo encolar/desencolar
 }
+
+/*
+Implementar una función eliminarRepetidos(arreglo []int) []int que dado un arreglo de números, nos devuelva
+otro en el que estén los elementos del original sin repetidos. La primera aparición debe mantenerse, y las demás no ser
+consideradas. Indicar y justificar la complejidad del algoritmo implementado.
+*/
+
+func eliminarRepetidos(arreglo []int) []int {
+	// Crear Hash O(1)
+	visitados := CrearHash[int, bool](func(a, b int) bool { return a == b })
+	sinRepetidos := make([]int, 0, len(arreglo))
+	// Calcular para elementos Guardar cada elemento como no visitado O(n) -> N veces operaciones O(1)
+	for _, num := range arreglo {
+		if !visitados.Pertenece(num) {
+			sinRepetidos = append(sinRepetidos, num)
+			visitados.Guardar(num, false)
+		}
+	}
+	return sinRepetidos
+}
+
+// Complejiadad total: O(n) = O(N)
