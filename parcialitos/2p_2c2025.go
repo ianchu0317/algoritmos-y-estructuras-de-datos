@@ -58,6 +58,31 @@ La función debe devolver una lista con los nombres de los personajes que logran
 en el que actúan. Indicar y justificar la complejidad del algoritmo implementado, expresada con las variables N y T del problema.
 */
 
+type Personaje struct {
+	nombre     string
+	iniciativa int
+}
+
+// Complejidad O(n) + O(n) + O(T*log(n)) -> O(n + Tlog(n)) OJO si T <= N
+func determinarOrdenDeAtaque(combatientes Lista[Personaje], T int) Lista[Personaje] {
+	// Pasar los combatientes a un arreglo O(n)
+	arrCombatientes := make([]Personaje, 0)
+	combatientes.Iterar(func(combatiente Personaje) bool {
+		arrCombatientes = append(arrCombatientes, combatiente)
+		return true
+	})
+	// Crear Max-Heap desde arreglo O(n) (Heapify)
+	heap := CrearHeapArr[Personaje](arrCombatientes, func(a, b Personaje) int {
+		return a.iniciativa - b.iniciativa
+	})
+	// Crear lista combatientes con T-elementos del heap
+	listaOrden := CrearListaEnlazada[Personaje]()
+	for i := 0; i < T; i++ {
+		listaOrden.InsertarUltimo(heap.Desencolar())
+	}
+	return listaOrden
+}
+
 /*
 3. Implementar en Go una primitiva para Árbol Binario func (ab *Arbol[int]) ArbolEsPlantable() bool que determine si un
 árbol es plantable, o no. Para que lo sea, todo nodo debe cumplir: el dato del nodo debe ser mayor al dato de sus hijos (si los tiene),
