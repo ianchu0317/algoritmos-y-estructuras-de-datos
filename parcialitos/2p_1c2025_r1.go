@@ -80,3 +80,33 @@ padron int
 notas []int
 }
 */
+
+type Alumno struct {
+	nombre string
+	padron int
+	notas  []int
+}
+
+func prom(notas []int) int {
+	sum := 0
+	for _, num := range notas {
+		sum += num
+	}
+	return sum / len(notas)
+}
+
+func mejoresPromedios(alumnos []Alumno, k int) Lista[Alumno] {
+	// Crear heap desde arreglo, se aplica heapify O(n)
+	heap := CrearHeapArr(alumnos, func(a, b Alumno) int { return prom(a.notas) - prom(b.notas) })
+	// Crear lista para resultados O(1)
+	listaAlumnos := CrearListaEnlazada[Alumno]()
+	// K veces -> desencolar heap -> K log(n). OJO K <= N
+	for i := range k {
+		listaAlumnos.InsertarUltimo(heap.Desencolar())
+	}
+	return listaAlumnos
+}
+
+// COmplejidad total: O(n) + O(k log(n)) = O(n + klog(n))
+
+// Si la cantidad de notas es acotado O(c) entonces heapify es O(n*c), si c == 3, entonces heapify es O(n)
