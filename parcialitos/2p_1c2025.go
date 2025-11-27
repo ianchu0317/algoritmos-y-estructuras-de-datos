@@ -86,3 +86,10 @@ func minimoExcluido(arr []int) int {
 }
 
 // Complejidad total: O(n) + O(n) + O(1) = O(n)
+
+/*
+Ejercicio Heap:
+Realizar el seguimiento de las siguientes operaciones sobre un heap de máximos:
+a. Constuir el heap a partir del arreglo [5, 3, 6, 1, 4, 7, 8, 10]
+b. Sobre el heap resultante del punto (a): Encolar 7, Desencolar, Desencolar, Encolar 13, Desencolar.
+*/
