@@ -56,3 +56,33 @@ func (arbol *abb[K, V]) _ancestroComun(min, max K) K {
 		return arbol.der._ancestroComun(min, max)
 	}
 }
+
+/*
+Implementar una función func minimoExcluido(arr []int) int que dado un arreglo de valores enteros (mayores o
+iguales a 0), obtenga el mínimo valor que no se encuentre en el arreglo. Indicar y justificar la complejidad del algoritmo
+(explicar en detalle este paso, porque es fácil que se te puedan pasar detalles importantes a explicar).
+Por ejemplo:
+minimoExcluido([]int{0, 5, 1}) --> 2
+minimoExcluido([]int{3, 5, 1}) --> 0
+minimoExcluido([]int{0, 5, 1, 3, 4, 1, 2}) --> 6
+minimoExcluido([]int{0, 5, 1, 3, 4, 1, 2, 12345675433221345}) --> 6
+*/
+
+func minimoExcluido(arr []int) int {
+	visitados := CrearHash[int, int](func(a, b int) bool { return a == b })
+	// Iterar cada elemento de arreglo y guardarlo en hash
+	// N veces operacion O(1) -> O(n)
+	for _, num := range arr {
+		visitados.Guardar(num, 0)
+	}
+	// Iterar indices de 0 hasta len(n) y buscar elemento minimo
+	// Iterar N veces operacion de O(1): COmparaciones, aplicacion de hash, etc
+	for i := 0; i < len(arr); i++ {
+		if !visitados.Pertenece(i) {
+			return i
+		}
+	}
+	return len(arr)
+}
+
+// Complejidad total: O(n) + O(n) + O(1) = O(n)
