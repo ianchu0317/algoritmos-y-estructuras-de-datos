@@ -246,7 +246,6 @@ def comunidades(grafo: Grafo) -> list:
     """
     # Obtener vertices de entrada O(V + E)
     vertices_entrada = obtener_vertices_entrada(grafo)
-    _ITERACION = 10
     
     # Asignar label para cada vertice del grafo
     label = dict()
@@ -256,11 +255,11 @@ def comunidades(grafo: Grafo) -> list:
         i += 1
     
     # Repetir hasta condicion de corte O(k)
+    _ITERACION = 10
     for x in range(_ITERACION):
         # Obtener orden random O(V)
         orden_random = grafo.obtener_vertices()
-        shuffle(orden_random)
-        
+        shuffle(orden_random)    
         # Hacer para cada vertice del grafo en orden aleatorio O(V + E)
         for v in orden_random:
             if not vertices_entrada[v]:
@@ -275,7 +274,7 @@ def comunidades(grafo: Grafo) -> list:
         if v_label not in comunidades_dicc:
             comunidades_dicc[v_label] = set()
         comunidades_dicc[v_label].add(v)
-    return list(comunidades_dicc.values)
+    return list(comunidades_dicc.values())
 
 
 def max_freq(label: dict, v_entrada: list) -> int:
