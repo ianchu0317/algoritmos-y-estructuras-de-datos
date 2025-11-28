@@ -151,8 +151,23 @@ class Netstats:
         """
         return bib.en_rango(self.red, pagina, n)
     
-    def comunidad():
-        pass
+    
+    def comunidad(self, pagina):
+        """
+        Devuelve la comunidad a la que pertenezca la ṕágina por parámetro.
+        
+        En caso de encontrar comunidad devuelve una lista de comunidades separados por coma.
+        En caso contrario, "No se encontro comunidad"
+        
+        **Ejemplo**
+        netstat.comunidad("Chile")
+        **Complejidad**: O(k(V + E)) -> O(V + E) ya que k=10 en este caso
+        """    
+        comunidades = bib.comunidades(self.red)
+        for comunidad in comunidades:
+            if pagina in comunidad:
+                return ", ".join(comunidad)
+        return "No se encontro comunidad"
     
     
     def navegacion(self, pagina) -> str:
