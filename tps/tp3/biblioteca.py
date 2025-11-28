@@ -202,19 +202,20 @@ def orden_topologico_vertices(grafo: Grafo, vertices: list) -> list:
     g_entrada = grados_entrada(grafo, vertices)
     cola = deque()
     orden = list()
-        
+    
     for v in vertices:
         if g_entrada[v] == 0:
             cola.append(v)
-    
+            
     while len(cola) > 0:
         v = cola.popleft()
         orden.append(v)
+        
         for w in grafo.adyacentes(v):
-            g_entrada[w] -= 1
-            if g_entrada[w] == 0:
-                orden.append(w)
-    
+            if w in g_entrada:
+                g_entrada[w] -= 1
+                if g_entrada[w] == 0:
+                    cola.append(w)
     return orden
 
 
@@ -230,7 +231,8 @@ def grados_entrada(grafo: Grafo, vertices: list) -> dict:
         g_entrada[v] = 0
     for v in vertices:
         for w in grafo.adyacentes(v):
-            g_entrada[w] += 1
+            if w in g_entrada:
+                g_entrada[w] += 1
     return g_entrada
 
 
