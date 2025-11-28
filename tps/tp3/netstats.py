@@ -95,9 +95,26 @@ class Netstats:
     def ciclo():
         pass
     
-    def lectura():
-        pass
     
+    def lectura(self, paginas: list):
+        """
+        Permite obtener un orden en el que es válido leer las páginas indicados en lista de paginas pasados por parametro. 
+        Solo se tiene en cuenta los artículos mencionados en los parámetros.
+
+        Si pagina_i tiene un link a pagina_j, entonces se lee primero pagina_j.
+        Si existe orden, entonces devuelve una cadena separada por coma de un orden.
+        Si no se puede leer las paginas en orden, devuelve "NO existe forma de leer las paginas en orden"
+    
+        **Parametros**: lista([Pagina_i, Pagina_j ..... Pagina_n])
+        **Complejidad**: O(n + Ln)
+        """
+        orden = bib.orden_topologico_vertices(self.red, paginas)
+        # Si orden obtenido no es igual, hubo ciclo
+        if len(orden) != len(paginas):
+            return "No existe forma de leer las paginas en orden"
+        # Devolver orden topologico al revess
+        return ", ".join(orden[::-1])
+
     
     def diametro(self) -> str:
         """
@@ -181,3 +198,6 @@ if __name__ == '__main__':
     
     # Test conectividad (cfcs)
     print(netstat.conectados("Colombia"))   # Taiwan -> Colombia -> portugal
+    
+    # Test lectura (orden topologico)
+    print(netstat.lectura(["Portugal", "Argentina", "China"]))  # China -> Portugal -> Argentina
