@@ -264,8 +264,11 @@ def comunidades(grafo: Grafo) -> list:
         # Hacer para cada vertice del grafo en orden aleatorio
         for v in orden_random:
             label[v] = max_freq(label, vertices_entrada[v])
-
+    
+    # Reconstruir comunidades
     _comunidades = []
+    
+
 
     
     
@@ -277,7 +280,10 @@ def max_freq(label: dict, v_entrada: list) -> int:
     Complejidad O(E) -> TOdos los grados de entrada de un vertice
     """
     contador_label = dict()
-    return max([label[v] for v in v_entrada])
+    for v in v_entrada:
+        v_label = label[v]
+        contador_label[v_label] = contador_label(v_label, 0) + 1
+    return max(contador_label, key=contador_label.get)
 
 
     
