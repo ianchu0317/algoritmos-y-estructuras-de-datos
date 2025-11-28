@@ -1,6 +1,8 @@
 from grafo import Grafo
 from collections import deque
+from random import shuffle
 import heapq
+
 
 
 def camino_minimo(grafo: Grafo, origen, destino) -> list:
@@ -238,23 +240,52 @@ def grados_entrada(grafo: Grafo, vertices: list) -> dict:
 
 def comunidades(grafo: Grafo) -> list:
     """
-    Toma un grafo y devuelve las comunidades dentro del grafo
+    Toma un grafo y devuelve las comunidades dentro del grafo.
+    
+    O(V + E) + O()
     """
+    # Obtener vertices de entrada
+    vertices_entrada = obtener_vertices_entrada(grafo)
+    _ITERACION = 10
     
     # Asignar label para cada vertice del grafo
     label = dict()
     i = 0
     for v in grafo:
         label[v] = i
-        i += 1    
+        i += 1
     
-    
+    # Repetir hasta condicion de corte O(k)
+    for x in range(_ITERACION):
+        # Obtener orden random O(V)
+        orden_random = grafo.obtener_vertices()
+        shuffle(orden_random)
+        
+        # Hacer para cada vertice del grafo en orden aleatorio
+        for v in orden_random:
+            label[v] = max_freq(label, vertices_entrada[v])
+
     _comunidades = []
+
+    
+    
+
+def max_freq(label: dict, v_entrada: list) -> int:
+    """
+    Toma un diccionario de label y devuelve el mayor label de v_entrada
+    
+    Complejidad O(E) -> TOdos los grados de entrada de un vertice
+    """
+    contador_label = dict()
+    return max([label[v] for v in v_entrada])
+
 
     
 def obtener_vertices_entrada(grafo: Grafo) -> dict:
     """
-    Devuelve un diccionario que contiene para cada vertice, una lista con vertices de entrada.    
+    Devuelve un diccionario que contiene para cada vertice del grafo, una lista con vertices de entrada.    
+    
+    **Complejidad**: O(V + E)
     """
     vertices_entrada = dict()
     for v in grafo:
@@ -263,6 +294,8 @@ def obtener_vertices_entrada(grafo: Grafo) -> dict:
         for w in grafo.adyacentes(v):
             vertices_entrada[w].append(v)
     return vertices_entrada
+
+
 
 
 if __name__ == '__main__':
