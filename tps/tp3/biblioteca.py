@@ -236,5 +236,34 @@ def grados_entrada(grafo: Grafo, vertices: list) -> dict:
     return g_entrada
 
 
+def comunidades(grafo: Grafo) -> list:
+    """
+    Toma un grafo y devuelve las comunidades dentro del grafo
+    """
+    
+    # Asignar label para cada vertice del grafo
+    label = dict()
+    i = 0
+    for v in grafo:
+        label[v] = i
+        i += 1    
+    
+    
+    _comunidades = []
+
+    
+def obtener_vertices_entrada(grafo: Grafo) -> dict:
+    """
+    Devuelve un diccionario que contiene para cada vertice, una lista con vertices de entrada.    
+    """
+    vertices_entrada = dict()
+    for v in grafo:
+        vertices_entrada[v] = []
+    for v in grafo:
+        for w in grafo.adyacentes(v):
+            vertices_entrada[w].append(v)
+    return vertices_entrada
+
+
 if __name__ == '__main__':
     pass
