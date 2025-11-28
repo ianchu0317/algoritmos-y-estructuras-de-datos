@@ -196,7 +196,27 @@ def orden_topologico_vertices(grafo: Grafo, vertices: list) -> list:
     **Consideraciones**
     Para que haya orden topológico entre v_i y v_j de la lista de vertices,
     entonces debe haber un arista entre esos dos vertices.
+    
+    **Complejidad** O(Vn + En), Vn la cantidad vertices y En la cantidad de aristas que hay
     """
+    g_entrada = grados_entrada(grafo, vertices)
+    cola = deque()
+    orden = list()
+        
+    for v in vertices:
+        if g_entrada[v] == 0:
+            cola.append(v)
+    
+    while len(cola) > 0:
+        v = cola.popleft()
+        orden.append(v)
+        for w in grafo.adyacentes(v):
+            g_entrada[w] -= 1
+            if g_entrada[w] == 0:
+                orden.append(w)
+    
+    return orden
+
 
 def grados_entrada(grafo: Grafo, vertices: list) -> dict:
     """
