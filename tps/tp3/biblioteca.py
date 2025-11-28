@@ -188,5 +188,31 @@ def _dfs_cfcs(v, grafo: Grafo, visitados: set,
         cfcs.append(cfc)
             
 
+def orden_topologico_vertices(grafo: Grafo, vertices: list) -> list:
+    """
+    Toma un grafo y una lista de vertices.
+    Devuelve un orden topológico de esos vertices según el grafo pasado.
+    
+    **Consideraciones**
+    Para que haya orden topológico entre v_i y v_j de la lista de vertices,
+    entonces debe haber un arista entre esos dos vertices.
+    """
+
+def grados_entrada(grafo: Grafo, vertices: list) -> dict:
+    """
+    Toma un grafo y una lista de vertices perteneciente al grafo.
+    Devuelve grados de entrada de esos vertices en esa sección del grafo.
+    Si grafo.hay_arista(v_i, v_j) entonces v_i -> v_j. 
+    Si ningun vertice de la lista pasada conecta a v_i, entonces grado de entrada de v_i es 0. 
+    """
+    g_entrada = dict()
+    for v in vertices:
+        g_entrada[v] = 0
+    for v in vertices:
+        for w in grafo.adyacentes(v):
+            g_entrada[w] += 1
+    return g_entrada
+
+
 if __name__ == '__main__':
     pass
