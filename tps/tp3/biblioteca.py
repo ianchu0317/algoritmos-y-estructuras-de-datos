@@ -242,7 +242,7 @@ def comunidades(grafo: Grafo) -> list:
     """
     Toma un grafo y devuelve las comunidades dentro del grafo.
     
-    O(V + E) + O()
+    **Complejidad**: O(K(V + E)), donde K es la cantidad de iteraciones 
     """
     # Obtener vertices de entrada O(V + E)
     vertices_entrada = obtener_vertices_entrada(grafo)
@@ -261,9 +261,8 @@ def comunidades(grafo: Grafo) -> list:
         orden_random = grafo.obtener_vertices()
         shuffle(orden_random)
         
-        # Hacer para cada vertice del grafo en orden aleatorio
+        # Hacer para cada vertice del grafo en orden aleatorio O(V + E)
         for v in orden_random:
-            # SI no tiene vertices de entrada entonces queda con su acutla
             if not vertices_entrada[v]:
                 continue
             label[v] = max_freq(label, vertices_entrada[v])
