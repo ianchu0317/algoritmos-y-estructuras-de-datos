@@ -250,3 +250,6 @@ if __name__ == '__main__':
     
     # Test netstat mas_importantes (page_rank)
     print(netstat.mas_importantes(5))
+    
+    # Test ciclo de largo n
+    print(bib.ciclo_largo_n(grafo_pr, "p2", 3))
