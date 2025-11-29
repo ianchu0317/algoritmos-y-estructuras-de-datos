@@ -410,5 +410,33 @@ def page_rank(grafo: Grafo, k: int, d: float, n: int) -> list:
     return res
 
 
+def ciclo_largo_n(grafo: Grafo, origen, n: int) -> list:
+    """
+    Devuelve un camino de un ciclo de largo n.
+    En caso de no encontrar camino devuelve una lista vacia.
+    
+    Complejidad O(V^n) (por permutacion)
+    """
+    
+    if n < 1:
+        return []
+
+    padres = dict()
+    distancias = dict()
+    visitados = set()
+    
+    if _dfs_hay_ciclo_largo_n(grafo, origen, origen, distancias, visitados, n):
+        return reconstruir_camino(padres)
+    return []
+
+
+def _dfs_hay_ciclo_largo_n(grafo: Grafo, v, origen, padres: dict, distancias: dict, visitados: set, n: int) -> bool:
+    
+    
+    if distancias[v] == n and v == origen:
+        return reconstruir_camino()
+    pass
+
+
 if __name__ == '__main__':
     pass
