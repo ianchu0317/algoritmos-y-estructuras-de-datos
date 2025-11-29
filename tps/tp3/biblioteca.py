@@ -306,6 +306,30 @@ def obtener_vertices_entrada(grafo: Grafo) -> dict:
     return vertices_entrada
 
 
+def clustering_vertice(grafo: Grafo, v) -> float:
+    """
+    Dado un grafo y un vértice del grafo, devuelve el coeficiente de Clustering de ese vertice.
+    Si vértice tiene menos de dos adyacentes, entonces devuelve 0.0
+    """
+    
+    vecinos_v = grafo.adyacentes(v)
+    k = len(vecinos_v)
+    
+    if k < 2:
+        return 0.0
+
+    contador_aristas = 0
+    for i in range(k):
+        w = vecinos_v[i]
+        for j in range(k):
+            if j == i:
+                continue
+            u = vecinos_v[j]
+            if grafo.hay_arista(w, u):
+                contador_aristas += 1
+    
+    return round(contador_aristas / (k*(k-1)), 3)
+
 
 
 if __name__ == '__main__':
