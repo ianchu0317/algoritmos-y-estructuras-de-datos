@@ -161,6 +161,14 @@ class Grafo:
         if not self.vertices:
             raise ValueError("No hay vertices en el grafo")
         random.choice(self.vertices.keys())
-        
     
     
+    def adyacente_aleatorio(self, v):
+        """
+        Toma un vertice V y devuelve un adyacente aleatorio de ese vertice.
+        En caso de no tener adyacentes devuelve `None`.
+        """
+        if not self.vertices[v]:
+            return None
+        return random.choice(self.vertices[v].keys())    
+     
