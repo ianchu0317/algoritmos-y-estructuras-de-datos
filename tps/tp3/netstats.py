@@ -74,8 +74,17 @@ class Netstats:
         return resultado
     
     
-    def mas_importantes():
-        pass
+    def mas_importantes(self, n):
+        """
+        Devuelve las n-paginas más importantes de la red.
+        En caso de que n < grafo, devuelve "N es mayor a la cantidad de paginas".
+        
+        **Complejidad**: O(l(P + L) + O(V log n))
+        (falta optimizar para repetidas operaciones en una misma red)
+        """
+        if n > len(self.red.obtener_vertices()):
+            return "N es mayor a la cantidad de paginas"
+        return ", ".join(bib.page_rank(self.red, 10, 0.85, n))
     
     
     def conectados(self, pagina):
@@ -238,3 +247,6 @@ if __name__ == '__main__':
     grafo_pr.agregar_arista("p5", "p4")
     
     print(bib.page_rank(grafo_pr, 10, 0.85, 6))
+    
+    # Test netstat mas_importantes (page_rank)
+    print(netstat.mas_importantes(5))
