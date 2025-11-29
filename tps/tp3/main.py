@@ -4,9 +4,38 @@ import sys
 from netstats import Netstats
 
 
-def operar(netstat: Netstats, comando, argumentos):
+def operar(netstat: Netstats, operacion, argumentos):
+    # Acordar formatear argumentos con coma -> Y los ints
     if operacion == "listar_operaciones":
-        print(netstat.listar_operaciones())
+        salida = netstat.listar_operaciones()
+    elif operacion == "camino":
+        salida = netstat.camino(argumentos[0], argumentos[1])
+    elif operacion == "mas_importantes":
+        salida = netstat.mas_importantes(argumentos[0])
+    elif operacion == "conectados":
+        salida = netstat.conectados(argumentos[0])
+    elif operacion == "ciclo":
+        salida = netstat.ciclo(argumentos[0], argumentos[1])
+    elif operacion == "lectura":
+        salida = netstat.lectura(argumentos[0])
+    elif operacion == "diametro":
+        salida = netstat.diametro(argumentos[0])
+    elif operacion == "rango":
+        salida = netstat.rango(argumentos[0])
+    elif operacion == "comunidad":
+        salida = netstat.comunidad(argumentos[0])
+    elif operacion == "navegacion":
+        salida = netstat.navegacion(argumentos[0])
+    elif operacion == "clustering":
+        if not argumentos:
+            salida = netstat.clustering()
+        else:
+            salida = netstat.clustering(argumentos[0])    
+    else:
+        salida = "No existe operacion"
+    print(salida)
+
+
 
 if __name__ == '__main__':
     netstat = Netstats()
