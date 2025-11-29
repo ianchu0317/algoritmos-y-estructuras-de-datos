@@ -181,8 +181,18 @@ class Netstats:
         return " -> ".join(nav_primer_link)
     
     
-    def clustering():
-        pass
+    def clustering(self, pagina=None):
+        """
+        Toma una pagina (opcional) y devuelve su coeficiente de clustering.
+        En caso de no indicar ninguna pagina, devuelve coeficiente de clustering de toda la red (promedio)
+        
+        **Parametros**
+        - pagina (opcional)
+        """
+        if not pagina:
+            return bib.clustering(self.red)
+        return bib.clustering_vertice(self.red, pagina)
+        
 
 if __name__ == '__main__':
     netstat = Netstats()
