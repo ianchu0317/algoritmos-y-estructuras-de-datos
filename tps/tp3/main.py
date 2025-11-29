@@ -9,7 +9,8 @@ def operar(netstat: Netstats, operacion, argumentos):
     if operacion == "listar_operaciones":
         salida = netstat.listar_operaciones()
     elif operacion == "camino":
-        salida = netstat.camino(argumentos[0], argumentos[1])
+        origen, destino = argumentos[0].split(",")
+        salida = netstat.camino(origen, destino)
     elif operacion == "mas_importantes":
         salida = netstat.mas_importantes(argumentos[0])
     elif operacion == "conectados":
@@ -54,8 +55,8 @@ if __name__ == '__main__':
     while True:
         try:
             # Leer argumento
-            operacion = input()
-            print(operacion)
+            linea_operacion = input()
+            operacion = linea_operacion.split(" ", 1)   # Split solo el primer espacio
             # Operar argumento
             operar(netstat, operacion[0], operacion[1:])
         except EOFError:

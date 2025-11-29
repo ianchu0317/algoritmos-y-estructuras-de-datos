@@ -1,1 +1,4 @@
 listar_operaciones
+camino Argentina,Zinedine Zidane
+camino Jeremy Irons,pejerrey
+camino handball,Napoleón Bonaparte
