@@ -21,12 +21,14 @@ if __name__ == '__main__':
         linea_lista_tsv = dato.split("\t")
         netstat.agregar_post(linea_lista_tsv[0], linea_lista_tsv[1:])
     
-    # Esperar comandos
+    # Esperar comandos -> Hasta que no haya inputs entonces break
     while True:
-        # Leer argumento
-        operacion= input()
-        print(operacion)
-        # Operar argumento
-        operar(netstat, operacion[0], operacion[1:])
-
+        try:
+            # Leer argumento
+            operacion = input()
+            print(operacion)
+            # Operar argumento
+            operar(netstat, operacion[0], operacion[1:])
+        except EOFError:
+            break
 
