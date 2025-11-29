@@ -4,6 +4,9 @@ import sys
 from netstats import Netstats
 
 
+def operar(netstat: Netstats, comando, argumentos):
+    if operacion == "listar_operaciones":
+        print(netstat.listar_operaciones())
 
 if __name__ == '__main__':
     netstat = Netstats()
@@ -19,7 +22,11 @@ if __name__ == '__main__':
         netstat.agregar_post(linea_lista_tsv[0], linea_lista_tsv[1:])
     
     # Esperar comandos
-    cmd = input()
-    print(cmd)
+    while True:
+        # Leer argumento
+        operacion= input()
+        print(operacion)
+        # Operar argumento
+        operar(netstat, operacion[0], operacion[1:])
 
 
