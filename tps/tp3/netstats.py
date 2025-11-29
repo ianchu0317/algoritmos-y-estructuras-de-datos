@@ -226,3 +226,15 @@ if __name__ == '__main__':
     
     # Test lectura (orden topologico)
     print(netstat.lectura(["Portugal", "Argentina", "China"]))  # China -> Portugal -> Argentina
+    
+    # Test page rank
+    grafo_pr = Grafo(True, vertices=["p1", "p2", "p3", "p4", "p5"])
+    grafo_pr.agregar_arista("p1", "p4")
+    grafo_pr.agregar_arista("p2", "p1")
+    grafo_pr.agregar_arista("p2", "p4")
+    grafo_pr.agregar_arista("p3", "p2")
+    grafo_pr.agregar_arista("p4", "p3")
+    grafo_pr.agregar_arista("p4", "p5")
+    grafo_pr.agregar_arista("p5", "p4")
+    
+    print(bib.page_rank(grafo_pr, 10, 0.85, 6))
