@@ -422,20 +422,34 @@ def ciclo_largo_n(grafo: Grafo, origen, n: int) -> list:
         return []
 
     padres = dict()
-    distancias = dict()
     visitados = set()
     
-    if _dfs_hay_ciclo_largo_n(grafo, origen, origen, distancias, visitados, n):
-        return reconstruir_camino(padres)
+    padres[origen] = None
+    visitados.add(origen)
+    
+    return _dfs_ciclo_largo_n(grafo, origen, origen, padres, visitados, n)
+
+def _dfs_ciclo_largo_n(grafo: Grafo, v, origen, 
+                       padres: dict, visitados: set, 
+                       pasos_restantes: int):
+       
+    for w in grafo.adyacentes(v):
+        # Reconstruir camino si se encontro ciclo
+        if pasos_restantes == 1 and w == origen:
+            ciclo = reconstruir_camino(padres, origen, v)
+            ciclo.append(origen)
+            return ciclo
+        
+        if w not in visitados:
+            visitados.add(w)
+            padres[w] = v
+            ciclo = _dfs_ciclo_largo_n(grafo, w, origen, padres, visitados, pasos_restantes-1)
+            if ciclo:
+                return ciclo
+            # Borrar visitados para otros posibles caminos
+            visitados.remove(w)
+            padres.pop(w)
     return []
-
-
-def _dfs_hay_ciclo_largo_n(grafo: Grafo, v, origen, padres: dict, distancias: dict, visitados: set, n: int) -> bool:
-    
-    
-    if distancias[v] == n and v == origen:
-        return reconstruir_camino()
-    pass
 
 
 if __name__ == '__main__':
