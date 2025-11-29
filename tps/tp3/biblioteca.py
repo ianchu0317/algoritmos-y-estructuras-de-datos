@@ -415,7 +415,10 @@ def ciclo_largo_n(grafo: Grafo, origen, n: int) -> list:
     Devuelve un camino de un ciclo de largo n.
     En caso de no encontrar camino devuelve una lista vacia.
     
-    Complejidad O(V^n) (por permutacion)
+    Complejidad O(V^n):
+    - Busco con dfs hasta la profundidad deseada.
+    - SI no encuentro lo borro... En el peor de los casos cada nivel tiene V vertices
+        - V x V x ... Vn = V^n
     """
     
     if n < 1:
