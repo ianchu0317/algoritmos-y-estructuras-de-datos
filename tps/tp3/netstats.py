@@ -101,8 +101,16 @@ class Netstats:
         return ""   # Si no existe pagina en la red
     
     
-    def ciclo():
-        pass
+    def ciclo(self, pagina, n: int):
+        """
+        Toma una pagina y un valor entero n y devuelve si hay ciclo en esa pagina de largo n.
+        Si no encuentra entonces devuelve: "No se encontro recorrido"
+        **Complejidad**: O(P^n)
+        """
+        recorrido = bib.ciclo_largo_n(self.red, pagina, n)
+        if not recorrido:
+            return "No se encontro recorrido"
+        return " -> ".join(recorrido)
     
     
     def lectura(self, paginas: list):
@@ -253,3 +261,6 @@ if __name__ == '__main__':
     
     # Test ciclo de largo n
     print(bib.ciclo_largo_n(grafo_pr, "p2", 3))
+    
+    # Encontrar recorrido con netstat
+    print(netstat.ciclo("Portugal", 3))     # Portugal -> Colomb -> Taiwan -> Portugal
