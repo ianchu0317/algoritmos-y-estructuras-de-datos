@@ -1,3 +1,4 @@
+import random
 
 class Grafo:
     def __init__(self, es_dirigido: bool, vertices=[]):
@@ -150,3 +151,16 @@ class Grafo:
             if v in self.vertices[w]:
                 self.vertices[w].remove(v)
                 self.pesos[w].pop(v)
+
+
+    def vertice_aleatorio(self):
+        """
+        Devuelve un vertice aleatorio en el grafo.
+        En caso de no haber vertices en grafo, devuelve "No hay vertices en el grafo"
+        """
+        if not self.vertices:
+            raise ValueError("No hay vertices en el grafo")
+        random.choice(self.vertices.keys())
+        
+    
+    
