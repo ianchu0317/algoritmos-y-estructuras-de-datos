@@ -312,6 +312,8 @@ def clustering_vertice(grafo: Grafo, v) -> float:
     Si vértice tiene menos de dos adyacentes, entonces devuelve 0.0
     
     **Complejidad** O(k²) pero si K es acotado y con un rango pequeño, entonces O(C) constante y se acota O(1)
+    
+    Si no es grafo disperso, entonces es O(E) en el peor de los casos
     """
     
     vecinos_v = grafo.adyacentes(v)
@@ -331,8 +333,25 @@ def clustering_vertice(grafo: Grafo, v) -> float:
             if grafo.hay_arista(w, u):
                 contador_aristas += 1
     
-    return round(contador_aristas / (k*(k-1)), 4)
+    return round(contador_aristas / (k*(k-1)), 3)
 
+
+def clustering(grafo: Grafo) -> float:
+    """
+    Toma un grafo y devuelve el coeficiente de clustering promedio de todo el grafo.
+    
+    **Complejidad**
+    Para cada vertice calculo su coeficiente O(v*k²)
+    - Si K es acotado (grafo disperso) entonces es O(v)
+    - Si es grafo denso entonces (k aprox V) -> O(V³)
+        - DUDA RECORDATORIO PREGUNTAR COMPLEJIDAD DE ESTE****
+    """
+    suma_clustering = 0.0
+    cantidad = 0
+    for v in grafo:
+        suma_clustering += clustering_vertice(grafo, v)
+        cantidad += 1
+    return round(suma_clustering / cantidad, 3) 
 
 
 if __name__ == '__main__':
