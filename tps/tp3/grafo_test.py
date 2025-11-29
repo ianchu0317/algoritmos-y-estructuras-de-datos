@@ -461,6 +461,7 @@ def test_clustering():
     grafo5.agregar_arista("V", "B")
     grafo5.agregar_arista("V", "C")
     grafo5.agregar_arista("A", "B")  # Solo 1 arista entre vecinos
+    grafo5.agregar_arista("B", "C")
     
     """
     V → A

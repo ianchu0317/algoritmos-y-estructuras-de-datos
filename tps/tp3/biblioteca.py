@@ -310,6 +310,8 @@ def clustering_vertice(grafo: Grafo, v) -> float:
     """
     Dado un grafo y un vértice del grafo, devuelve el coeficiente de Clustering de ese vertice.
     Si vértice tiene menos de dos adyacentes, entonces devuelve 0.0
+    
+    **Complejidad** O(k²) pero si K es acotado y con un rango pequeño, entonces O(C) constante y se acota O(1)
     """
     
     vecinos_v = grafo.adyacentes(v)
@@ -319,6 +321,7 @@ def clustering_vertice(grafo: Grafo, v) -> float:
         return 0.0
 
     contador_aristas = 0
+    # POr cada adyacente, me fijo si hay un par con arista
     for i in range(k):
         w = vecinos_v[i]
         for j in range(k):
@@ -328,7 +331,7 @@ def clustering_vertice(grafo: Grafo, v) -> float:
             if grafo.hay_arista(w, u):
                 contador_aristas += 1
     
-    return round(contador_aristas / (k*(k-1)), 3)
+    return round(contador_aristas / (k*(k-1)), 4)
 
 
 
