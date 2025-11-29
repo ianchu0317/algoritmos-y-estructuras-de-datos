@@ -366,11 +366,364 @@ def test_comunidades():
     print("=== ✅ TODOS LOS TESTS DE COMUNIDADES PASARON ===\n")
 
 
+def test_clustering():
+    """
+    Tests para coeficiente de clustering
+    """
+    print("=== Tests de Coeficiente de Clustering ===\n")
+    
+    # Test 1: Vértice sin vecinos
+    print("Test 1: Vértice sin vecinos (aislado)")
+    grafo1 = Grafo(es_dirigido=True)
+    grafo1.agregar_vertice("Solo")
+    
+    from biblioteca import clustering_vertice
+    
+    resultado = clustering_vertice(grafo1, "Solo")
+    assert resultado == 0.0, f"Esperado 0.0, obtuvo {resultado}"
+    print(f"✅ Clustering de vértice aislado: {resultado}\n")
+    
+    
+    # Test 2: Vértice con 1 solo vecino
+    print("Test 2: Vértice con 1 vecino")
+    grafo2 = Grafo(es_dirigido=True)
+    grafo2.agregar_vertice("A")
+    grafo2.agregar_vertice("B")
+    grafo2.agregar_arista("A", "B")
+    
+    resultado_a = clustering_vertice(grafo2, "A")
+    assert resultado_a == 0.0, f"Esperado 0.0, obtuvo {resultado_a}"
+    print(f"✅ Clustering de A (1 vecino): {resultado_a}\n")
+    
+    
+    # Test 3: Triángulo completo (clustering = 1.0)
+    print("Test 3: Triángulo completo")
+    grafo3 = Grafo(es_dirigido=True)
+    grafo3.agregar_vertice("A")
+    grafo3.agregar_vertice("B")
+    grafo3.agregar_vertice("C")
+    grafo3.agregar_arista("A", "B")
+    grafo3.agregar_arista("A", "C")
+    grafo3.agregar_arista("B", "C")
+    grafo3.agregar_arista("C", "B")  # Bidireccional B-C
+    
+    """
+    A → B
+    ↓   ↕
+    C ←─┘
+    
+    Vecinos de A: [B, C]
+    Aristas entre vecinos: B↔C (existe)
+    Max posible: 1 pareja
+    Clustering: 1/1 = 1.0
+    """
+    
+    resultado = clustering_vertice(grafo3, "A")
+    assert resultado == 1.0, f"Esperado 1.0, obtuvo {resultado}"
+    print(f"✅ Clustering de A en triángulo: {resultado}\n")
+    
+    
+    # Test 4: Sin aristas entre vecinos (clustering = 0.0)
+    print("Test 4: Estrella (sin aristas entre vecinos)")
+    grafo4 = Grafo(es_dirigido=True)
+    grafo4.agregar_vertice("Centro")
+    grafo4.agregar_vertice("A")
+    grafo4.agregar_vertice("B")
+    grafo4.agregar_vertice("C")
+    grafo4.agregar_arista("Centro", "A")
+    grafo4.agregar_arista("Centro", "B")
+    grafo4.agregar_arista("Centro", "C")
+    
+    """
+    Centro → A
+         ↓   B
+         ↓   C
+    
+    Vecinos de Centro: [A, B, C]
+    Aristas entre vecinos: ninguna
+    Max posible: 3 parejas (A-B, A-C, B-C)
+    Clustering: 0/3 = 0.0
+    """
+    
+    resultado = clustering_vertice(grafo4, "Centro")
+    assert resultado == 0.0, f"Esperado 0.0, obtuvo {resultado}"
+    print(f"✅ Clustering de Centro en estrella: {resultado}\n")
+    
+    
+    # Test 5: Clustering parcial (0.333...)
+    print("Test 5: Clustering parcial (1 de 3 aristas)")
+    grafo5 = Grafo(es_dirigido=True)
+    grafo5.agregar_vertice("V")
+    grafo5.agregar_vertice("A")
+    grafo5.agregar_vertice("B")
+    grafo5.agregar_vertice("C")
+    grafo5.agregar_arista("V", "A")
+    grafo5.agregar_arista("V", "B")
+    grafo5.agregar_arista("V", "C")
+    grafo5.agregar_arista("A", "B")  # Solo 1 arista entre vecinos
+    
+    """
+    V → A
+    ↓   ↓
+    B ← B
+    ↓
+    C
+    
+    Vecinos de V: [A, B, C]
+    Aristas entre vecinos: A→B (1)
+    Max posible: 3 parejas
+    Clustering: 1/3 = 0.333...
+    """
+    
+    resultado = clustering_vertice(grafo5, "V")
+    assert abs(resultado - 0.333) < 0.001, f"Esperado ~0.333, obtuvo {resultado}"
+    print(f"✅ Clustering parcial de V: {resultado}\n")
+    
+    
+    # Test 6: Clustering con aristas bidireccionales
+    print("Test 6: Aristas bidireccionales")
+    grafo6 = Grafo(es_dirigido=True)
+    grafo6.agregar_vertice("X")
+    grafo6.agregar_vertice("A")
+    grafo6.agregar_vertice("B")
+    grafo6.agregar_arista("X", "A")
+    grafo6.agregar_arista("X", "B")
+    grafo6.agregar_arista("A", "B")
+    grafo6.agregar_arista("B", "A")  # Bidireccional
+    
+    """
+    X → A
+    ↓   ↕
+        B
+    
+    Vecinos de X: [A, B]
+    Aristas entre vecinos: A↔B (cuenta como 1 arista)
+    Max posible: 1 pareja
+    Clustering: 1/1 = 1.0
+    """
+    
+    resultado = clustering_vertice(grafo6, "X")
+    assert resultado == 1.0, f"Esperado 1.0, obtuvo {resultado}"
+    print(f"✅ Clustering con aristas bidireccionales: {resultado}\n")
+    
+    
+    # Test 7: Clustering con 4 vecinos
+    print("Test 7: Vértice con 4 vecinos (2 de 6 aristas)")
+    grafo7 = Grafo(es_dirigido=True)
+    grafo7.agregar_vertice("Hub")
+    grafo7.agregar_vertice("A")
+    grafo7.agregar_vertice("B")
+    grafo7.agregar_vertice("C")
+    grafo7.agregar_vertice("D")
+    grafo7.agregar_arista("Hub", "A")
+    grafo7.agregar_arista("Hub", "B")
+    grafo7.agregar_arista("Hub", "C")
+    grafo7.agregar_arista("Hub", "D")
+    grafo7.agregar_arista("A", "B")  # Arista 1
+    grafo7.agregar_arista("C", "D")  # Arista 2
+    
+    """
+    Hub → A → B
+      ↓   C → D
+    
+    Vecinos de Hub: [A, B, C, D]
+    Aristas entre vecinos: A→B, C→D (2)
+    Max posible: C(4,2) = 6 parejas
+    Clustering: 2/6 = 0.333...
+    """
+    
+    resultado = clustering_vertice(grafo7, "Hub")
+    assert abs(resultado - 0.333) < 0.001, f"Esperado ~0.333, obtuvo {resultado}"
+    print(f"✅ Clustering de Hub con 4 vecinos: {resultado}\n")
+    
+    
+    # Test 8: No contar self-loops
+    print("Test 8: Ignorar self-loops (vértice que apunta a sí mismo)")
+    grafo8 = Grafo(es_dirigido=True)
+    grafo8.agregar_vertice("V")
+    grafo8.agregar_vertice("A")
+    grafo8.agregar_vertice("B")
+    grafo8.agregar_arista("V", "A")
+    grafo8.agregar_arista("V", "B")
+    grafo8.agregar_arista("A", "A")  # Self-loop (no debe contar)
+    grafo8.agregar_arista("A", "B")
+    
+    """
+    V → A ⟲ (self-loop, ignorar)
+    ↓   ↓
+        B
+    
+    Vecinos de V: [A, B]
+    Aristas entre vecinos: A→B (1), A→A NO cuenta
+    Max posible: 1 pareja
+    Clustering: 1/1 = 1.0
+    """
+    
+    resultado = clustering_vertice(grafo8, "V")
+    assert resultado == 1.0, f"Esperado 1.0, obtuvo {resultado}"
+    print(f"✅ Self-loops ignorados correctamente: {resultado}\n")
+    
+    
+    # Test 9: Grafo no dirigido (ambas direcciones)
+    print("Test 9: Grafo NO dirigido")
+    grafo9 = Grafo(es_dirigido=False)
+    grafo9.agregar_vertice("V")
+    grafo9.agregar_vertice("A")
+    grafo9.agregar_vertice("B")
+    grafo9.agregar_vertice("C")
+    grafo9.agregar_arista("V", "A")
+    grafo9.agregar_arista("V", "B")
+    grafo9.agregar_arista("V", "C")
+    grafo9.agregar_arista("A", "B")
+    
+    """
+    V --- A
+    |     |
+    B --- B
+    |
+    C
+    
+    Vecinos de V: [A, B, C]
+    Aristas entre vecinos: A-B (1)
+    Max posible: 3 parejas
+    Clustering: 1/3 = 0.333...
+    """
+    
+    resultado = clustering_vertice(grafo9, "V")
+    assert abs(resultado - 0.333) < 0.001, f"Esperado ~0.333, obtuvo {resultado}"
+    print(f"✅ Clustering en grafo no dirigido: {resultado}\n")
+    
+    
+    # Test 10: Clustering promedio de toda la red
+    print("Test 10: Clustering promedio de la red")
+    from biblioteca import clustering_promedio
+    
+    grafo10 = Grafo(es_dirigido=True)
+    
+    # Crear una red pequeña
+    grafo10.agregar_vertice("A")
+    grafo10.agregar_vertice("B")
+    grafo10.agregar_vertice("C")
+    grafo10.agregar_arista("A", "B")
+    grafo10.agregar_arista("A", "C")
+    grafo10.agregar_arista("B", "C")
+    
+    """
+    Clustering individual:
+    - A: vecinos [B, C], arista B-C existe → 1/1 = 1.0
+    - B: vecinos [C], solo 1 vecino → 0.0
+    - C: sin vecinos de salida → 0.0
+    
+    Promedio: (1.0 + 0.0 + 0.0) / 3 = 0.333...
+    """
+    
+    resultado = clustering_promedio(grafo10)
+    assert abs(resultado - 0.333) < 0.001, f"Esperado ~0.333, obtuvo {resultado}"
+    print(f"✅ Clustering promedio de la red: {resultado}\n")
+    
+    
+    # Test 11: Red con todos clustering = 0
+    print("Test 11: Red tipo árbol (clustering = 0)")
+    grafo11 = Grafo(es_dirigido=True)
+    grafo11.agregar_vertice("Raiz")
+    grafo11.agregar_vertice("A")
+    grafo11.agregar_vertice("B")
+    grafo11.agregar_vertice("C")
+    grafo11.agregar_arista("Raiz", "A")
+    grafo11.agregar_arista("Raiz", "B")
+    grafo11.agregar_arista("A", "C")
+    
+    """
+    Raiz → A → C
+       ↓   B
+    
+    Clustering:
+    - Raiz: vecinos [A, B], no hay A-B → 0/1 = 0.0
+    - A: vecinos [C], solo 1 → 0.0
+    - B: sin vecinos → 0.0
+    - C: sin vecinos → 0.0
+    
+    Promedio: 0.0
+    """
+    
+    resultado = clustering_promedio(grafo11)
+    assert resultado == 0.0, f"Esperado 0.0, obtuvo {resultado}"
+    print(f"✅ Clustering de árbol (sin triángulos): {resultado}\n")
+    
+    
+    # Test 12: Red completamente conectada (clique)
+    print("Test 12: Clique (todos clustering = 1.0)")
+    grafo12 = Grafo(es_dirigido=True)
+    vertices_clique = ["A", "B", "C", "D"]
+    
+    for v in vertices_clique:
+        grafo12.agregar_vertice(v)
+    
+    # Conectar todos con todos
+    for v1 in vertices_clique:
+        for v2 in vertices_clique:
+            if v1 != v2:
+                grafo12.agregar_arista(v1, v2)
+    
+    """
+    Grafo completo (todos conectados con todos)
+    
+    Para cada vértice:
+    - Tiene 3 vecinos
+    - Todos los vecinos están conectados entre sí
+    - Clustering: 3/3 = 1.0
+    
+    Promedio: 1.0
+    """
+    
+    resultado = clustering_promedio(grafo12)
+    assert resultado == 1.0, f"Esperado 1.0, obtuvo {resultado}"
+    print(f"✅ Clustering de clique completo: {resultado}\n")
+    
+    
+    # Test 13: Verificar redondeo a 3 decimales
+    print("Test 13: Redondeo a 3 decimales")
+    grafo13 = Grafo(es_dirigido=True)
+    grafo13.agregar_vertice("V")
+    for i in range(7):  # 7 vecinos
+        grafo13.agregar_vertice(str(i))
+        grafo13.agregar_arista("V", str(i))
+    
+    # Agregar algunas aristas entre vecinos
+    grafo13.agregar_arista("0", "1")
+    grafo13.agregar_arista("2", "3")
+    
+    """
+    Vecinos de V: 7 vértices
+    Max posible: C(7,2) = 21 parejas
+    Aristas: 2
+    Clustering: 2/21 = 0.095238... → 0.095 (redondeado)
+    """
+    
+    resultado = clustering_vertice(grafo13, "V")
+    # Verificar que tiene exactamente 3 decimales
+    resultado_str = f"{resultado:.3f}"
+    assert resultado_str == "0.095", f"Esperado '0.095', obtuvo '{resultado_str}'"
+    print(f"✅ Redondeo correcto: {resultado_str}\n")
+    
+    
+    # Test 14: Grafo vacío
+    print("Test 14: Clustering promedio de grafo vacío")
+    grafo14 = Grafo(es_dirigido=True)
+    resultado = clustering_promedio(grafo14)
+    assert resultado == 0.0, f"Esperado 0.0, obtuvo {resultado}"
+    print(f"✅ Grafo vacío: {resultado}\n")
+    
+    
+    print("=== ✅ TODOS LOS TESTS DE CLUSTERING PASARON ===\n")
+
+
 # Ejecutar todos los tests
 if __name__ == "__main__":
     test_grafo()
     test_vertices_entrada()
     test_comunidades()
+    test_clustering()  # ✅ Agregar nueva función
     
     print("\n" + "="*60)
     print("🎉 ¡TODOS LOS TESTS PASARON EXITOSAMENTE! 🎉")
