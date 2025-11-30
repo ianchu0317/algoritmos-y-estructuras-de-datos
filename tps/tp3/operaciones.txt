@@ -10,3 +10,4 @@ lectura Hockey sobre hielo,Roma,Japón,árbol,Guerra,Dios,universo,Himalaya,oto�
 rango Tokio,8
 rango Tokio,3
 rango Perón,4
+comunidad Chile

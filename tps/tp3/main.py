@@ -41,7 +41,8 @@ def operar(netstat: Netstats, operacion, argumentos):
         salida = netstat.rango(pagina, int(n))
     
     elif operacion == "comunidad":
-        salida = netstat.comunidad(argumentos[0])
+        pagina = argumentos[0]
+        salida = netstat.comunidad(pagina)
     
     elif operacion == "navegacion":
         salida = netstat.navegacion(argumentos[0])
