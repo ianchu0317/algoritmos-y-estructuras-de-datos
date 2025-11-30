@@ -28,7 +28,6 @@ def operar(netstat: Netstats, operacion, argumentos):
     
     elif operacion == netstats.OPERACION_CONECTADOS:
         pagina = argumentos[0]
-        #salida = "Falta implementar conectados"
         salida = netstat.conectados(pagina)
     
     elif operacion == netstats.OPERACION_CICLO:
@@ -40,7 +39,6 @@ def operar(netstat: Netstats, operacion, argumentos):
         salida = netstat.lectura(paginas)
     
     elif operacion == netstats.OPERACION_DIAMETRO:
-        #salida = "Pausar diametro"
         salida = netstat.diametro()
         
     elif operacion == netstats.OPERACION_RANGO:
@@ -49,7 +47,6 @@ def operar(netstat: Netstats, operacion, argumentos):
     
     elif operacion == netstats.OPERACION_COMUNIDAD:
         pagina = argumentos[0]
-        #salida = "Pausar comunidad para testing"
         salida = netstat.comunidad(pagina)
     
     elif operacion == netstats.OPERACION_NAVEGACION:
