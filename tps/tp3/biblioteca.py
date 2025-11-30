@@ -355,16 +355,14 @@ def clustering(grafo: Grafo) -> float:
 
 
 
-def page_rank(grafo: Grafo, k: int, d: float, n: int) -> list:
+def page_rank(grafo: Grafo, k: int, d: float) -> list:
     """
     Toma un grafo, un valor K (veces a iterar, cuanto más mejora presicion), un valor d (dumping factor),
-    y un valor n. 
-    Devuelve una lista n-elemntos ordenada de mayor a menor por importancia de vertices.
+    y un valor n.
+    Devuelve un diccionario con los valores que rankean los vertices del grafo.
     
-    **Complejidad**: O(k(V + E) + V(log n))
-    
+    **Complejidad**: O(k(V + E) 
     """
-    
     # Estructuras auxiliares a utilizar
     pr = dict()
     v_entrada = obtener_vertices_entrada(grafo) # O(V + E) 
@@ -383,12 +381,19 @@ def page_rank(grafo: Grafo, k: int, d: float, n: int) -> list:
             for w in v_entrada[v]:
                 v_sumatoria += pr[w] / len(grafo.adyacentes(w))
             pr_nuevo[v] = (1-d)/N + d*v_sumatoria 
-        pr = pr_nuevo       # Actualizar valores en cada iter
-        
+        pr = pr_nuevo       # Actualizar valores en cada iter      
+    return pr
+
+
+def obtener_top_n(diccionario: dict, n: int):
+    """
+    Toma un diccionario y devuelve una lista ordenada de top n elemntos del diccionario
+    Complejidad: O(V(log n))
+    """
     # Devolver lista n-elementos importantes -> Meter todo a heap -> min heap top-n
     top_n = []
     i = 0
-    for v, rango_v in pr.items():
+    for v, rango_v in diccionario.items():
         # Mantener con n-eleemntos
         if i < n:
             heapq.heappush(top_n, (rango_v, v))

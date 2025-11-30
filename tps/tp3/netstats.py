@@ -42,6 +42,7 @@ class Netstats:
     
     def __init__(self):
         self.red = Grafo(True)
+        self.page_rank = None
     
     
     def agregar_post(self, post: str, links: list):
@@ -103,9 +104,9 @@ class Netstats:
         **Complejidad**: O(l(P + L) + O(V log n))
         (falta optimizar para repetidas operaciones en una misma red)
         """
-        if n > len(self.red.obtener_vertices()):
-            return "N es mayor a la cantidad de paginas"
-        return ", ".join(bib.page_rank(self.red, 15, 0.85, n))
+        if not self.page_rank:
+            self.page_rank = bib.page_rank(self.red, 15, 0.85)
+        return ", ".join(bib.obtener_top_n(self.page_rank, n))
     
     
     def conectados(self, pagina):
