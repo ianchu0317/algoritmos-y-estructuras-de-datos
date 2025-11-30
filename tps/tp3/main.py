@@ -3,6 +3,7 @@
 import sys
 from netstats import Netstats
 
+sys.setrecursionlimit(100000)
 
 def operar(netstat: Netstats, operacion, argumentos):
     # Acordar formatear argumentos con coma -> Y los ints
@@ -12,9 +13,11 @@ def operar(netstat: Netstats, operacion, argumentos):
         origen, destino = argumentos[0].split(",")
         salida = netstat.camino(origen, destino)
     elif operacion == "mas_importantes":
-        salida = netstat.mas_importantes(int(argumentos[0]))
+        n = int(argumentos[0])
+        salida = netstat.mas_importantes(n)
     elif operacion == "conectados":
-        salida = netstat.conectados(argumentos[0])
+        pagina = argumentos[0]
+        salida = netstat.conectados(pagina)
     elif operacion == "ciclo":
         salida = netstat.ciclo(argumentos[0], argumentos[1])
     elif operacion == "lectura":
