@@ -14,12 +14,16 @@ def operar(netstat: Netstats, operacion, argumentos):
         salida = netstat.camino(origen, destino)
     elif operacion == "mas_importantes":
         n = int(argumentos[0])
-        salida = netstat.mas_importantes(n)
+        salida = "Falta implementar mas importantes"
+        #salida = netstat.mas_importantes(n)
     elif operacion == "conectados":
         pagina = argumentos[0]
-        salida = netstat.conectados(pagina)
+        salida = "Falta implementar conectados"
+        #salida = netstat.conectados(pagina)
     elif operacion == "ciclo":
-        salida = netstat.ciclo(argumentos[0], argumentos[1])
+        pagina, n = argumentos[0].split(",")
+        salida = "Falta implementar ciclo"
+        #salida = netstat.ciclo(pagina, int(n))
     elif operacion == "lectura":
         salida = netstat.lectura(argumentos[0])
     elif operacion == "diametro":
