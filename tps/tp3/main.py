@@ -25,7 +25,8 @@ def operar(netstat: Netstats, operacion, argumentos):
         salida = "Falta implementar ciclo"
         #salida = netstat.ciclo(pagina, int(n))
     elif operacion == "lectura":
-        salida = netstat.lectura(argumentos[0])
+        paginas = argumentos[0].split(",")
+        salida = netstat.lectura(paginas)
     elif operacion == "diametro":
         salida = netstat.diametro(argumentos[0])
     elif operacion == "rango":
