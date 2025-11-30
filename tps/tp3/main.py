@@ -3,7 +3,9 @@
 import sys
 from netstats import Netstats
 
-sys.setrecursionlimit(100000)
+MAX_RECURSION = 100000
+sys.setrecursionlimit(MAX_RECURSION)
+
 
 def operar(netstat: Netstats, operacion, argumentos):
     # Acordar formatear argumentos con coma -> Y los ints
@@ -47,13 +49,13 @@ def operar(netstat: Netstats, operacion, argumentos):
     elif operacion == "navegacion":
         pagina = argumentos[0]
         salida = netstat.navegacion(pagina)
-        
+
     elif operacion == "clustering":
         if not argumentos:
             salida = netstat.clustering()
         else:
-            salida = netstat.clustering(argumentos[0])    
-    
+            pagina = argumentos[0]
+            salida = netstat.clustering(pagina)    
     else:
         salida = "No existe operacion"
     

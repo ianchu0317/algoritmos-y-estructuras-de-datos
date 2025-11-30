@@ -16,3 +16,7 @@ navegacion Alemania
 navegacion queso
 navegacion Bolivia
 navegacion Brasil
+clustering River Plate
+clustering Club Atlético River Plate
+clustering Juan Domingo Perón
+clustering Ámsterdam
