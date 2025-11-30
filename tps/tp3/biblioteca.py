@@ -388,7 +388,6 @@ def page_rank(grafo: Grafo, k: int, d: float, n: int) -> list:
     # Devolver lista n-elementos importantes -> Meter todo a heap -> min heap top-n
     top_n = []
     i = 0
-    print(pr.items())
     for v, rango_v in pr.items():
         # Mantener con n-eleemntos
         rango_v = round(rango_v, 3)
@@ -399,7 +398,6 @@ def page_rank(grafo: Grafo, k: int, d: float, n: int) -> list:
         elif rango_v > top_n[0][0]:
             heapq.heappop(top_n)
             heapq.heappush(top_n, (rango_v, v))    
-        print(top_n)
     
     # Desencolar de heap y revertir
     res = []
