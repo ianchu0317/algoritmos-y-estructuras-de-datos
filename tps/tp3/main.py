@@ -9,42 +9,52 @@ def operar(netstat: Netstats, operacion, argumentos):
     # Acordar formatear argumentos con coma -> Y los ints
     if operacion == "listar_operaciones":
         salida = netstat.listar_operaciones()
+    
     elif operacion == "camino":
         origen, destino = argumentos[0].split(",")
-        salida = "Testing"
-        #salida = netstat.camino(origen, destino)
+        salida = netstat.camino(origen, destino)
+    
     elif operacion == "mas_importantes":
         n = int(argumentos[0])
-        salida = "Testing"
-        #salida = "Falta implementar mas importantes"
+        salida = "Falta implementar mas importantes"
         #salida = netstat.mas_importantes(n)
+    
     elif operacion == "conectados":
         pagina = argumentos[0]
         salida = "Falta implementar conectados"
         #salida = netstat.conectados(pagina)
+    
     elif operacion == "ciclo":
         pagina, n = argumentos[0].split(",")
         salida = "Falta implementar ciclo"
         #salida = netstat.ciclo(pagina, int(n))
+    
     elif operacion == "lectura":
         paginas = argumentos[0].split(",")
-        salida = "Testing"
-        #salida = netstat.lectura(paginas)
+        salida = netstat.lectura(paginas)
+    
     elif operacion == "diametro":
         salida = netstat.diametro()
+        
     elif operacion == "rango":
-        salida = netstat.rango(argumentos[0])
+        pagina, n = argumentos[0].split(",")
+        salida = netstat.rango(pagina, int(n))
+    
     elif operacion == "comunidad":
         salida = netstat.comunidad(argumentos[0])
+    
     elif operacion == "navegacion":
         salida = netstat.navegacion(argumentos[0])
+    
     elif operacion == "clustering":
         if not argumentos:
             salida = netstat.clustering()
         else:
             salida = netstat.clustering(argumentos[0])    
+    
     else:
         salida = "No existe operacion"
+    
     print(salida)
 
 
