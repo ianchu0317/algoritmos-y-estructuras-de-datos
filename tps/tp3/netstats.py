@@ -105,7 +105,7 @@ class Netstats:
         """
         if n > len(self.red.obtener_vertices()):
             return "N es mayor a la cantidad de paginas"
-        return ", ".join(bib.page_rank(self.red, 10, 0.85, n))
+        return ", ".join(bib.page_rank(self.red, 15, 0.85, n))
     
     
     def conectados(self, pagina):

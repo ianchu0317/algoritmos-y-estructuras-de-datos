@@ -24,8 +24,7 @@ def operar(netstat: Netstats, operacion, argumentos):
     
     elif operacion == netstats.OPERACION_MAS_IMPORTANTES:
         n = int(argumentos[0])
-        salida = "Falta implementar mas importantes"
-        #salida = netstat.mas_importantes(n)
+        salida = netstat.mas_importantes(n)
     
     elif operacion == netstats.OPERACION_CONECTADOS:
         pagina = argumentos[0]
@@ -42,7 +41,8 @@ def operar(netstat: Netstats, operacion, argumentos):
         salida = netstat.lectura(paginas)
     
     elif operacion == netstats.OPERACION_DIAMETRO:
-        salida = netstat.diametro()
+        salida = "Pausar diametro"
+        #salida = netstat.diametro()
         
     elif operacion == netstats.OPERACION_RANGO:
         pagina, n = argumentos[0].split(",")
@@ -50,7 +50,8 @@ def operar(netstat: Netstats, operacion, argumentos):
     
     elif operacion == netstats.OPERACION_COMUNIDAD:
         pagina = argumentos[0]
-        salida = netstat.comunidad(pagina)
+        salida = "Pausar comunidad para testing"
+        #salida = netstat.comunidad(pagina)
     
     elif operacion == netstats.OPERACION_NAVEGACION:
         pagina = argumentos[0]

@@ -390,7 +390,6 @@ def page_rank(grafo: Grafo, k: int, d: float, n: int) -> list:
     i = 0
     for v, rango_v in pr.items():
         # Mantener con n-eleemntos
-        rango_v = round(rango_v, 3)
         if i < n:
             heapq.heappush(top_n, (rango_v, v))
             i += 1
