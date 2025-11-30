@@ -10,12 +10,14 @@ class Grafo:
             Grafo(es_dirigido=True) -> Crea un grafo dirigido
         """
         # Estructura interna
-        self.vertices = dict()      # Diccionario de diccionario y guardo peso
+        self.vertices = dict()      # Diccionario de listas
+        self.pesos = dict()         # Diccionario de diccionario
         self.es_dirigido = es_dirigido
         
         # Cargar datos iniciales
         for v in vertices:
-            self.vertices[v] = dict()
+            self.vertices[v] = []
+            self.pesos[v] = dict()
     
     
     def __iter__(self):
@@ -55,7 +57,8 @@ class Grafo:
         """
         if self.hay_vertice(v):
             raise ValueError("Vertice ya esta en grafo")
-        self.vertices[v] = dict()
+        self.vertices[v] = []
+        self.pesos[v] = dict()
     
         
     def agregar_arista(self, v, w, peso_vw=0):
@@ -71,9 +74,11 @@ class Grafo:
         if w in self.vertices[v]:
             raise ValueError("Ya existe arista")
 
-        self.vertices[v][w] = peso_vw
+        self.vertices[v].append(w)
+        self.pesos[v][w] = peso_vw
         if not self.es_dirigido:
-            self.vertices[w][v] = peso_vw
+            self.vertices[w].append(v)
+            self.pesos[w][v] = peso_vw
         
         
     def adyacentes(self, v) -> list:
@@ -83,7 +88,7 @@ class Grafo:
         """
         if v not in self.vertices:
             raise ValueError("No existe vertice en grafo")
-        return list(self.vertices[v].keys())
+        return self.vertices[v]
     
     
     def peso_arista(self, v, w):
@@ -117,9 +122,15 @@ class Grafo:
             raise ValueError("No existe vertice en grafo")
         
         self.vertices.pop(v)
-        for w, ady_w in self.vertices.items():
-            if v in ady_w:
-                ady_w.pop(v)
+        for _, ady in self.vertices.items():
+            if v in ady:
+                ady.remove(v)
+        # Eliminar los pesos
+        self.pesos.pop(v)
+        for w, peso_wv in self.pesos.items():
+            if v in peso_wv:
+                peso_wv.pop(v)
+    
     
     def borrar_arista(self, v, w):
         """
@@ -133,10 +144,13 @@ class Grafo:
             raise ValueError("No existe arista en grafo")
 
         if w in self.vertices[v]:
-            self.vertices[v].pop(w)
+            self.vertices[v].remove(w)
+            self.pesos[v].pop(w)
         
         if not self.es_dirigido:
             if v in self.vertices[w]:
-                self.vertices[w].pop(v)
+                self.vertices[w].remove(v)
+                self.pesos[w].pop(v)
+
  
      
