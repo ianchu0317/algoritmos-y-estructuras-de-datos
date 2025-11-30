@@ -88,8 +88,7 @@ class Netstats:
         camino_minimo = bib.camino_minimo(self.red, origen, destino)
         if not camino_minimo:
             return "No se encontro recorrido"
-        
-        cadena_camino_minimo = " -> ".join(camino_minimo)   # O(P) en el peor de los casos
+        cadena_camino_minimo = self.formatear_salida(" -> ", camino_minimo)
         resultado = f"{cadena_camino_minimo}\nCosto: {len(camino_minimo)-1}"
         
         return resultado
@@ -105,7 +104,7 @@ class Netstats:
         """
         if not self.page_rank:
             self.page_rank = bib.page_rank(self.red, 15, 0.85)
-        return ", ".join(bib.obtener_top_n(self.page_rank, n))
+        return self.formatear_salida(", ", bib.obtener_top_n(self.page_rank, n))
     
     
     def conectados(self, pagina):
@@ -118,7 +117,7 @@ class Netstats:
         cfcs = bib.obtener_cfcs(self.red)
         for cfc in cfcs:
             if pagina in cfc:
-                return ", ".join(cfc)    # O(P)
+                return self.formatear_salida(", ", cfc)
         return ""   # Si no existe pagina en la red
     
     
@@ -131,7 +130,7 @@ class Netstats:
         recorrido = bib.ciclo_largo_n(self.red, pagina, n)
         if not recorrido:
             return "No se encontro recorrido"
-        return " -> ".join(recorrido)
+        return self.formatear_salida(" -> ", recorrido)
     
     
     def lectura(self, paginas: list):
@@ -151,7 +150,8 @@ class Netstats:
         if len(orden) != len(paginas):
             return "No existe forma de leer las paginas en orden"
         # Devolver orden topologico al revess
-        return ", ".join(orden[::-1])
+        orden.reverse()
+        return self.formatear_salida(", ", orden)
 
     
     def diametro(self) -> str:
@@ -170,7 +170,7 @@ class Netstats:
         ```
         """
         camino_diametro = bib.diametro(self.red)
-        cadena_diametro = " -> ".join(camino_diametro)   # O(P) en el peor de los casos
+        cadena_diametro = self.formatear_salida(" -> ", camino_diametro)
         resultado = f"{cadena_diametro}\nCosto: {len(camino_diametro)-1}"
         return resultado
         
@@ -204,7 +204,7 @@ class Netstats:
         comunidades = bib.comunidades(self.red)
         for comunidad in comunidades:
             if pagina in comunidad:
-                return ", ".join(comunidad)
+                return self.formatear_salida(", ", comunidad)
         return "No se encontro comunidad"
     
     
@@ -216,7 +216,7 @@ class Netstats:
         **Complejidad**: O(n)
         """
         nav_primer_link = bib.camino_primer_adyacente(self.red, pagina)
-        return " -> ".join(nav_primer_link)
+        return self.formatear_salida(" -> ", nav_primer_link)
     
     
     def clustering(self, pagina=None):
@@ -232,3 +232,8 @@ class Netstats:
         return bib.clustering_vertice(self.red, pagina)
  
  
+    def formatear_salida(self, caracter: str, elementos: list):
+        """
+        Devuelve una cadena con los elementos de la lista unidos por el caracter
+        """
+        return caracter.join(elementos)
