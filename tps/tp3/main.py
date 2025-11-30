@@ -12,7 +12,7 @@ def operar(netstat: Netstats, operacion, argumentos):
         origen, destino = argumentos[0].split(",")
         salida = netstat.camino(origen, destino)
     elif operacion == "mas_importantes":
-        salida = netstat.mas_importantes(argumentos[0])
+        salida = netstat.mas_importantes(int(argumentos[0]))
     elif operacion == "conectados":
         salida = netstat.conectados(argumentos[0])
     elif operacion == "ciclo":
