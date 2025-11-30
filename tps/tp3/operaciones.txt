@@ -7,3 +7,4 @@ conectados Boca Juniors
 ciclo Jeremy Irons,4
 lectura Buenos Aires,Roma
 lectura Hockey sobre hielo,Roma,Japón,árbol,Guerra,Dios,universo,Himalaya,otoño
+diametro
