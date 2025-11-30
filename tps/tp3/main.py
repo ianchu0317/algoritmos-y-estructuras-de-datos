@@ -45,8 +45,9 @@ def operar(netstat: Netstats, operacion, argumentos):
         salida = netstat.comunidad(pagina)
     
     elif operacion == "navegacion":
-        salida = netstat.navegacion(argumentos[0])
-    
+        pagina = argumentos[0]
+        salida = netstat.navegacion(pagina)
+        
     elif operacion == "clustering":
         if not argumentos:
             salida = netstat.clustering()

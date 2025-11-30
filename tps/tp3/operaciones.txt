@@ -11,3 +11,8 @@ rango Tokio,8
 rango Tokio,3
 rango Perón,4
 comunidad Chile
+navegacion Argentina
+navegacion Alemania
+navegacion queso
+navegacion Bolivia
+navegacion Brasil
