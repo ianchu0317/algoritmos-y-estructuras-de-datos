@@ -9,56 +9,56 @@ MAX_RECURSION = 100000
 sys.setrecursionlimit(MAX_RECURSION)
 
 
-def operar(netstat: Netstats, operacion, argumentos):
+def operar(wiki: Netstats, operacion, argumentos):
     """
     Toma un servidor tipo Netstat, una operacion y los argumentos para la operacion.
     Ejecuta e imprime por pantalla el resultado.
     """
     
     if operacion == netstats.OPERACION_LISTAR_OPERACIONES:
-        salida = netstat.listar_operaciones()
+        salida = wiki.listar_operaciones()
     
     elif operacion == netstats.OPERACION_CAMINO:
         origen, destino = argumentos[0].split(",")
-        salida = netstat.camino(origen, destino)
+        salida = wiki.camino(origen, destino)
     
     elif operacion == netstats.OPERACION_MAS_IMPORTANTES:
         n = int(argumentos[0])
-        salida = netstat.mas_importantes(n)
+        salida = wiki.mas_importantes(n)
     
     elif operacion == netstats.OPERACION_CONECTADOS:
         pagina = argumentos[0]
-        salida = netstat.conectados(pagina)
+        salida = wiki.conectados(pagina)
     
     elif operacion == netstats.OPERACION_CICLO:
         pagina, n = argumentos[0].split(",")
-        salida = netstat.ciclo(pagina, int(n))
+        salida = wiki.ciclo(pagina, int(n))
     
     elif operacion == netstats.OPERACION_LECTURA:
         paginas = argumentos[0].split(",")
-        salida = netstat.lectura(paginas)
+        salida = wiki.lectura(paginas)
     
     elif operacion == netstats.OPERACION_DIAMETRO:
-        salida = netstat.diametro()
+        salida = wiki.diametro()
         
     elif operacion == netstats.OPERACION_RANGO:
         pagina, n = argumentos[0].split(",")
-        salida = netstat.rango(pagina, int(n))
+        salida = wiki.rango(pagina, int(n))
     
     elif operacion == netstats.OPERACION_COMUNIDAD:
         pagina = argumentos[0]
-        salida = netstat.comunidad(pagina)
+        salida = wiki.comunidad(pagina)
     
     elif operacion == netstats.OPERACION_NAVEGACION:
         pagina = argumentos[0]
-        salida = netstat.navegacion(pagina)
+        salida = wiki.navegacion(pagina)
 
     elif operacion == netstats.OPERACION_CLUSTERING:
         if not argumentos:
-            salida = netstat.clustering()
+            salida = wiki.clustering()
         else:
             pagina = argumentos[0]
-            salida = netstat.clustering(pagina)    
+            salida = wiki.clustering(pagina)    
     else:
         salida = "No existe operacion"
     
@@ -67,7 +67,7 @@ def operar(netstat: Netstats, operacion, argumentos):
 
 
 if __name__ == '__main__':
-    netstat = Netstats()
+    wiki = Netstats()
     
     # Leer TSV opcional
     if len(sys.argv) > 1:
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         # Cargar servidor -> Para cada linea de tsv, separar a lista
         for dato in contenido.split("\n"):
             linea_lista_tsv = dato.split("\t")
-            netstat.agregar_post(linea_lista_tsv[0], linea_lista_tsv[1:])
+            wiki.agregar_post(linea_lista_tsv[0], linea_lista_tsv[1:])
         
     # Esperar comandos -> Hasta que no haya inputs entonces break
     while True:
@@ -88,7 +88,7 @@ if __name__ == '__main__':
             linea_operacion = input()
             operacion = linea_operacion.split(" ", 1)   # Split solo el primer espacio
             # Operar argumento
-            operar(netstat, operacion[0], operacion[1:])
+            operar(wiki, operacion[0], operacion[1:])
         except EOFError:
             break
 
