@@ -1,9 +1,18 @@
+"""
+biblioteca.py contiene las funciones auxiliares y operaciones sobre grafos.
+En este caso específico para grafos dirigidos no pesados.
+"""
+
 from grafo import Grafo
 from collections import deque
 from random import shuffle
 import heapq
 
 
+
+################################
+#       CAMINO MINIMO
+################################
 
 def camino_minimo(grafo: Grafo, origen, destino) -> list:
     """
@@ -51,6 +60,11 @@ def reconstruir_camino(padres: dict, ini, fin) -> list:
         camino.append(fin)
     return list(reversed(camino))
 
+
+
+################################
+#       DIAMETRO
+################################
 
 def diametro(grafo: Grafo) -> list:
     """
@@ -111,8 +125,12 @@ def bfs_distancias_padres(grafo: Grafo, origen):
                 cola.append(w)
                 
     return distancias, padres
-    
 
+
+
+################################
+#      Vertices en RANGO
+################################
 
 def en_rango(grafo: Grafo, origen, rango: int) -> int:
     """
@@ -129,6 +147,11 @@ def en_rango(grafo: Grafo, origen, rango: int) -> int:
             cant_en_rango += 1
     return cant_en_rango
 
+
+
+################################
+#   Navegar Primer Adyacente
+################################
 
 def camino_primer_adyacente(grafo: Grafo, origen) -> list:
     """
@@ -147,6 +170,11 @@ def camino_primer_adyacente(grafo: Grafo, origen) -> list:
         contador += 1
     return camino
 
+
+
+################################
+#       Obtener CFCs
+################################
 
 def obtener_cfcs(grafo: Grafo) -> list:
     """
@@ -188,7 +216,12 @@ def _dfs_cfcs(v, grafo: Grafo, visitados: set,
             if w == v:
                 break
         cfcs.append(cfc)
-            
+
+
+
+################################
+#       ORDEN TOPOLOGICO
+################################
 
 def orden_topologico_vertices(grafo: Grafo, vertices: list) -> list:
     """
@@ -237,6 +270,11 @@ def grados_entrada(grafo: Grafo, vertices: list) -> dict:
                 g_entrada[w] += 1
     return g_entrada
 
+
+
+################################
+#   COMUNIDADES (Label propagation)
+################################
 
 def comunidades(grafo: Grafo) -> list:
     """
@@ -306,6 +344,11 @@ def obtener_vertices_entrada(grafo: Grafo) -> dict:
     return vertices_entrada
 
 
+
+################################
+#         CLUSTERING
+################################
+
 def clustering_vertice(grafo: Grafo, v) -> float:
     """
     Dado un grafo y un vértice del grafo, devuelve el coeficiente de Clustering de ese vertice.
@@ -354,6 +397,10 @@ def clustering(grafo: Grafo) -> float:
     return round(suma_clustering / cantidad, 3) 
 
 
+
+################################
+#         PAGE RANK
+################################
 
 def page_rank(grafo: Grafo, k: int, d: float) -> list:
     """
@@ -411,6 +458,11 @@ def obtener_top_n(diccionario: dict, n: int):
     res.reverse()
     return res
 
+
+
+################################
+#       Ciclos de largo N
+################################
 
 def ciclo_largo_n(grafo: Grafo, origen, n: int) -> list:
     """
