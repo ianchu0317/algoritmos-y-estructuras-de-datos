@@ -151,24 +151,5 @@ class Grafo:
             if v in self.vertices[w]:
                 self.vertices[w].remove(v)
                 self.pesos[w].pop(v)
-
-
-    def vertice_aleatorio(self):
-        """
-        Devuelve un vertice aleatorio en el grafo.
-        En caso de no haber vertices en grafo, devuelve "No hay vertices en el grafo"
-        """
-        if not self.vertices:
-            raise ValueError("No hay vertices en el grafo")
-        random.choice(self.vertices.keys())
-    
-    
-    def adyacente_aleatorio(self, v):
-        """
-        Toma un vertice V y devuelve un adyacente aleatorio de ese vertice.
-        En caso de no tener adyacentes devuelve `None`.
-        """
-        if not self.vertices[v]:
-            return None
-        return random.choice(self.vertices[v].keys())    
+ 
      
