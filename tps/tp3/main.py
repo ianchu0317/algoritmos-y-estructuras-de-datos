@@ -18,45 +18,45 @@ def operar(netstat: Netstats, operacion, argumentos):
     if operacion == netstats.OPERACION_LISTAR_OPERACIONES:
         salida = netstat.listar_operaciones()
     
-    elif operacion == "camino":
+    elif operacion == netstats.OPERACION_CAMINO:
         origen, destino = argumentos[0].split(",")
         salida = netstat.camino(origen, destino)
     
-    elif operacion == "mas_importantes":
+    elif operacion == netstats.OPERACION_MAS_IMPORTANTES:
         n = int(argumentos[0])
         salida = "Falta implementar mas importantes"
         #salida = netstat.mas_importantes(n)
     
-    elif operacion == "conectados":
+    elif operacion == netstats.OPERACION_CONECTADOS:
         pagina = argumentos[0]
         salida = "Falta implementar conectados"
         #salida = netstat.conectados(pagina)
     
-    elif operacion == "ciclo":
+    elif operacion == netstats.OPERACION_CICLO:
         pagina, n = argumentos[0].split(",")
         salida = "Falta implementar ciclo"
         #salida = netstat.ciclo(pagina, int(n))
     
-    elif operacion == "lectura":
+    elif operacion == netstats.OPERACION_LECTURA:
         paginas = argumentos[0].split(",")
         salida = netstat.lectura(paginas)
     
-    elif operacion == "diametro":
+    elif operacion == netstats.OPERACION_DIAMETRO:
         salida = netstat.diametro()
         
-    elif operacion == "rango":
+    elif operacion == netstats.OPERACION_RANGO:
         pagina, n = argumentos[0].split(",")
         salida = netstat.rango(pagina, int(n))
     
-    elif operacion == "comunidad":
+    elif operacion == netstats.OPERACION_COMUNIDAD:
         pagina = argumentos[0]
         salida = netstat.comunidad(pagina)
     
-    elif operacion == "navegacion":
+    elif operacion == netstats.OPERACION_NAVEGACION:
         pagina = argumentos[0]
         salida = netstat.navegacion(pagina)
 
-    elif operacion == "clustering":
+    elif operacion == netstats.OPERACION_CLUSTERING:
         if not argumentos:
             salida = netstat.clustering()
         else:
