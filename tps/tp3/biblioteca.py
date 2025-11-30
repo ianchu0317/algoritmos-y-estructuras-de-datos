@@ -461,7 +461,3 @@ def _dfs_ciclo_largo_n(grafo: Grafo, v, origen,
             visitados.remove(w)
             padres.pop(w)
     return []
-
-
-if __name__ == '__main__':
-    pass
