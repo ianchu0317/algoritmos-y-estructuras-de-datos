@@ -2,6 +2,32 @@
 from grafo import Grafo
 import biblioteca as bib
 
+# Constantes
+OPERACION_LISTAR_OPERACIONES = 'listar_operaciones'
+OPERACION_CAMINO = 'camino'
+OPERACION_MAS_IMPORTANTES = 'mas_importantes'
+OPERACION_CONECTADOS = 'conectados'
+OPERACION_CICLO = 'ciclo'
+OPERACION_LECTURA = 'lectura'
+OPERACION_DIAMETRO = 'diametro'
+OPERACION_RANGO = 'rango'
+OPERACION_COMUNIDAD = 'comunidad'
+OPERACION_NAVEGACION = 'navegacion'
+OPERACION_CLUSTERING = 'clustering'
+
+LISTA_OPERACIONES=f"""
+{OPERACION_CAMINO}
+{OPERACION_MAS_IMPORTANTES}
+{OPERACION_CONECTADOS}
+{OPERACION_CICLO}
+{OPERACION_LECTURA}
+{OPERACION_DIAMETRO}
+{OPERACION_RANGO}
+{OPERACION_COMUNIDAD}
+{OPERACION_NAVEGACION}
+{OPERACION_CLUSTERING}"""
+
+
 class Netstats:
     """
     Netstats modela una red con grafos, donde:
@@ -16,11 +42,6 @@ class Netstats:
     
     def __init__(self):
         self.red = Grafo(True)
-        self.operaciones = [
-            'camino', 'mas_importantes', 'conectados'
-            'ciclo', 'lectura', 'diametro', 'rango', 
-            'comunidad', 'navegacion', 'clustering'
-        ]
     
     
     def agregar_post(self, post: str, links: list):
@@ -55,7 +76,7 @@ class Netstats:
         
         Complejidad O(1)
         """
-        return self.operaciones
+        return LISTA_OPERACIONES
     
     
     def camino(self, origen, destino) -> str:

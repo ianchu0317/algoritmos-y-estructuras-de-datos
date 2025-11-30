@@ -1,15 +1,21 @@
 #!/usr/bin/python3
 
 import sys
+import netstats 
 from netstats import Netstats
 
+# Configurar maxima recursion
 MAX_RECURSION = 100000
 sys.setrecursionlimit(MAX_RECURSION)
 
 
 def operar(netstat: Netstats, operacion, argumentos):
-    # Acordar formatear argumentos con coma -> Y los ints
-    if operacion == "listar_operaciones":
+    """
+    Toma un servidor tipo Netstat, una operacion y los argumentos para la operacion.
+    Ejecuta e imprime por pantalla el resultado.
+    """
+    
+    if operacion == netstats.OPERACION_LISTAR_OPERACIONES:
         salida = netstat.listar_operaciones()
     
     elif operacion == "camino":
