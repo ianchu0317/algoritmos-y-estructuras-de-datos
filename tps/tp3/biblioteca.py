@@ -420,6 +420,9 @@ def ciclo_largo_n(grafo: Grafo, origen, n: int) -> list:
     
     if n < 1:
         return []
+    
+    if n > len(grafo.obtener_vertices()):
+        return []
 
     padres = dict()
     visitados = set()
@@ -432,7 +435,10 @@ def ciclo_largo_n(grafo: Grafo, origen, n: int) -> list:
 def _dfs_ciclo_largo_n(grafo: Grafo, v, origen, 
                        padres: dict, visitados: set, 
                        pasos_restantes: int):
-       
+    # Cortar recursividad si me paso de n ->> sino se me hace infinito xd
+    if pasos_restantes == 0:
+        return []
+    
     for w in grafo.adyacentes(v):
         # Reconstruir camino si se encontro ciclo
         if pasos_restantes == 1 and w == origen:

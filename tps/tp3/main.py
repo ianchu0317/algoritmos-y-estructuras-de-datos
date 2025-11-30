@@ -33,8 +33,7 @@ def operar(netstat: Netstats, operacion, argumentos):
     
     elif operacion == netstats.OPERACION_CICLO:
         pagina, n = argumentos[0].split(",")
-        salida = "Falta implementar ciclo"
-        #salida = netstat.ciclo(pagina, int(n))
+        salida = netstat.ciclo(pagina, int(n))
     
     elif operacion == netstats.OPERACION_LECTURA:
         paginas = argumentos[0].split(",")
