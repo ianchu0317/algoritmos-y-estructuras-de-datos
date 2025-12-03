@@ -71,7 +71,47 @@ para cada álbum menciona una lista de álbumes que hay que escuchar antes que e
 a) Modelar este problema con grafos, indicando claramente qué son los vértices y qué son las aristas.
 b) Implementar un algoritmo que le de a los alumnos un orden posible para escuchar los albumes que les recomendó Juan.
 """
+def ej2_3p_2c2025(grafo):
+    """
+    **Modelacion**
+    Se puede modelar el problema con un grafo dirigido no pesado donde
+    - Vertices: son los albumes
+    - Aristas: son los albumes a escuchar antes (precedencia)
+    
+    Ejemplo:
+    A1 se tiene que esuchar antes que [A2, A4]  = A1 -> A2, -> A4
+    A3 se tiene que escuchar antes que [A4, A5] = A3 -> A4, -> A5
+    Por cada enunciado se obtienen V vertices y V aristas
+    
+    En este problema necesitamos calcular orden topológico: el mas simple es bfs topologico.
+    O(V + E) -> O(Albumes + Conexiones)
+    Cabe destacar que si hay un ciclo, no se puede determinar cual escuchar primero
+    """
+    cola = Cola()
+    orden = []
+    g_entrada = grados_entrada(grafo)   # O(V + E) recorro el grafo calculando grados de entrada
+    
+    for v in grafo:
+        if g_entrada[v] == 0:
+            cola.encolar(v)
+    
+    while not cola.esta_vacia():
+        v = cola.desencolar()
+        orden.append(v)        
+        for w in grafo.adyacentes(v):
+            g_entrada[w] -= 1
+            if g_entrada[w] == 0:
+                cola.encolar(w)
+    return orden
 
+def grados_entrada(grafo):
+    g_entrada = dict()
+    for v in grafo:
+        g_entrada[v] = 0
+    for v in grafo:
+        for w in grafo.adyacentes(v):
+            g_entrada[w] += 1
+    return g_entrada
 
 """
 3. Sobre el grafo del dorso:
