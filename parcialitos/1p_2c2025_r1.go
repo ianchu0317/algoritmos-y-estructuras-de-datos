@@ -56,6 +56,17 @@ conquista determine si elem se encuentra en el arreglo. Indicar y justificar ade
 implementado.
 */
 
+func elemEnArreglo(elem int, arr []int) bool {
+	// Complejidad por teorema maestro: T(n)=2T(n/2) + O(1) -> O(n)
+	if len(arr) == 0 {
+		return false
+	} else if len(arr) == 1 {
+		return elem == arr[0]
+	}
+	mitad := len(arr) / 2
+	return elemEnArreglo(elem, arr[:mitad]) || elemEnArreglo(elem, arr[mitad:])
+}
+
 /*
 Implementar una función que reciba una pila de enteros y devuelva la suma de todos los elementos. Al finalizar la
 ejecución de la función, la pila debe quedar en el mismo estado que tenía antes de ejecutar la misma. La función no puede
