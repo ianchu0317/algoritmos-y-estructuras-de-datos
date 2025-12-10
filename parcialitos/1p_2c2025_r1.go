@@ -1,5 +1,7 @@
 package parcialitos
 
+import Pila "tdas/pila"
+
 /*Se tiene un arreglo de n cadenas y una buena función de hashing. Se quiere ordenar dichas cadenas por su resultado
 en la función de hashing, habiéndole hecho previamente % K a cada uno de los resultados (donde K es un valor enorme,
 muchísimo más grande que n). Implementar un algoritmo que ordene las cadenas por dicho criterio en O(n). La firma de
@@ -73,3 +75,15 @@ ejecución de la función, la pila debe quedar en el mismo estado que tenía ant
 utilizar estructuras auxiliares (incluyendo arreglos). La firma de la función debe ser pilaSumar(pila Pila[int]) int.
 Indicar y justificar la complejidad de la función implementada.
 */
+
+func pilaSumar(pila Pila.Pila[int]) int {
+	if pila.EstaVacia() {
+		return 0
+	}
+	elem := pila.Desapilar()
+	suma := elem + pilaSumar(pila)
+	pila.Apilar(elem)
+	return suma
+}
+
+// Complejidad O(n): POrque practicamente recorro toda la pila
