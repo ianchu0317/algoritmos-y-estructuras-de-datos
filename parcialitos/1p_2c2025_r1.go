@@ -21,8 +21,8 @@ type cadenaHash struct {
 
 func Ordenar(cadenas []string, valoresHash []int64, K int64) []string {
 	// Variables auxiliares a utilizar	O(1)
-	numBaldes := 10
-	elemPorBalde := K / int64(numBaldes)
+	numBaldes := len(cadenas)            // k = n
+	elemPorBalde := K / int64(numBaldes) // b = K/n
 	baldes := make([][]cadenaHash, numBaldes)
 
 	// Insertar cada cadena en su balde. Guardar el struct para ordenar después
