@@ -103,7 +103,7 @@ func BucketSortEquipos(equipos []equipo) []equipo {
 }
 
 /*
-4. Dado un arreglo de enteros ordenado de n elementos en el cual sus elementos van de 0 a M, con M  n, implementar
+4. Dado un arreglo de enteros ordenado de n elementos en el cual sus elementos van de 0 a M, con M << n, implementar
 una función que determine en O(log n) si hay algún elemento que aparezca más de la mitad de la veces en el arreglo.
 Justificar la complejidad del algoritmo implementado.
 */
@@ -124,6 +124,17 @@ los elementos de la cola. Al terminar la ejecución, la cola debe quedar vacía.
 otras primitivas, para demostrar el conocimiento sobre estructuras enlazadas. Indicar y justificar la complejidad de la
 primitiva.
 */
+func (cola *colaEnlazada[T]) Consumir(accion func(T)) {
+	// Complejidad O(n), siendo n la cantidad de nodos de la cola
+	// Para cada nodo realizo operaciones O(1) -> accion, asignar variables
+	for cola.primero != nil {
+		accion(cola.primero.valor)
+		cola.primero = cola.primero.siguiente
+	}
+	// Asignar variables O(1)
+	cola.ultimo = nil
+	cola.cantidad = 0
+}
 
 /*
 1. Implementar una función func minimoExcluido(arr []int) int que dado un arreglo de valores enteros (mayores o iguales a 0),
