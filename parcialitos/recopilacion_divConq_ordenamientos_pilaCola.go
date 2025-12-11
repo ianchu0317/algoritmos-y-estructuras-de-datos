@@ -137,15 +137,36 @@ func (cola *colaEnlazada[T]) Consumir(accion func(T)) {
 }
 
 /*
-1. Implementar una función func minimoExcluido(arr []int) int que dado un arreglo de valores enteros (mayores o iguales a 0),
-obtenga el mínimo valor que no se encuentre en el arreglo. Indicar y justificar la complejidad del algoritmo (explicar en detalle este
-paso, porque es fácil que se te puedan pasar detalles importantes a explicar). ¿Es el mismo ejercicio del parcialito? Si.
+1. Implementar una función que, dado un arreglo ordenado y sin elementos repetidos de valores enteros no negativos,
+obtenga el mínimo valor que no se encuentre en el arreglo. Indicar y justificar adecuadamente la complejidad del
+algoritmo.
 Por ejemplo:
-minimoExcluido([]int{0, 5, 1}) --> 2
-minimoExcluido([]int{3, 5, 1}) --> 0
-minimoExcluido([]int{0, 5, 1, 3, 4, 1, 2}) --> 6
-minimoExcluido([]int{0, 5, 1, 3, 4, 1, 2, 12345675433221345}) --> 6
+minimoExcluido([0, 1, 5]) --> 2
+minimoExcluido([1, 3, 5]) --> 0
+minimoExcluido([0, 1, 2, 3, 4, 5]) --> 6
+minimoExcluido([0, 1, 2, 3, 4, 5, 1234567]) --> 6
 */
+func minimoExcluido(arr []int) int {
+	if arr[0] != 0 {
+		return 0
+	}
+	if arr[len(arr)-1] == len(arr)-1 {
+		return len(arr)
+	}
+	return _minimoExcluido(arr, 0, len(arr))
+}
+
+func _minimoExcluido(arr []int, ini, fin int) int {
+	if ini == fin {
+		return ini
+	}
+	mitad := (ini + fin) / 2
+	if arr[mitad] != mitad {
+		return _minimoExcluido(arr, ini, mitad)
+	} else {
+		return _minimoExcluido(arr, mitad+1, fin)
+	}
+}
 
 /*
 Implementar un algoritmo que dado un arreglo de dígitos (0-9) determine cuál es el número más grande que se puede
