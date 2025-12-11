@@ -173,6 +173,43 @@ Implementar un algoritmo que dado un arreglo de dígitos (0-9) determine cuál e
 formar con dichos dígitos. Indicar y justificar la complejidad del algoritmo implementado.
 */
 
+func numeroMasGrande(digitos []int) int {
+	// ORdenar O(n+k)
+	digitosOrdenados := CountingSort(digitos, 10)
+	// Armar numero mas grande
+	// Iterar arreglo de n elementos
+	masGrande := 0
+	for i := len(digitos) - 1; i >= 0; i-- {
+		masGrande = masGrande*10 + digitosOrdenados[i]
+	}
+	return masGrande
+
+	// Complejidad total O(n+k)
+}
+
+func CountingSort(arr []int, rango int) []int {
+	// O(n) contar cada elemento
+	frecuencias := make([]int, rango)
+	for _, num := range arr {
+		frecuencias[num]++
+	}
+
+	// O(k) contar inicio de cada elemtno
+	inicios := make([]int, rango)
+	for i := 1; i < rango; i++ {
+		inicios[i] = inicios[i-1] + frecuencias[i-1]
+	}
+
+	// Ordenar elemento O(n)
+	ordenado := make([]int, len(arr))
+	for _, num := range arr {
+		indice := inicios[num]
+		ordenado[indice] = num
+		inicios[num]++
+	}
+	return ordenado
+}
+
 /*
 Implementar un algoritmo que dado un arreglo de números, determine si hay un elemento dentro del mismo que
 aparece al menos la mitad veces. La complejidad del algoritmo debe ser lineal. Justificar la complejidad del algoritmo
