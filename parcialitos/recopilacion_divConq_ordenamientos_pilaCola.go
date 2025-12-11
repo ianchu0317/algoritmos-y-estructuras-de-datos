@@ -7,6 +7,29 @@ conquista que permita obtener el valor faltante de A en B. Ejemplo, si A = {2, 4
 Indicar y justificar adecuadamente la complejidad del algoritmo implementado.
 */
 
+// ElemFaltante toma dos arreglos ordenados y devuelve indice del elemento faltante del otro
+func elemFaltante(A, B []int) int {
+	return _elemFaltante(A, B, 0, max(len(A), len(B))-1)
+}
+
+// Complejidad O(log(n)), T(n)= T(n/2) + O(1), como log2(1)=0==0, entonces O(n⁰*log(n))= O(log(n))
+func _elemFaltante(A, B []int, ini, fin int) int {
+	// Devuelve el inidce del elemento faltante
+	if ini > fin {
+		return -1
+	} else if ini == fin {
+		return ini
+	}
+
+	mitad := (ini + fin) / 2
+
+	if A[mitad] == B[mitad] {
+		return _elemFaltante(A, B, mitad+1, fin)
+	} else {
+		return _elemFaltante(A, B, ini, mitad)
+	}
+}
+
 /*
 Realizar el seguimiento de aplicar BucketSort al siguiente conjunto de equipos de fútbol, ordenando por la cantidad
 de descensos que tienen (entre paréntesis se indica la cantidad en cada caso). Para este caso aplicar la versión de
