@@ -40,6 +40,68 @@ Sarmiento (2) - Defensa y Justicia (0) - Plantense (3) - River (1) - Independien
 Estudiantes LP (2) - Racing (1) - Tigre (8) - Velez (1) - Atlanta (4) - Gimnasia LP (5)
 */
 
+type equipo struct {
+	nombre    string
+	descensos int
+}
+
+func BucketSortEquipos(equipos []equipo) []equipo {
+	/*
+		Seguimiento
+		PASO 1: Hallar maximo de descensos -> 8
+		PASO 2: Crear Buckets e insertar cada equipo uno en su lugar. cada descenso representa un banlde
+
+			0: Boca, Defensa y Justicia
+			1: River, Independiente, Racing, Velez
+			2: Sarmiento, Estudiantes LP
+			3: Almagero, Platense
+			4: Olimpo, Rosario Central, Atlanta
+			5: Gimnasia LP
+			6:
+			7:
+			8: Banfield, Tigre
+
+		PASO 3: Ordenar según criterio (no se especifica)
+		PASO 4: Iterar baldes en orden e insertar en arreglo
+		ORDENADO: [Boca, Defensa y Justicia, River, Independiente, Racing, Velez, Sarmiento, Estudiantes LP,
+					Almagero, Platense, Olimpo, Rosario Central, Atlanta, Gimnasia LP, Banfield, Tigre]
+
+	*/
+	n := len(equipos)
+	b := 0
+
+	// Hallar descenso máximo antes de crear los baldes O(n)
+	maxDescensos := 0
+	for _, e := range equipos {
+		if e.descensos > maxDescensos {
+			maxDescensos = e.descensos
+		}
+	}
+
+	// Poner cada equipo en su bucket (Balde) O(n*b)
+	b = maxDescensos + 1
+	buckets := make([][]equipo, b)
+	for _, e := range equipos {
+		indice := e.descensos // Cada valor de descenso representa un balde
+		buckets[indice] = append(buckets[indice], e)
+	}
+
+	// ORdenar cada bucket
+	for i := range buckets {
+		buckets[i] = OrdenarBucket(buckets[i])
+	}
+
+	// Iterar cada balde ordenado y guardarlo
+	ordenados := make([]equipo, 0, n)
+	for _, bucket := range buckets {
+		for _, e := range bucket {
+			ordenados = append(ordenados, e)
+		}
+	}
+
+	return ordenados
+}
+
 /*
 4. Dado un arreglo de enteros ordenado de n elementos en el cual sus elementos van de 0 a M, con M  n, implementar
 una función que determine en O(log n) si hay algún elemento que aparezca más de la mitad de la veces en el arreglo.
