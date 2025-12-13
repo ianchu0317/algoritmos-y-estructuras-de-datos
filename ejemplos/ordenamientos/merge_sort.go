@@ -38,7 +38,7 @@ func merge(arr1, arr2 []int) []int {
 // Merge sort ordena el arreglo utilizando algoritmo merge sort
 func MergeSort(arr []int) []int {
 	// Caso base si hay un solo elemento, está ordenado
-	if len(arr) == 1 {
+	if len(arr) <= 1 {
 		return arr
 	}
 

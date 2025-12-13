@@ -38,4 +38,9 @@ func main() {
 	fmt.Println("Nuevo array es:", arr4)
 	fmt.Println("Array ordenado con Radix Sort es:", sort.RadixSort(arr4))
 
+	// Bucket Sort
+	arr5 := aux.CrearArrayRandom(20)
+	fmt.Println("\n***Bucket Sort****")
+	fmt.Println("Nuevo array es:", arr5)
+	fmt.Println("Array ordenado con Bucket Sort es:", sort.BucketSort(arr5))
 }
